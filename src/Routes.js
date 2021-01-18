@@ -1,3 +1,6 @@
+import Homepage from "@/components/AdminPages/Homepage";
+import Profile from "@/components/AdminPages/Profile";
+
 export default [
     // Login route
 
@@ -6,7 +9,8 @@ export default [
 
 
     // Admin routes
-
+    {path: '/admin/', component: Homepage },
+    {path: '/admin/profil', component: Profile },
 
     // Professor routes
 ]

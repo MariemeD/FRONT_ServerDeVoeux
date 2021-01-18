@@ -1,16 +1,14 @@
 <template>
   <div id="app">
-      <Homepage />
+      <router-view />
   </div>
 </template>
 
 <script>
 
-import Homepage from "@/components/AdminPages/Homepage";
 export default {
   name: 'App',
   components: {
-      Homepage
 
   }
 }
