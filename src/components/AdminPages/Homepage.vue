@@ -3,7 +3,7 @@
         <Header />
 
         <div class="container pt-5">
-            <div class="row">
+            <div class="row pt-3">
                 <div class="col-4">
                     <div id="server-card" class="card p-3">
                         <div id="server-icon">
@@ -35,19 +35,19 @@
 
                         <ul id="professor-actions" class="text-left mr-auto ml-auto">
                             <li>
-                                - <a href="">Gestion des enseignants</a>
+                                - <router-link to="/admin/enseignants" href="">Gestion des enseignants</router-link>
                             </li>
                             <li>
-                                - <a href="">Gestion des primes</a>
+                                - <router-link to="/admin/primes" href="">Gestion des primes</router-link>
                             </li>
                             <li>
-                                - <a href="">Gestion des heures effectuées</a>
+                                - <router-link to="/admin/heures-effectuees" href="">Gestion des heures effectuées</router-link>
                             </li>
                             <li>
-                                - <a href="">Gestion des status</a>
+                                - <router-link to="/admin/statuts" href="">Gestion des statuts</router-link>
                             </li>
                             <li>
-                                - <a href="">Gestion des décharges</a>
+                                - <router-link to="/admin/decharges" href="">Gestion des décharges</router-link>
                             </li>
                         </ul>
                     </div>
@@ -62,16 +62,16 @@
 
                         <ul id="studings-actions" class="text-left mr-auto ml-auto">
                             <li>
-                                - <a href="">Gestion des cursus</a>
+                                - <router-link to="/admin/cursus" href="">Gestion des cursus</router-link>
                             </li>
                             <li>
-                                - <a href="">Gestion des filières</a>
+                                - <router-link to="/admin/filieres" href="">Gestion des filières</router-link>
                             </li>
                             <li>
-                                - <a href="">Gestion des origines</a>
+                                - <router-link to="/admin/origines" href="">Gestion des origines</router-link>
                             </li>
                             <li>
-                                - <a href="">Gestion des types de cours</a>
+                                - <router-link to="/admin/types-de-cours" href="">Gestion des types de cours</router-link>
                             </li>
                         </ul>
                     </div>
