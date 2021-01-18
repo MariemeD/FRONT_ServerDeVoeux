@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-expand fixed-top navbar-nav justify-content-between p-0">
+    <nav class="navbar navbar-expand fixed-top navbar-nav p-0">
         <router-link class="navbar-brand" to="/admin/">
             <img alt="Vue logo" src="../../assets/Logo_Universite_Evry.png" width="175" class="img-fluid">
         </router-link>
