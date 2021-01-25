@@ -157,7 +157,7 @@ tbody td {
 </style>
 
 <script>
-import Navbar from '../Navbar';
+import Navbar from '../Navbar_Prof';
 
 export default {
   name : 'Details_Filiere',

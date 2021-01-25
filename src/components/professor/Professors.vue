@@ -124,7 +124,7 @@ a{
 }
 </style>
 <script>
-import Navbar from '../Navbar';
+import Navbar from '../Navbar_Prof';
 
 export default {
   name : 'Professors',
@@ -153,7 +153,6 @@ info : ["test","best"]
           console.log(a+""+b);
           return 1;
         } else if (a < b) {
-         
           return -1;
         } else {
           return 0;
