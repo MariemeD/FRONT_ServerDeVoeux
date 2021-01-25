@@ -1,3 +1,15 @@
+
+import Professors from "./components/professor/Professors";
+import ProfessorService from "./components/professor/Prof_Service";
+//modules
+
+import DetailsModule from "./components/Modules/Details_Module";
+
+//Filiere
+import Branch from "./components/Filieres/Branch";
+import DetailsBranch from "./components/Filieres/Details_Branch";
+
+
 import Homepage from "@/components/AdminPages/Homepage";
 import Profile from "@/components/AdminPages/Profile";
 import Professors from "@/components/AdminPages/Professors/Professors/Professors";
@@ -25,7 +37,9 @@ import Types from "@/components/AdminPages/Studings/TypeOfCourses/Types";
 import AddType from "@/components/AdminPages/Studings/TypeOfCourses/AddType";
 import ModifyType from "@/components/AdminPages/Studings/TypeOfCourses/ModifyType";
 
+
 export default [
+
     // Login route
 
 
@@ -64,5 +78,18 @@ export default [
     {path: '/admin/types-de-cours/modifier', component: ModifyType },
 
 
+
+    // Professor routes
+    {path: '/professors', component: Professors},
+    {path: '/professorService', component: ProfessorService},
+
+    //Modules
+    {path: '/detailsModule', component: DetailsModule},
+
+    //Branch
+    {path: '/branch', component: Branch},
+    {path: '/detailsBranch', component: DetailsBranch}
+
     // Professors routes
+
 ]
