@@ -1,13 +1,13 @@
 
-import Professors from "./components/professor/Professors";
-import ProfessorService from "./components/professor/Prof_Service";
+import Professor from "./components/ProfessorPages/professor/Professors";
+import ProfessorService from "./components/ProfessorPages/professor/Prof_Service";
 //modules
 
-import DetailsModule from "./components/Modules/Details_Module";
+import DetailsModule from "./components/ProfessorPages/Modules/Details_Module";
 
 //Filiere
-import Branch from "./components/Filieres/Branch";
-import DetailsBranch from "./components/Filieres/Details_Branch";
+import Branch from "./components/ProfessorPages/Filieres/Branch";
+import DetailsBranch from "./components/ProfessorPages/Filieres/Details_Branch";
 
 
 import Homepage from "@/components/AdminPages/Homepage";
@@ -80,7 +80,7 @@ export default [
 
 
     // Professor routes
-    {path: '/professors', component: Professors},
+    {path: '/professors', component: Professor},
     {path: '/professorService', component: ProfessorService},
 
     //Modules
