@@ -33,6 +33,7 @@ import ModifyOrigin from "@/components/AdminPages/Studings/Origins/ModifyOrigin"
 import Types from "@/components/AdminPages/Studings/TypeOfCourses/Types";
 import AddType from "@/components/AdminPages/Studings/TypeOfCourses/AddType";
 import ModifyType from "@/components/AdminPages/Studings/TypeOfCourses/ModifyType";
+import HoursMadeDetails from "@/components/AdminPages/Professors/Hours/HoursMadeDetails";
 
 
 export default [
@@ -51,6 +52,7 @@ export default [
     {path: '/admin/enseignants/ajouter-un-enseignant', name: 'professors-add', component: AddProfessor },
     {path: '/admin/enseignants/modifier-un-enseignant', name: 'professors-edit', component: ModifyProfessor },
     {path: '/admin/heures-effectuees', name: 'hoursMade', component: HoursMade },
+    {path: '/admin/heures-effectuees/:lastnameProf/:firstnameProf', name: 'hoursMade-details', component: HoursMadeDetails },
     {path: '/admin/statuts/', name: 'status', component: Status },
     {path: '/admin/statuts/ajouter-un-statut', name: 'status-add', component: AddStatus },
     {path: '/admin/statuts/modifier-un-statut/:idStatus', name: 'status-edit', component: ModifyStatus },
