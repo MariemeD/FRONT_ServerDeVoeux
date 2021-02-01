@@ -145,20 +145,41 @@ export default {
     background-color: #536895;
 }
 
+table {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(45deg, #49a09d, #7745a0);
+}
+
+td {
+    border-top-color: #2c3e50;
+}
+
+.table thead th {
+    border-bottom-color: #2c3e50;
+}
+
+thead th {
+    background-color: #536895;
+}
+
+tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
 .pageSizeElt {
     cursor: pointer;
     color: #536895;
 }
 
 .editIcon {
-    color: #344C80;
+    color: #2c3e50;
 }
 
 .page-link {
-    color: #ffa637;
+    color: #536895;
 }
 
 .page-link:hover {
-    color: #C9893C;
+    color: #2c3e50;
 }
 </style>
