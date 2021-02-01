@@ -11,7 +11,8 @@ import {
   faEdit,
   faSort,
   faSortUp,
-  faSortDown
+  faSortDown,
+  faEye
 } from "@fortawesome/free-solid-svg-icons";
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -28,6 +29,7 @@ library.add(faEdit)
 library.add(faSortUp)
 library.add(faSortDown)
 library.add(faSort)
+library.add(faEye)
 
 const router = new VueRouter({
   routes: Routes,

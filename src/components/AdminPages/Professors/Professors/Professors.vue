@@ -6,8 +6,16 @@
 
         <div class="container">
             <router-link :to="{name: 'professors-add'}">
-                <button id="addProfButton" class="btn btn-outline-info mb-3 float-right">Ajouter un nouveau professeur</button>
+                <button id="addProfButton" class="btn btn-outline-info mb-3 float-left">Ajouter un nouveau professeur</button>
             </router-link>
+
+            <p class="float-right">
+                Afficher
+                <a class="pageSizeElt" @click="setElementsPerPage(5)">5</a>
+                | <a class="pageSizeElt" @click="setElementsPerPage(10)">10</a>
+                | <a class="pageSizeElt" @click="setElementsPerPage(20)">20</a>
+                éléments
+            </p>
 
             <div class="table-responsive">
                 <table class="table">
@@ -24,7 +32,7 @@
                             Email
                             <font-awesome-icon :icon="sortIcon" @click="sort('email')"></font-awesome-icon>
                         </th>
-                        <th>-</th>
+                        <th>Actions</th>
                     </thead>
                     <tbody>
                         <tr v-for="prof in sortedProfessors" :key="prof.email">
@@ -32,7 +40,12 @@
                             <td>{{ prof.firstName }}</td>
                             <td>{{ prof.email }}</td>
                             <td>
-                                <font-awesome-icon icon="edit"></font-awesome-icon>
+                                <router-link :to="{name: 'professor', params: {idProf: prof.email}}">
+                                    <font-awesome-icon class="editIcon mr-3" icon="eye" size="lg"></font-awesome-icon>
+                                </router-link>
+                                <router-link :to="{name: 'professors-edit'}">
+                                    <font-awesome-icon class="editIcon" icon="edit" size="lg"></font-awesome-icon>
+                                </router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -87,10 +100,23 @@ export default {
             if ((this.currentPage * this.pageSize) < this.professors.length) {
                 this.currentPage++;
             }
+        },
+        setElementsPerPage(pageSize) {
+            this.pageSize = pageSize
+        },
+        capitalizeTextElement(element) {
+            const firstLetter = element[0].toUpperCase()
+            const rest = element.toLowerCase().substring(1)
+            return firstLetter + rest
         }
     },
     computed: {
         sortedProfessors:function() {
+            for (let prof of this.professors) {
+                prof.lastName = this.capitalizeTextElement(prof.lastName)
+                prof.firstName = this.capitalizeTextElement(prof.firstName)
+            }
+
             return this.professors.slice().sort((a, b) => {
                 let modifier = 1
                 if(this.currentSortDirection === 'desc') modifier = -1
@@ -117,5 +143,22 @@ export default {
     color: #FFF;
     border-color: #536895;
     background-color: #536895;
+}
+
+.pageSizeElt {
+    cursor: pointer;
+    color: #536895;
+}
+
+.editIcon {
+    color: #344C80;
+}
+
+.page-link {
+    color: #ffa637;
+}
+
+.page-link:hover {
+    color: #C9893C;
 }
 </style>

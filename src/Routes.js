@@ -13,6 +13,7 @@ import DetailsBranch from "./components/ProfessorPages/Filieres/Details_Branch";
 import Homepage from "@/components/AdminPages/Homepage";
 import Profile from "@/components/AdminPages/Profile";
 import Professors from "@/components/AdminPages/Professors/Professors/Professors";
+import ProfessorDetails from "@/components/AdminPages/Professors/Professors/ProfessorDetails";
 import AddProfessor from "@/components/AdminPages/Professors/Professors/AddProfessor";
 import ModifyProfessor from "@/components/AdminPages/Professors/Professors/ModifyProfessor";
 import Bonuses from "@/components/AdminPages/Professors/Bonus/Bonuses";
@@ -51,6 +52,7 @@ export default [
     {path: '/admin/profil', name: 'admin-profil', component: Profile },
 
     {path: '/admin/enseignants/', name: 'professors', component: Professors },
+    {path: '/admin/enseignants/:idProf', name: 'professor', component: ProfessorDetails },
     {path: '/admin/enseignants/ajouter-un-enseignant', name: 'professors-add', component: AddProfessor },
     {path: '/admin/enseignants/modifier-un-enseignant', name: 'professors-edit', component: ModifyProfessor },
     {path: '/admin/primes/', name: 'bonuses', component: Bonuses },

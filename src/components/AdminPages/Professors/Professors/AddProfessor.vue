@@ -30,7 +30,28 @@ import Header from "@/components/AdminPages/Header";
 
 export default {
     name: "AddProfessor",
-    components: {Header}
+    components: {Header},
+    data() {
+        return {
+            pathways: [],
+            lastname: '',
+            firstname: '',
+            email: '',
+            isAdmin: false,
+            isResponsible: false,
+            pathwayResponsibleFor: ''
+        }
+    },
+    created() {
+        // TODO Appel au GET de toutes les filieres
+    },
+    methods: {
+        sendForm() {
+            // TODO SI "responsable de filiere" est coché et qu'une filière a été sélectionnée, on envoie le formulaire
+            // TODO recupérer les data du formulaire
+            // TODO appel au POST du professeur
+        }
+    }
 }
 </script>
 
