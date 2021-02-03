@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="general">
-        <h1>Nome de la Branche</h1>
+        <h1>Nom de la Branche</h1>
         <table class="table">
       <thead>
         <tr>
@@ -19,6 +19,7 @@
           <th>Semestre</th>
           <th>Cours</th>
           <th>TD</th>
+          <th>TP</th>
           <th>TP</th>
          
         </tr>
@@ -80,15 +81,7 @@
 </div>
 </template>
 <style scoped>
-nav{
-  background: linear-gradient(45deg, #49a09d, #5f2c82);
-}
-.navbar-brand{
-  font-family: "Lato", "Lucida Grande", "Lucida Sans Unicode", Tahoma,
-    Sans-Serif ;
-  color: #fff;
-  font-size: 20px;
-}
+
 h1{
    font-family: Georgia, serif;
   font-size: 40px;
@@ -117,7 +110,8 @@ a{
   position: absolute;
   width: 200px;
   height: 100%;
-  background: linear-gradient(45deg, #49a09d, #5f2c82);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  background: #55608f;
   transition: width 0.4s;
   overflow: hidden;
   z-index: 2;
@@ -129,7 +123,7 @@ table {
   border-collapse: collapse;
   overflow: hidden;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  background: linear-gradient(45deg, #49a09d, #5f2c82);
+  background: #344C80;
   margin-top: 30px;
 }
 

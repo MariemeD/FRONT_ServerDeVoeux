@@ -1,4 +1,4 @@
-
+import HomeProf from "./components/ProfessorPages/HomePage";
 import Professor from "./components/ProfessorPages/professor/Professors";
 import ProfessorService from "./components/ProfessorPages/professor/Prof_Service";
 //modules
@@ -78,6 +78,7 @@ export default [
     {path: '/admin/types-de-cours/modifier', component: ModifyType },
 
 
+    {path: '/home', component: HomeProf},
 
     // Professor routes
     {path: '/professors', component: Professor},

@@ -22,87 +22,68 @@
       <div class="card">
         <h4>M2</h4>
         <hr />
-       
-      <table>
+
+        <table v-for="branch in M2N" :key="branch">
           <tr>
             <td>
-              <a href="/detailsBranch"> Branch 1 </a>
+              <a href="/detailsBranch"> {{ branch }} </a>
             </td>
-          </tr>
-          <tr>
-            <td>Branche2</td>
           </tr>
         </table>
       </div>
-      <div class="card"> <h4> M1</h4>
-      <hr />
-      <table>
+      <div class="card">
+        <h4>M1</h4>
+        <hr />
+        <table v-for="branch in M1N" :key="branch">
           <tr>
             <td>
-              <a href="/detailsBranch"> Branch 1 </a>
+              <a href="/detailsBranch"> {{ branch }} </a>
             </td>
-          </tr>
-          <tr>
-            <td>Branche2</td>
-          </tr>
-        </table> </div>
-      <div class="card"> <h4> L3 </h4>
-         <hr />
-      <table>
-          <tr>
-            <td>
-              <a href="/detailsBranch"> Branch 1 </a>
-            </td>
-          </tr>
-          <tr>
-            <td>Branche2</td>
           </tr>
         </table>
       </div>
-      <div class="card"> <h4> L2 </h4> 
-         <hr />
-      <table>
+      <div class="card">
+        <h4>L3</h4>
+        <hr />
+        <table v-for="branch in L3N" :key="branch">
           <tr>
             <td>
-              <a href="/detailsBranch"> Branch 1 </a>
+              <a href="/detailsBranch"> {{ branch }} </a>
             </td>
-          </tr>
-          <tr>
-            <td>Branche2</td>
           </tr>
         </table>
       </div>
-      <div class="card"> <h4> L1 </h4>
-       <hr />
-      <table>
+      <div class="card">
+        <h4>L2</h4>
+        <hr />
+        <table v-for="branch in L2N" :key="branch">
           <tr>
             <td>
-              <a href="/detailsBranch"> Branch 1 </a>
+              <a href="/detailsBranch"> {{ branch }} </a>
             </td>
           </tr>
+        </table>
+      </div>
+      <div class="card">
+        <h4>L1</h4>
+        <hr />
+        <table v-for="branch in L1N" :key="branch">
           <tr>
-            <td>Branche2</td>
+            <td>
+              <a href="/detailsBranch"> {{ branch }} </a>
+            </td>
           </tr>
         </table>
-        </div>
+      </div>
     </div>
   </div>
 </template>
 <style scoped>
-nav {
-  background: linear-gradient(45deg, #49a09d, #5f2c82);
-}
-.navbar-brand {
-  font-family: "Lato", "Lucida Grande", "Lucida Sans Unicode", Tahoma,
-    Sans-Serif;
-  color: #fff;
-  font-size: 20px;
-}
 .card {
   width: 700px;
   margin-left: 10px;
   margin-top: 5%;
-  background-color: #69bab8;
+  background-color: #8ea3d1;
   height: 400px;
 }
 .modules {
@@ -120,7 +101,7 @@ h2 {
 h4 {
   margin-top: 10px;
 }
-a{
+a {
   text-decoration: none;
   color: black;
 }
@@ -145,11 +126,155 @@ hr {
 </style>
 <script>
 import Navbar from "../Navbar_Prof";
+import axios from "axios";
 
 export default {
   name: "Branche",
   components: {
     Navbar,
+  },
+  data() {
+    return {
+      L1: [],
+      L1N: [],
+      L2: [],
+      L2N: [],
+      L3: [],
+      L3N: [],
+      M1: [],
+      M1N: [],
+      M2: [],
+      M2N: [],
+      firstSplit: String,
+      branch_Name: String,
+    };
+  },
+  mounted() {
+    axios
+      .get("http://146.59.195.214:8006/api/v1/events/filieres")
+      .then((response) => {
+        console.log(this.L1);
+        response.data.forEach((branch) => {
+          //console.log(branch)
+          if (branch.startsWith("L1")) {
+            this.firstSplit = branch.split("-")[0];
+            this.branch_Name = this.firstSplit.split("L1")[1];
+             if(this.branch_Name === "CIL"){
+              this.branch_Name = "CILS"
+            }
+             if(this.branch_Name === "MIAI"){
+              this.branch_Name = "Miage Initiae"
+            }
+             if(this.branch_Name === "MIAA"){
+              this.branch_Name = "Miage Apprentissage"
+            }
+            this.L1.push({
+              branchName: this.branch_Name,
+            });
+
+            this.L1N = this.removeDuplicate(this.L1);
+          }
+          if (branch.startsWith("L2")) {
+             
+            this.firstSplit = branch.split("-")[0];
+            this.branch_Name = this.firstSplit.split("L2")[1];
+             if(this.branch_Name === "CIL"){
+              this.branch_Name = "CILS"
+            }
+            if(this.branch_Name === "INFX"){
+              this.branch_Name = "Informatique"
+            }
+             if(this.branch_Name === "MIAI"){
+              this.branch_Name = "Miage Initiae"
+            }
+             if(this.branch_Name === "MIAA"){
+              this.branch_Name = "Miage Apprentissage"
+            }
+            this.L2.push({
+              branchName: this.branch_Name,
+            });
+            this.L2N = this.removeDuplicate(this.L2);
+          }
+          if (branch.startsWith("L3")) {
+           
+            if(branch.indexOf("-")> -1){
+
+           
+            this.branch_Name = branch.split("-")[1];
+            
+           
+            if(branch.split("-")[0] === "L3A"){
+              this.branch_Name = this.branch_Name + "-Apprentissage";
+            }
+           
+            //this.branch_Name = this.firstSplit.split("L3")[1];
+            console.log(this.firstSplit.split("L3"))
+             if(this.branch_Name === "CIL"){
+              this.branch_Name = "CILS"
+            }
+             if(this.branch_Name === "MIAI"){
+              this.branch_Name = "Miage-Initiae"
+            }
+             if(this.branch_Name === "MIAA"){
+              this.branch_Name = "Miage-Apprentissage"
+            }
+             } else{
+               this.branch_Name= "";
+             }
+            this.L3.push({
+              branchName: this.branch_Name,
+            });
+            this.L3N = this.removeDuplicate(this.L3);
+          }
+          if (branch.startsWith("M1")) {
+            this.firstSplit = branch.split("-")[0];
+            
+            this.branch_Name = this.firstSplit.split("M1")[1];
+             if(this.branch_Name === "CIL"){
+              this.branch_Name = "CILS"
+            }
+             if(this.branch_Name === "MIAI"){
+              this.branch_Name = "Miage-Initiae"
+            }
+             if(this.branch_Name === "MIAA"){
+              this.branch_Name = "Miage-Apprentissage"
+            }
+            this.M1.push({
+              branchName: this.branch_Name,
+            });
+            this.M1N = this.removeDuplicate(this.M1);
+          }
+          if (branch.startsWith("M2")) {
+            this.firstSplit = branch.split("-")[0];
+            this.branch_Name = this.firstSplit.split("M2")[1];
+            if(this.branch_Name === "CIL"){
+              this.branch_Name = "CILS"
+            }
+             if(this.branch_Name === "MIAI"){
+              this.branch_Name = "Miage-Initiae"
+            }
+             if(this.branch_Name === "MIAA"){
+              this.branch_Name = "Miage-Apprentissage"
+            }
+              this.M2.push({
+                branchName: this.branch_Name,
+              });
+             this.M2N = this.removeDuplicate(this.M2);
+          }
+        });
+      });
+  },
+  methods: {
+    removeDuplicate(table) {
+      let unique = {};
+      table.forEach(function (i) {
+        if (!unique[i]) {
+        //  console.log(i.branchName);
+          unique[i.branchName] = true;
+        }
+      });
+      return Object.keys(unique);
+    },
   },
 };
 </script>
