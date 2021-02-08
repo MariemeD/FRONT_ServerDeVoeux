@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <router-link class="navbar-brand" to="/admin/">
-            <img alt="Vue logo" src="../../assets/Logo_Universite_Evry.png" width="175" class="img-fluid">
+            <img alt="Vue logo" src="../../assets/Logo_Universite_Evry.png" width="155" class="img-fluid">
         </router-link>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -11,6 +11,9 @@
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <router-link class="nav-link" to="/admin/profil">Profil</router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link class="nav-link" to="/admin/gestion-des-voeux/">Gestion des voeux</router-link>
                 </li>
             </ul>
             <a class="nav-link my-2 my-lg-0">Déconnexion</a>
@@ -26,7 +29,7 @@ export default {
 
 <style scoped>
 nav {
-    background-color: #536895;
+    background-color: #63759b;
     padding: 0.1em;
 }
 

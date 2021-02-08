@@ -5,29 +5,6 @@
         <div class="container">
             <div class="row pt-3">
                 <div class="col-lg-4 col-md-8 col-sm-6">
-                    <div id="server-card" class="card p-3">
-                        <div id="div-server-icon">
-                            <font-awesome-icon id="server-icon" icon="server" size="5x" style="color: #C9893C" />
-                        </div>
-                        <h6 class="mt-3 mb-0 text-uppercase">Serveur</h6>
-                        <hr>
-                        <small>Le serveur est ouvert</small>
-
-                        <ul id="server-actions" class="text-left mr-auto ml-auto">
-                            <li>
-                                - <a href="">Fermer le serveur</a>
-                            </li>
-                            <li>
-                                - <a href="">Redémarrer le serveur</a>
-                            </li>
-                            <li>
-                                - <a href="">Sauvegarder la base</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-8 col-sm-6">
                     <div id="professor-card" class="card p-3">
                         <div id="div-professor-icon">
                             <font-awesome-icon id="professor-icon" icon="users" size="5x" style="color: #C9893C" />
@@ -40,9 +17,6 @@
                                 - <router-link to="/admin/enseignants" href="">Gestion des enseignants</router-link>
                             </li>
                             <li>
-                                - <router-link to="/admin/primes" href="">Gestion des primes</router-link>
-                            </li>
-                            <li>
                                 - <router-link to="/admin/heures-effectuees" href="">Gestion des heures effectuées</router-link>
                             </li>
                             <li>
@@ -50,6 +24,29 @@
                             </li>
                             <li>
                                 - <router-link to="/admin/decharges" href="">Gestion des décharges</router-link>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-8 col-sm-6">
+                    <div id="server-card" class="card p-3">
+                        <div id="div-server-icon">
+                            <font-awesome-icon id="server-icon" icon="server" size="5x" style="color: #C9893C" />
+                        </div>
+                        <h6 class="mt-3 mb-0 text-uppercase">Serveur</h6>
+                        <hr>
+                        <small class="text-success">Le serveur est ouvert</small>
+
+                        <ul id="server-actions" class="text-left mr-auto ml-auto">
+                            <li>
+                                - <a href="">Fermer le serveur</a>
+                            </li>
+                            <li>
+                                - <a href="">Redémarrer le serveur</a>
+                            </li>
+                            <li>
+                                - <a href="">Sauvegarder la base</a>
                             </li>
                         </ul>
                     </div>
@@ -102,7 +99,7 @@ export default {
     padding: 5px 0 0;
 }
 
-#server-card, #studings-card {
+#professor-card, #studings-card {
     background-color: #D5D5D5;
 }
 
@@ -123,15 +120,15 @@ h6 {
     margin-bottom: 0;
 }
 
-#server-actions li, #studings-actions li, #server-actions a, #studings-actions a, #server-card h6, #studings-card h6{
+#professor-actions li, #studings-actions li, #professor-actions a, #studings-actions a, #professor-card h6, #studings-card h6{
     color: #344C80;
 }
 
-#professor-card {
+#server-card {
     background-color: #344C80;
 }
 
-#professor-actions li, #professor-actions a, #professor-card h6 {
+#server-actions li, #server-actions a, #server-card h6 {
     color: #C9893C;
 }
 
