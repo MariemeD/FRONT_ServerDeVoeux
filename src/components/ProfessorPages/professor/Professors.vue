@@ -77,7 +77,7 @@ h2{
    font-family: Georgia, serif;
   font-size: 40px;
   font-weight: bold;
-  margin-top: 30px;
+  margin-top: 100px;
   
 }
 table {
@@ -131,14 +131,18 @@ a{
 			left: -9999px;
 		}
 		
-		tr { border: 2px solid #eee; }
-		
+		tr { border: 2px solid #eee;
+        }
+			tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
 		td { 
 			/* Behave  like a "row" */
 			border: none;
 			border-bottom: 1px solid #eee; 
 			position: relative;
 			padding-left: 50%; 
+      
       
 		}
 		
@@ -149,10 +153,10 @@ a{
 			top: 6px;
 			left: 6px;
 			width: 45%; 
-			padding-right: 10px; 
+			padding-right: 100%;
 			white-space: nowrap;
 		}
-		
+	
 		/*
 		Label the data
 		*/

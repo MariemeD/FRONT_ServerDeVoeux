@@ -3,7 +3,9 @@ import Professor from "./components/ProfessorPages/professor/Professors";
 import ProfessorService from "./components/ProfessorPages/professor/Prof_Service";
 //modules
 
-import DetailsModule from "./components/ProfessorPages/Modules/Details_Module";
+//import DetailsModule from "./components/ProfessorPages/Modules/Details_Module";
+import EditModule from "./components/ProfessorPages/Modules/Edit_Module";
+import Demandes from "./components/ProfessorPages/Modules/Demandes";
 
 //Filiere
 import Branch from "./components/ProfessorPages/Filieres/Branch";
@@ -85,7 +87,9 @@ export default [
     {path: '/professorService', component: ProfessorService},
 
     //Modules
-    {path: '/detailsModule', component: DetailsModule},
+    //{path: '/detailsModule', component: DetailsModule},
+    {path: '/detailsModule', component: EditModule},
+    {path: '/demandes', component: Demandes},
 
     //Branch
     {path: '/branch', component: Branch},

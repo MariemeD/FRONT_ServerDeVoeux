@@ -1,24 +1,11 @@
 <template>
   <div class="container">
     <Navbar />
-    <div class="titke">
+    <div class="title">
       <h2>Liste des Enseignements</h2>
     </div>
     <div class="modules">
-      <div class="card">
-        <h4>Doctorat</h4>
-        <hr />
-        <table>
-          <tr>
-            <td>
-              <a href="/detailsBranch"> Branch 1 </a>
-            </td>
-          </tr>
-          <tr>
-            <td>Branche2</td>
-          </tr>
-        </table>
-      </div>
+      
       <div class="card">
         <h4>M2</h4>
         <hr />
@@ -93,7 +80,7 @@ td {
   margin-top: 5%;
 }
 h2 {
-  margin-top: 30px;
+  margin-top: 100px;
   font-family: Georgia, serif;
   font-size: 40px;
   font-weight: bold;
@@ -123,6 +110,17 @@ hr {
   -o-transition-timing-function: cubic-bezier(0.795, 0, 0.165, 1);
   transition-timing-function: cubic-bezier(0.795, 0, 0.165, 1); /* custom */
 }
+	@media 
+	only screen and (max-width: 760px),
+	(min-device-width: 768px) and (max-device-width: 1024px)  {
+    .modules{
+      flex-flow: row wrap;
+    }
+    .card{
+      width: 300px;
+      margin-left: 20px;
+    }
+  }
 </style>
 <script>
 import Navbar from "../Navbar_Prof";
@@ -155,9 +153,10 @@ export default {
       .then((response) => {
         console.log(this.L1);
         response.data.forEach((branch) => {
-          //console.log(branch)
+        
           if (branch.startsWith("L1")) {
             this.firstSplit = branch.split("-")[0];
+           console.log(this.firstSplit)
             this.branch_Name = this.firstSplit.split("L1")[1];
              if(this.branch_Name === "CIL"){
               this.branch_Name = "CILS"
@@ -185,7 +184,7 @@ export default {
               this.branch_Name = "Informatique"
             }
              if(this.branch_Name === "MIAI"){
-              this.branch_Name = "Miage Initiae"
+              this.branch_Name = "Miage Initiale"
             }
              if(this.branch_Name === "MIAA"){
               this.branch_Name = "Miage Apprentissage"
@@ -213,7 +212,7 @@ export default {
               this.branch_Name = "CILS"
             }
              if(this.branch_Name === "MIAI"){
-              this.branch_Name = "Miage-Initiae"
+              this.branch_Name = "Miage-Initiale"
             }
              if(this.branch_Name === "MIAA"){
               this.branch_Name = "Miage-Apprentissage"
@@ -234,7 +233,7 @@ export default {
               this.branch_Name = "CILS"
             }
              if(this.branch_Name === "MIAI"){
-              this.branch_Name = "Miage-Initiae"
+              this.branch_Name = "Miage-Initiale"
             }
              if(this.branch_Name === "MIAA"){
               this.branch_Name = "Miage-Apprentissage"
@@ -246,12 +245,13 @@ export default {
           }
           if (branch.startsWith("M2")) {
             this.firstSplit = branch.split("-")[0];
+             
             this.branch_Name = this.firstSplit.split("M2")[1];
             if(this.branch_Name === "CIL"){
               this.branch_Name = "CILS"
             }
              if(this.branch_Name === "MIAI"){
-              this.branch_Name = "Miage-Initiae"
+              this.branch_Name = "Miage-Initiale"
             }
              if(this.branch_Name === "MIAA"){
               this.branch_Name = "Miage-Apprentissage"
@@ -274,6 +274,12 @@ export default {
         }
       });
       return Object.keys(unique);
+    },
+    
+    setCookie(item) {
+      this.$cookies.set("filiere", item);
+      console.log(this.$cookies.get("idexercice"));
+      this.$router.push("/exerciceContent/" + this.$cookies.get("idexercice"));
     },
   },
 };

@@ -9,6 +9,7 @@
       <a class="nav-item nav-link active" href="/professors">Enseignant<span class="sr-only">(current)</span></a>
       <a class="nav-item nav-link" href="/branch">Enseignements</a>
       <a class="nav-item nav-link" href="#">Enseignement non couvert</a>
+      <a class="nav-item nav-link" href="/demandes">Demande d'enseignement</a>
  
     </div>
   </div>
