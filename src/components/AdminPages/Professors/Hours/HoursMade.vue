@@ -11,6 +11,7 @@
                         <thead>
                         <tr>
                             <th @click="sort">Professeur</th>
+                            <th>Statut</th>
                             <th>CM effectués / totaux</th>
                             <th>TD effectués / totaux</th>
                             <th>TP effectués / totaux</th>
@@ -24,6 +25,7 @@
                             @click.prevent="setActiveProfessor(prof)"
                             >
                             <td>{{ prof.lastName }} {{ prof.firstName }}</td>
+                            <td>Statut</td>
                             <td
                                 class="font-weight-bold"
                                 v-bind:class="{
@@ -78,7 +80,7 @@
             </div>-->
             <hr>
 
-            <h2 class="text-left mb-4">Mes heures de travail</h2>
+            <h2 class="text-left mb-4">Mes heures de travail totales</h2>
             <div class="row">
                 <div class="col-4">
                     <h4>Heures de CM</h4>
@@ -161,10 +163,11 @@ export default {
     },
     created() {
         axios.get("http://146.59.195.214:8006/api/v1/events/paginated?page=2&size=10").then(response => {
-            //console.table(response.data.content)
+            console.table(response.data.content)
             this.hoursDataDetails = response.data.content
         })
         axios.get("http://146.59.195.214:8006/api/v1/stats/teacher/details/PASCAL/PETIT").then(response => {
+            console.log(response.data)
             this.hoursData = response.data
             this.chartDataCM.datasets[0].data = [
                 response.data.Done.cm,
@@ -231,12 +234,21 @@ export default {
             if ((this.currentPage * this.pageSize) < this.professors.length) {
                 this.currentPage++;
             }
+        },
+        capitalizeTextElement(element) {
+            const firstLetter = element[0].toUpperCase()
+            const rest = element.toLowerCase().substring(1)
+            return firstLetter + rest
         }
     },
     mounted() {
     },
     computed: {
         sortedProfessors: function() {
+            for (let prof of this.professors) {
+                prof.lastName = prof.lastName.toUpperCase()
+                prof.firstName = this.capitalizeTextElement(prof.firstName)
+            }
             // Slice method to avoid unexpected side effects
             return this.professors.slice().sort((a, b) => {
               let modifier = 1;
