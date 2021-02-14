@@ -5,8 +5,8 @@
     <h2>Département informatique - Université d'Evry</h2>
     <h3>2020 - 2021</h3>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"> Connexion </button> <!-- The Modal -->
-    <div class="visiteur"> <a href="#" class="linkVisiteur">Liste des professeurs</a> </div>
-    <div class="visiteur"> <a href="#" class="linkVisiteur">Liste des enseignements</a> </div>
+    <div class="visiteur"> <a href="/professors" class="linkVisiteur">Liste des professeurs</a> </div>
+    <div class="visiteur"> <a href="/branch" class="linkVisiteur">Liste des enseignements</a> </div>
     <div class="visiteur"> <a href="#" class="linkVisiteur">Liste des enseignements non couverts</a> </div>
     <div class="modal fade" id="myModal">
       <div class="modal-dialog modal-dialog-centered">
@@ -82,11 +82,17 @@ body {
 .modal-header {
   border-bottom: none;
   padding-bottom: 0;
-  padding-top: 4vh
+  padding-top: 4vh;
+  background-color: #C9893C;
+  font-size: 2vw;
+
 }
 
 .modal-footer {
   border-top: none
+}
+
+.modal-body{
 }
 
 button:active {
@@ -233,13 +239,17 @@ input {
   background-color: #C9893C;
 }
 
+.btn-primary:hover, .btn-primary:visited{
+  background-color: #344C80;
+}
+
 .btn:focus {
   box-shadow: none;
   outline: none
 }
 
 .container{
-  background-color: #344C80;
+  background-color: #55608f;
   padding-top: 10%;
   padding-bottom: 10%;
   border-radius: 20px;
