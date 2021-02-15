@@ -3,7 +3,7 @@
         <Header />
         <font-awesome-icon />
         <h1 class="pt-5">Liste des filières</h1>
-        <div class="panel panel-primary">
+        <div class="container">
         <div class="panel-heading"></div>     
         <table class="table table-bordered table-striped">
           <thead>
@@ -16,13 +16,17 @@
           <tbody>
             <tr v-for="filiere in separ" :key="filiere">
               <td>{{filiere}}</td>
-              <td><button class="btn btn-info btn-block" v-on:click="modifier"><font-awesome-icon icon="edit"></font-awesome-icon></button></td>
-              <td><button class="btn btn-danger btn-block" v-on:click="supprimer"><font-awesome-icon icon="trash"></font-awesome-icon></button></td>
+              <td><button class="btn btn-info btn-block" v-on:click="modif">Modifier<font-awesome-icon icon="edit"></font-awesome-icon></button></td>
+              <td><button class="btn btn-danger btn-block">Supprimer<font-awesome-icon icon="trash"></font-awesome-icon></button></td>
             </tr> 
 
-            <tr>
-              <td><input type="text" class="form-control"  placeholder="Filière"></td>
-              <td colspan=2><button class="btn btn-primary btn-block" disabled>Ajouter</button></td>
+            <tr v-if="Modification">
+              <td><input type="text" class="form-control"  placeholder="Filière "></td>
+              <td colspan=2><button class="btn btn-primary btn-block" v-on:click="MethodeModifier">Modifier</button></td>
+            </tr>
+            <tr v-else>
+              <td><input type="text" class="form-control"  placeholder="Filière "></td>
+              <td colspan=2><button class="btn btn-primary btn-block" v-on:click="Ajouter" >Ajouter</button></td>
             </tr>
 
           </tbody>
@@ -50,7 +54,7 @@ export default {
         return {
             filieres: [],
             test:null,
-            nbrePage: 10,
+            nbrePage: 5,
             currentPage: 1,
             pathway:[],
             pathways: [],
@@ -61,6 +65,7 @@ export default {
             branch_Name: String,
             rep:String,
             L1: [],
+            Modification:false,
       
      
      
@@ -252,14 +257,6 @@ export default {
   },
 
 
-
-
-
-
-
-
-
-
     methods: {
         prevPage() {
             if (this.currentPage > 1) {
@@ -274,6 +271,18 @@ export default {
          setElementsnbrePage(nbrePage) {
             this.nbrePage = nbrePage
         },
+
+        modif() {
+            this.Modification=true
+        },
+        Ajouter() {
+            this.Modification=false
+        },
+
+        MethodeModifier() {
+            this.Modification=false
+        },
+        
 
         removeDuplicate(table) {
       let unique = {};

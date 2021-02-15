@@ -3,6 +3,9 @@
         <Header />
         <font-awesome-icon />
         <h1 class="pt-5">Liste des Profs de {{ListeOrigine}}</h1>
+        <router-link to="/admin/origines/">
+                   <button id="bt1" class="btn btn-info btn-block" >Retour aux origines</button>
+        </router-link>
         <div class="panel panel-primary">
         <div class="panel-heading"></div>     
         <table class="table table-bordered table-striped">
@@ -110,5 +113,9 @@ export default {
 </script>
 
 <style scoped>
+
+#bt1 {
+    width:200px;
+}
 
 </style>
