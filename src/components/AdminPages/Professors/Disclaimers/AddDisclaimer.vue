@@ -1,8 +1,9 @@
 <template>
     <div>
         <Header />
-
         <h1 class="pt-5">Ajouter une décharge</h1>
+
+
     </div>
 </template>
 

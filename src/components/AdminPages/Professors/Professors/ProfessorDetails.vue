@@ -2,7 +2,7 @@
     <div>
         <Header />
 
-        <h1 class="pt-5">Nom Prénom</h1>
+        <h1 class="pt-5">Professeur - Détails</h1>
 
         <div class="container">
             <div class="card mt-4">
@@ -30,16 +30,23 @@
                             <input id="email" class="form-control" type="text" :placeholder="professor.email" disabled>
                         </div>
 
-                        <div class="form-group">
-                            <label for="profStatus">Statut:</label>
-                            <input id="profStatus" class="form-control" type="text" :placeholder="professor.statut" disabled>
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label for="profStatus">Statut:</label>
+                                <input id="profStatus" class="form-control" type="text" :placeholder="professor.status" disabled>
+                            </div>
+
+                            <div class="col form-group">
+                                <label for="profOrigin">Origine:</label>
+                                <input id="profOrigin" class="form-control" type="text" :placeholder="professor.origin" disabled>
+                            </div>
                         </div>
 
                         <!-- TODO Gérer l'affichage conditionnel en fonction de si le prof est responsable ou non -->
 
                         <!-- Affichage conditionnel -->
-                        <div class="form-check">
-                            <input id="responsibleInput" class="form-check-input" type="radio" :value="professor.isAdmin" disabled>
+                        <div v-if="professor.isSupervisor" class="form-check">
+                            <input id="responsibleInput" class="form-check-input" type="radio" :value="professor.isSupervisor" disabled>
                             <label for="responsibleInput">Est responsable de la filière : { nom filière }</label>
                         </div>
                     </form>
@@ -63,7 +70,7 @@
             }
         },
         created() {
-            axios.get("").then(response => {
+            axios.get(`https://back-serverdevoeux.herokuapp.com/api/professor/${this.idProf}`).then(response => {
                 this.professor = response.data
             })
         }

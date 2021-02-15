@@ -1,8 +1,8 @@
 <template>
     <div>
         <Header />
+        <h1 class="pt-5">Gestion des conflits</h1>
 
-        <h1 class="pt-5">Modifier une prime</h1>
     </div>
 </template>
 
@@ -10,7 +10,7 @@
 import Header from "@/components/AdminPages/Header";
 
 export default {
-    name: "ModifyBonus",
+    name: "Conflicts",
     components: { Header }
 }
 </script>

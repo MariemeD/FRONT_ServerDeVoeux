@@ -8,10 +8,11 @@ import {
   faServer,
   faUsers,
   faBook,
-  faEdit,
-  faSort,
-  faSortUp,
   faSortDown,
+  faSortUp,
+  faSort,
+  faTrash,
+  faEdit,
   faEye
 } from "@fortawesome/free-solid-svg-icons";
 import 'bootstrap'
@@ -25,10 +26,11 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 library.add(faServer)
 library.add(faUsers)
 library.add(faBook)
-library.add(faEdit)
 library.add(faSortUp)
 library.add(faSortDown)
 library.add(faSort)
+library.add(faTrash)
+library.add(faEdit)
 library.add(faEye)
 
 const router = new VueRouter({

@@ -1,8 +1,8 @@
 <template>
     <div>
         <Header />
+        <h1 class="pt-5">Gestion des voeux</h1>
 
-        <h1 class="pt-5">Liste des primes</h1>
     </div>
 </template>
 
@@ -10,7 +10,7 @@
 import Header from "@/components/AdminPages/Header";
 
 export default {
-    name: "Bonuses",
+    name: "Wishes",
     components: { Header }
 }
 </script>
