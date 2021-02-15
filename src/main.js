@@ -7,11 +7,14 @@ import FontAwesomeIcon from "@fortawesome/vue-fontawesome/src/components/FontAwe
 import { faServer, faUsers, faBook } from "@fortawesome/free-solid-svg-icons";
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import VueCookies from 'vue-cookies';
+
 
 Vue.config.productionTip = false
 
 Vue.use(VueRouter)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.use(VueCookies)
 
 library.add(faServer)
 library.add(faUsers)

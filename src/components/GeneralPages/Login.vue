@@ -17,11 +17,12 @@
           </div> <!-- Modal body -->
           <div class="modal-body">
             <p class="title"> Connexion </p>
-            <form method="POST">
-              <div class="input-group"> <input class="input--style-3" type="text" placeholder="Login*" name="email"> </div>
-              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Password*" name="password"> </div>
+            <form>
+              <div class="input-group"> <input class="input--style-3" type="text" placeholder="Login*" name="email" v-model="email"> </div>
+              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Password*" name="password" v-model="password"> </div>
               <div class="extra"> <a href="#"><u>I forgot my password</u></a> </div>
-              <div class="p-t-10"> <button class="btn btn--pill btn--signin" type="submit" data-target="#">CONNEXION</button> </div>
+              <div class="p-t-10"><button class="btn btn--pill btn--signin" @click.stop.prevent="Login()" @click="hideModal">CONNEXION</button></div>
+              <!--<div class="p-t-10"><input type="submit" class="btn btn--pill btn--signin" value="Login" /></div>-->
               <!--<p class="title">or sign in using apps you love:</p>-->
               <!--<div class="row">
                 <div class="col">
@@ -40,6 +41,7 @@
   </div>
 </template>
 <script>
+    import axios from "axios"
     export default {
         name: "Login"
         ,mounted() {
@@ -47,7 +49,58 @@
             externalScript.setAttribute('src', 'https://code.jquery.com/jquery-3.2.1.slim.min.js')
             externalScript.setAttribute('src', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
             document.head.appendChild(externalScript)
-        }
+        },
+        data() {
+        return {
+          page: [],
+          email: "",
+          password: "",
+          wrong: ""
+        };
+      },
+        methods: {
+          hideModal() {
+            this.$refs['myModal'].hide()
+          },
+          Login() {
+          if (this.email && this.password !== "") {
+            axios
+                .get(
+                    "http://localhost:3000/api/login/" +
+                    this.email +
+                    "/" +
+                    this.password
+                )
+                .then((user) => {
+                  axios
+                      .get("http://localhost:3000/api/professors/")
+                      .then((response) => {
+                        for (let prof of response.data) {
+                          console.log(prof);
+                          if (prof.email === user.data.userLogin.email) {
+                            console.log(user.data.userLogin);
+                            this.$cookies.set("idProfessor", prof._id);
+                            this.$cookies.set("idUser", user.data.userLogin._id);
+                            this.$cookies.set("profile", user.data.userLogin.profile);
+                            console.log(this.$cookies.get("idProfessor"));
+                            console.log(this.$cookies.get("profile"));
+                          }
+                        }
+                        if (user.data.userLogin.profile === "professeur") {
+                          console.log("OK");
+                          this.$router.push("/professors");
+                        } else {
+                          this.$router.push("/admin");
+                        }
+                      });
+                })
+                .catch((error) => {
+                  console.log(error.response);
+                  this.wrongPr= error.response.data.error
+                });
+          }
+        },
+      }
     }
 
 </script>
