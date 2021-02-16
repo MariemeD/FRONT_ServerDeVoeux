@@ -5,10 +5,10 @@
       <div class="card" id="infos">
        <div class="additional">
         <div class="info-card">
-          <h3>Leila Hennach</h3>
-          <h3>Grad:</h3>
-          <h3>Université</h3>
-          <h3>email</h3>
+          <h6>{{ firstName }} {{ lastName }}</h6>
+          <h6>Grad : {{ status }}</h6>
+          <h6>{{ origin }}</h6>
+          <h6>{{ email }}</h6>
         </div>
       </div>
 
@@ -16,15 +16,17 @@
       </div>
       <div class="card" id="details">
         <div class="general">
-          <h1>Module Name</h1>
-          <h4>Branche Name</h4>
-          <table class="table">
+          <h1>Service de {{ firstName }} {{ lastName }}</h1>
+          
+          <table class="table table-striped">
             <thead>
               <tr>
-                <th>Type</th>
-                <th>Volume</th>
-                <th>Nbr de grp</th>
                 <th>Enseignement</th>
+                <th>Filière</th>
+                <th>Cours</th>
+                <th>TD</th>
+                <th>TP</th>
+                <th>Total en équivalent TD</th>
               </tr>
             </thead>
             <tbody>
@@ -32,6 +34,8 @@
                 <td>Hennach</td>
                 <td>Leila</td>
                 <td>testOrigine</td>
+                <td>testStatut</td>
+                <td>testStatut</td>
                 <td>testStatut</td>
               </tr>
               <tr>
@@ -145,6 +149,7 @@
   margin-top: 90px;
   margin-left:40px;
   height: 400px;
+  border: none;
 }
 .additional {
   position: absolute;
@@ -163,10 +168,10 @@
 td {
   margin-top: 5%;
 }
-h3 {
+h6 {
    color: #fff;
     margin-top: 40px;
-
+    
 }
 
 a {
@@ -178,29 +183,22 @@ table {
 
   border-collapse: collapse;
   overflow: hidden;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  background: #344c80;
+
   margin-top: 30px;
 }
 
 th,
 td {
   padding: 15px;
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #fff;
+ 
 }
 
 th {
   text-align: center;
+  
 }
 
-thead th {
-  background-color: #55608f;
-}
 
-tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.3);
-}
 tbody td {
   position: relative;
 }
@@ -300,11 +298,41 @@ margin-left: 40px;
 </style>
 <script>
 import Navbar from "../Navbar_Prof";
+import axios from "axios";
 
 export default {
   name: "Prof_Service",
   components: {
     Navbar,
   },
+   data() {
+    return {
+      info: ["test", "best"],
+      matieres: [],
+      firstName:String,
+      lastName:String,
+      status: String,
+      origin:String,
+      email:String
+    };
+  },
+  mounted(){
+    console.log
+    this.firstName =this.$cookies.get("prof").firstName;
+    this.lastName= this.$cookies.get("prof").lastName;
+    this.status = this.$cookies.get("prof").status;
+    this.origin= this.$cookies.get("prof").origin;
+    this.email= this.$cookies.get("prof").email;
+     axios
+      .get("http://146.59.195.214:8006/api/v1/events/teacher/"+this.firstName+"/"+this.lastName)
+      .then((response) => {
+        response.data.forEach((mat) => {
+           this.matieres.push({
+             name: mat
+           })
+        });
+      });
+    
+  }
 };
 </script>

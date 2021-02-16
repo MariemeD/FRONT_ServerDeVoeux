@@ -1,6 +1,7 @@
 import HomeProf from "./components/ProfessorPages/HomePage";
 import Professor from "./components/ProfessorPages/professor/Professors";
 import ProfessorService from "./components/ProfessorPages/professor/Prof_Service";
+import Profil from "./components/ProfessorPages/Profile";
 //modules
 
 //import DetailsModule from "./components/ProfessorPages/Modules/Details_Module";
@@ -81,7 +82,7 @@ export default [
 
 
     {path: '/home', component: HomeProf},
-
+    {path: '/profil', component: Profil},
     // Professor routes
     {path: '/professors', component: Professor},
     {path: '/professorService', component: ProfessorService},

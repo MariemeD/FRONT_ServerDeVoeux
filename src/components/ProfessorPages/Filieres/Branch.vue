@@ -5,15 +5,16 @@
       <h2>Liste des Enseignements</h2>
     </div>
     <div class="modules">
-      
       <div class="card">
         <h4>M2</h4>
         <hr />
 
         <table v-for="branch in M2N" :key="branch">
           <tr>
-            <td>
-              <a href="/detailsBranch"> {{ branch }} </a>
+            <td @click="setCookie(branch)">
+             
+                {{ branch.branchName }}
+           
             </td>
           </tr>
         </table>
@@ -23,8 +24,10 @@
         <hr />
         <table v-for="branch in M1N" :key="branch">
           <tr>
-            <td>
-              <a href="/detailsBranch"> {{ branch }} </a>
+            <td @click="setCookie(branch)">
+             
+                {{ branch.branchName }}
+              
             </td>
           </tr>
         </table>
@@ -34,8 +37,10 @@
         <hr />
         <table v-for="branch in L3N" :key="branch">
           <tr>
-            <td>
-              <a href="/detailsBranch"> {{ branch }} </a>
+            <td @click="setCookie(branch)">
+             
+                {{ branch.branchName }}
+              
             </td>
           </tr>
         </table>
@@ -45,8 +50,10 @@
         <hr />
         <table v-for="branch in L2N" :key="branch">
           <tr>
-            <td>
-              <a href="/detailsBranch"> {{ branch }} </a>
+            <td @click="setCookie(branch)">
+             
+                {{ branch.branchName }}
+            
             </td>
           </tr>
         </table>
@@ -56,8 +63,10 @@
         <hr />
         <table v-for="branch in L1N" :key="branch">
           <tr>
-            <td>
-              <a href="/detailsBranch"> {{ branch }} </a>
+            <td @click="setCookie(branch)">
+               
+                {{ branch.branchName }}
+            
             </td>
           </tr>
         </table>
@@ -78,6 +87,7 @@
 }
 td {
   margin-top: 5%;
+  cursor: pointer;
 }
 h2 {
   margin-top: 100px;
@@ -110,17 +120,16 @@ hr {
   -o-transition-timing-function: cubic-bezier(0.795, 0, 0.165, 1);
   transition-timing-function: cubic-bezier(0.795, 0, 0.165, 1); /* custom */
 }
-	@media 
-	only screen and (max-width: 760px),
-	(min-device-width: 768px) and (max-device-width: 1024px)  {
-    .modules{
-      flex-flow: row wrap;
-    }
-    .card{
-      width: 300px;
-      margin-left: 20px;
-    }
+@media only screen and (max-width: 760px),
+  (min-device-width: 768px) and (max-device-width: 1024px) {
+  .modules {
+    flex-flow: row wrap;
   }
+  .card {
+    width: 300px;
+    margin-left: 20px;
+  }
+}
 </style>
 <script>
 import Navbar from "../Navbar_Prof";
@@ -143,8 +152,10 @@ export default {
       M1N: [],
       M2: [],
       M2N: [],
+
       firstSplit: String,
       branch_Name: String,
+      originalName: String,
     };
   },
   mounted() {
@@ -153,133 +164,140 @@ export default {
       .then((response) => {
         console.log(this.L1);
         response.data.forEach((branch) => {
-        
           if (branch.startsWith("L1")) {
             this.firstSplit = branch.split("-")[0];
-           console.log(this.firstSplit)
+            console.log(this.firstSplit);
             this.branch_Name = this.firstSplit.split("L1")[1];
-             if(this.branch_Name === "CIL"){
-              this.branch_Name = "CILS"
+            this.originalName = this.firstSplit.split("L1")[1];
+            if (this.branch_Name === "CIL") {
+              this.branch_Name = "CILS";
             }
-             if(this.branch_Name === "MIAI"){
-              this.branch_Name = "Miage Initiae"
+            if (this.branch_Name === "MIAI") {
+              this.branch_Name = "Miage Initiae";
             }
-             if(this.branch_Name === "MIAA"){
-              this.branch_Name = "Miage Apprentissage"
+            if (this.branch_Name === "MIAA") {
+              this.branch_Name = "Miage Apprentissage";
             }
             this.L1.push({
               branchName: this.branch_Name,
+              branchCookie: "L1" + this.originalName,
             });
 
             this.L1N = this.removeDuplicate(this.L1);
           }
           if (branch.startsWith("L2")) {
-             
             this.firstSplit = branch.split("-")[0];
             this.branch_Name = this.firstSplit.split("L2")[1];
-             if(this.branch_Name === "CIL"){
-              this.branch_Name = "CILS"
+            this.originalName = this.firstSplit.split("L2")[1];
+            if (this.branch_Name === "CIL") {
+              this.branch_Name = "CILS";
             }
-            if(this.branch_Name === "INFX"){
-              this.branch_Name = "Informatique"
+            if (this.branch_Name === "INFX") {
+              this.branch_Name = "Informatique";
             }
-             if(this.branch_Name === "MIAI"){
-              this.branch_Name = "Miage Initiale"
+            if (this.branch_Name === "MIAI") {
+              this.branch_Name = "Miage Initiale";
             }
-             if(this.branch_Name === "MIAA"){
-              this.branch_Name = "Miage Apprentissage"
+            if (this.branch_Name === "MIAA") {
+              this.branch_Name = "Miage Apprentissage";
             }
             this.L2.push({
               branchName: this.branch_Name,
+              branchCookie: "L2" + this.originalName,
             });
             this.L2N = this.removeDuplicate(this.L2);
           }
           if (branch.startsWith("L3")) {
-           
-            if(branch.indexOf("-")> -1){
+            if (branch.indexOf("-") > -1) {
+              this.branch_Name = branch.split("-")[1];
+              this.originalName = branch.split("-")[1];
 
-           
-            this.branch_Name = branch.split("-")[1];
-            
-           
-            if(branch.split("-")[0] === "L3A"){
-              this.branch_Name = this.branch_Name + "-Apprentissage";
+              if (branch.split("-")[0] === "L3A") {
+                this.branch_Name = this.branch_Name + "-Apprentissage";
+              }
+
+              //this.branch_Name = this.firstSplit.split("L3")[1];
+              // console.log(this.firstSplit.split("L3"))
+              if (this.branch_Name === "CIL") {
+                this.branch_Name = "CILS";
+              }
+              if (this.branch_Name === "MIAI") {
+                this.branch_Name = "Miage-Initiale";
+              }
+              if (this.branch_Name === "MIAA") {
+                this.branch_Name = "Miage-Apprentissage";
+              }
+            } else {
+              this.branch_Name = "";
             }
-           
-            //this.branch_Name = this.firstSplit.split("L3")[1];
-            console.log(this.firstSplit.split("L3"))
-             if(this.branch_Name === "CIL"){
-              this.branch_Name = "CILS"
-            }
-             if(this.branch_Name === "MIAI"){
-              this.branch_Name = "Miage-Initiale"
-            }
-             if(this.branch_Name === "MIAA"){
-              this.branch_Name = "Miage-Apprentissage"
-            }
-             } else{
-               this.branch_Name= "";
-             }
             this.L3.push({
               branchName: this.branch_Name,
+              branchCookie: "L3" + this.originalName,
             });
             this.L3N = this.removeDuplicate(this.L3);
           }
           if (branch.startsWith("M1")) {
             this.firstSplit = branch.split("-")[0];
-            
+
             this.branch_Name = this.firstSplit.split("M1")[1];
-             if(this.branch_Name === "CIL"){
-              this.branch_Name = "CILS"
+            this.originalName = this.firstSplit.split("M1")[1];
+            if (this.branch_Name === "CIL") {
+              this.branch_Name = "CILS";
             }
-             if(this.branch_Name === "MIAI"){
-              this.branch_Name = "Miage-Initiale"
+            if (this.branch_Name === "MIAI") {
+              this.branch_Name = "Miage-Initiale";
             }
-             if(this.branch_Name === "MIAA"){
-              this.branch_Name = "Miage-Apprentissage"
+            if (this.branch_Name === "MIAA") {
+              this.branch_Name = "Miage-Apprentissage";
             }
             this.M1.push({
               branchName: this.branch_Name,
+              branchCookie: "M1" + this.originalName,
             });
             this.M1N = this.removeDuplicate(this.M1);
           }
           if (branch.startsWith("M2")) {
             this.firstSplit = branch.split("-")[0];
-             
+
             this.branch_Name = this.firstSplit.split("M2")[1];
-            if(this.branch_Name === "CIL"){
-              this.branch_Name = "CILS"
+            this.originalName = this.firstSplit.split("M2")[1];
+            if (this.branch_Name === "CIL") {
+              this.branch_Name = "CILS";
             }
-             if(this.branch_Name === "MIAI"){
-              this.branch_Name = "Miage-Initiale"
+            if (this.branch_Name === "MIAI") {
+              this.branch_Name = "Miage-Initiale";
             }
-             if(this.branch_Name === "MIAA"){
-              this.branch_Name = "Miage-Apprentissage"
+            if (this.branch_Name === "MIAA") {
+              this.branch_Name = "Miage-Apprentissage";
             }
-              this.M2.push({
-                branchName: this.branch_Name,
-              });
-             this.M2N = this.removeDuplicate(this.M2);
+
+            this.M2.push({
+              branchName: this.branch_Name,
+              branchCookie: "M2" + this.originalName,
+            });
+
+            this.M2N = this.removeDuplicate(this.M2);
+              console.log(this.M2N)
           }
         });
       });
   },
   methods: {
     removeDuplicate(table) {
-      let unique = {};
-      table.forEach(function (i) {
-        if (!unique[i]) {
-        //  console.log(i.branchName);
-          unique[i.branchName] = true;
-        }
+      let unique = [];
+      var cache = {};
+      unique = table.filter(function (elem) {
+        return cache[elem.branchName] ? 0 : (cache[elem.branchName] = 1);
       });
-      return Object.keys(unique);
+
+    //  console.log(unique);
+      return unique;
     },
-    
+
     setCookie(item) {
       this.$cookies.set("filiere", item);
-      console.log(this.$cookies.get("idexercice"));
-      this.$router.push("/exerciceContent/" + this.$cookies.get("idexercice"));
+      console.log(this.$cookies.get("filiere"))
+      this.$router.push("/detailsBranch");
     },
   },
 };

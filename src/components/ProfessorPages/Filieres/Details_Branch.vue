@@ -5,9 +5,9 @@
       <div class="card" id="infos">
        <div class="additional">
         <div class="info-card">
-          <h3>MIAGE</h3>
+          <h3>{{ branchName }}</h3>
           <h3>Responsable : email </h3>
-          <h3>Etat de filière </h3>
+       
           
         </div>
       </div>
@@ -16,67 +16,27 @@
       </div>
       <div class="card" id="details">
         <div class="general">
-        <h1>Nom de la Branche</h1>
-        <table class="table">
+        <h1>{{ branchName }}</h1>
+        <table class="table table-bordered table-striped">
       <thead>
-        <tr>
+        <tr class="table-active">
           <th>Matiere</th>
           <th>Semestre</th>
           <th>Cours</th>
           <th>TD</th>
           <th>TP</th>
-          <th>TP</th>
+          
          
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><a href="/detailsModule"> Module_name </a></td>
+        <tr v-for="mat in matieres" :key="mat">
+          <td>{{ mat.matiereName }}</td>
           <td>Leila</td>
           <td>testOrigine</td>
           <td>testStatut</td>
           <td>testService</td>
-          <td>100</td>
-        </tr>
-        <tr>
-          <td>Bourlier</td>
-          <td>Sylvie</td>
-          <td>testOrigine</td>
-          <td>testStatut</td>
-          <td>testService</td>
-          <td>100</td>
-        </tr>
-        <tr>
-          <td>Bourlier</td>
-          <td>Sylvie</td>
-          <td>testOrigine</td>
-          <td>testStatut</td>
-          <td>testService</td>
-          <td>100</td>
-        </tr>
-       
-        <tr>
-          <td>Bourlier</td>
-          <td>Sylvie</td>
-          <td>testOrigine</td>
-          <td>testStatut</td>
-          <td>testService</td>
-          <td>100</td>
-        </tr>
-       <tr>
-          <td colspan="5">Total</td>
-          <td>100</td>
-          
-        </tr>
-         <tr>
-          <td colspan="5">Heures Statutaire</td>
-          <td>100</td>
-          
-        </tr>
-         <tr>
-          <td colspan="5">Déficit</td>
-          <td>100</td>
-          
+         
         </tr>
       </tbody>
     </table>
@@ -175,7 +135,8 @@
   width: 70%;
   margin-top: 90px;
   margin-left:40px;
-  height: 400px;
+  border: none;
+  
 }
 .additional {
   position: absolute;
@@ -193,6 +154,7 @@
 }
 td {
   margin-top: 5%;
+  cursor: pointer;
 }
 h3 {
    color: #fff;
@@ -206,31 +168,26 @@ a {
 }
 table {
   width: 100%;
-
+   height: 100%;
   border-collapse: collapse;
   overflow: hidden;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  background: #344c80;
+
   margin-top: 30px;
 }
 
 th,
 td {
   padding: 15px;
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #fff;
+
 }
 
 th {
   text-align: center;
 }
 
-thead th {
-  background-color: #55608f;
-}
 
 tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0);
 }
 tbody td {
   position: relative;
@@ -289,9 +246,7 @@ margin-left: 40px;
   tr {
     border: 2px solid #eee;
   }
-  tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-  }
+ 
   td {
     /* Behave  like a "row" */
     border: none;
@@ -302,13 +257,13 @@ margin-left: 40px;
 
   td:before {
     /* Now like a table header */
-    position: absolute;
+    position:initial;
     /* Top/left values mimic padding */
     top: 6px;
     left: 6px;
     width: 45%;
     padding-right: 100%;
-    white-space: nowrap;
+    white-space:nowrap;
   }
 
   /*
@@ -316,27 +271,52 @@ margin-left: 40px;
 		*/
 
   td:nth-of-type(1):before {
-    content: "Type";
+    content: "Matière";
   }
   td:nth-of-type(2):before {
-    content: "Volume";
+    content: "Semestre";
   }
   td:nth-of-type(3):before {
-    content: "Nbr de groupe";
+    content: "Cours";
   }
   td:nth-of-type(4):before {
-    content: "Enseignement";
+    content: "TD";
   }
+  td:nth-of-type(5):before {
+    content: "TP";
+  }
+   
 }
 </style>
 
 <script>
 import Navbar from '../Navbar_Prof';
+import axios from "axios";
 
 export default {
   name : 'Details_Filiere',
+   data() {
+    return {
+      matieres: [],
+      branchName:String
+    };
+  },
   components: {
    Navbar
   },
+  mounted (){
+    this.branchName= this.$cookies.get("filiere").branchCookie.substring(0, 2)+" "+this.$cookies.get("filiere").branchName;
+     axios
+      .get("http://146.59.195.214:8006/api/v1/events/"+this.$cookies.get("filiere").branchCookie+"/matiere")
+      .then((response) => {
+        console.log(this.$cookies.get("filiere").branchCookie)
+          response.data.forEach((matiere) => {
+        this.matieres.push({
+          matiereName:matiere
+        })
+       // console.log(this.matieres)
+          });
+      });
+  }
 }
 </script>
