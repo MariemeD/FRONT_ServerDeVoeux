@@ -5,15 +5,18 @@ import Routes from "@/Routes";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import FontAwesomeIcon from "@fortawesome/vue-fontawesome/src/components/FontAwesomeIcon";
 import {
-  faServer,
-  faUsers,
-  faBook,
-  faSortDown,
-  faSortUp,
-  faSort,
-  faTrash,
-  faEdit,
-  faEye
+    faServer,
+    faUsers,
+    faBook,
+    faSortDown,
+    faSortUp,
+    faSort,
+    faTrash,
+    faEdit,
+    faEye,
+    faCheckCircle,
+    faTimesCircle,
+    faExclamation
 } from "@fortawesome/free-solid-svg-icons";
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -32,6 +35,9 @@ library.add(faSort)
 library.add(faTrash)
 library.add(faEdit)
 library.add(faEye)
+library.add(faCheckCircle)
+library.add(faTimesCircle)
+library.add(faExclamation)
 
 const router = new VueRouter({
   routes: Routes,

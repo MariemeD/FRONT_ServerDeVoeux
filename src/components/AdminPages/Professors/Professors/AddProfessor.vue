@@ -101,7 +101,7 @@ export default {
                 email: '',
                 status: '',
                 origin: '',
-                isSupervisor: false,
+                composante: '',
                 pathwayResponsibleFor: '',
                 submitted: false,
                 errorOnSubmit: false
@@ -125,12 +125,12 @@ export default {
             if (this.formData.lastname && this.formData.firstname
                 && this.formData.email && this.formData.status && this.formData.origin) {
                 const newProfessorAdded = {
-                    lastname: this.formData.lastname,
-                    firstname: this.formData.firstname,
+                    lastName: this.formData.lastname,
+                    firstName: this.formData.firstname,
                     email: this.formData.email,
                     status: this.formData.status,
-                    origin: this.formData.origin,
-                    isSupervisor: this.formData.isSupervisor,
+                    department: this.formData.origin,
+                    composante: this.formData.composante,
                 }
 
                 axios.post('https://back-serverdevoeux.herokuapp.com/api/professor', newProfessorAdded).then((response) => {

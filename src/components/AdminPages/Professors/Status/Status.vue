@@ -21,7 +21,7 @@
 
             <div>
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-striped">
                         <thead>
                         <th>
                             Statut
@@ -40,12 +40,13 @@
                         </thead>
                         <tbody>
                         <tr v-for="statut in sortedStatus" :key="statut._id">
-                            <td>{{ statut.name }}</td>
+                            <td>{{ statut }}</td>
                             <td>{{ statut.mandatoryHours }}</td>
                             <td>{{ statut.extraHours }}</td>
                             <!-- TODO Cette colonne doit apparaitre que si le super admin est connecté -->
-                            <td>
-                                <router-link :to="{ name: 'status-edit', params: { idStatus: statut._id }}">
+                           <td>
+                               -
+                               <!--  <router-link :to="{ name: 'status-edit', params: { idStatus: statut._id }}">
                                     <font-awesome-icon class="editIcon mr-3" icon="edit" size="lg"></font-awesome-icon>
                                 </router-link>
                                 <font-awesome-icon
@@ -55,7 +56,7 @@
                                     data-toggle="modal"
                                     data-target="#deleteModal"
                                     @click.prevent="setCurrentStatus(statut)">
-                                </font-awesome-icon>
+                                </font-awesome-icon>-->
                             </td>
                         </tr>
                         </tbody>
@@ -106,14 +107,16 @@ export default {
             currentStatus: {},
             showModal: false,
             currentSortDirection: 'asc',
-            currentSort: 'name',
+            currentSort: 'lastName',
             pageSize: 10,
             currentPage: 1,
             sortIcon: 'sort',
         }
     },
     created() {
-        axios.get("https://back-serverdevoeux.herokuapp.com/api/status").then(response => this.status = response.data)
+        axios.get("http://146.59.195.214:8006/api/v1/teachers/all").then(response => {
+            this.status = this.removeRedundantStatus(response.data)
+        })
     },
     methods: {
         sort(criteria) {
@@ -140,6 +143,13 @@ export default {
             this.currentStatus = status
             this.showModal = true
         },
+        removeRedundantStatus(status) {
+            let finalStatus = []
+            for (let stat of status) {
+                finalStatus.push(stat.status)
+            }
+            return [...new Set(finalStatus)].sort()
+        },
         deleteStatus() {
             axios.delete(`https://back-serverdevoeux.herokuapp.com/api/status/${this.currentStatus._id}`).then(() => {
                 console.log("Suppression effective")
@@ -152,13 +162,13 @@ export default {
     },
     computed: {
         sortedStatus: function() {
-            return this.status.slice().sort((a, b) => {
+            return this.status.slice()/*.sort((a, b) => {
                 let modifier = 1
                 if(this.currentSortDirection === 'desc') modifier = -1
                 if(a[this.currentSort].toLowerCase() < b[this.currentSort].toLowerCase()) return -1 * modifier
                 if(a[this.currentSort].toLowerCase() > b[this.currentSort].toLowerCase()) return modifier
                 return 0;
-            }).filter((row, index) => {
+            })*/.filter((row, index) => {
                 let start = (this.currentPage - 1) * this.pageSize;
                 let end = this.currentPage * this.pageSize;
                 if (index >= start && index < end) return true
@@ -188,22 +198,6 @@ export default {
 .pageSizeElt {
     cursor: pointer;
     color: #536895;
-}
-table {
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    background: linear-gradient(45deg, #405c9b, #b87f3a);
-}
-td {
-    border-top-color: #2c3e50;
-}
-.table thead th {
-    border-bottom-color: #2c3e50;
-}
-thead th {
-    background-color: #6684c1;
-}
-tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.3);
 }
 .page-link {
     color: #536895;

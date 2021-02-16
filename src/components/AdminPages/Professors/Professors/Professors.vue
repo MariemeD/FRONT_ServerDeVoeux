@@ -22,15 +22,11 @@
 
 
             <div class="table-responsive">
-                <table class="table">
+                <table class="table table-striped">
                     <thead>
                         <th>
-                            Nom de famille
-                            <font-awesome-icon :icon="sortIcon" @click="sort('lastname')"></font-awesome-icon>
-                        </th>
-                        <th>
-                            Prénom
-                            <font-awesome-icon :icon="sortIcon" @click="sort('firstname')"></font-awesome-icon>
+                            Nom - Prénom
+                            <font-awesome-icon :icon="sortIcon" @click="sort('lastName')"></font-awesome-icon>
                         </th>
                         <th>
                             Email
@@ -45,20 +41,26 @@
                     </thead>
                     <tbody>
                         <tr v-for="prof in sortedProfessors" :key="prof.email">
-                            <td>{{ prof.lastname }}</td>
-                            <td>{{ prof.firstname }}</td>
+                            <td>{{ prof.lastName }} {{ prof.firstName }}</td>
                             <td>{{ prof.email }}</td>
                             <td>{{ prof.status }}</td>
-                            <td>{{ prof.origin }}</td>
+                            <td>{{ prof.department }}</td>
                             <!--
                             TODO Cette colonne doit apparaitre que si le super admin est connecté et uniquement pour les professeurs liés à la filière du prof connecté
                             -->
                             <td>
                                 <router-link :to="{name: 'professor', params: { idProf: prof._id }}">
-                                    <font-awesome-icon class="editIcon mr-3" icon="eye" size="lg"></font-awesome-icon>
+                                    <button class="btn btn-outline-primary btnIcon">
+                                        Modifier
+                                        <font-awesome-icon icon="edit"></font-awesome-icon>
+                                    </button>
                                 </router-link>
+                                |
                                 <router-link :to="{name: 'professors-edit', params: { idProf: prof._id }}">
-                                    <font-awesome-icon class="editIcon" icon="edit" size="lg"></font-awesome-icon>
+                                    <button class="btn btn-outline-danger btnIcon">
+                                        Supprimer
+                                        <font-awesome-icon icon="trash"></font-awesome-icon>
+                                    </button>
                                 </router-link>
                             </td>
                         </tr>
@@ -88,22 +90,21 @@ export default {
         return {
             professors: [],
             currentSortDirection: 'asc',
-            currentSort: 'lastname',
+            currentSort: 'lastName',
             pageSize: 10,
             currentPage: 1,
             sortIcon: 'sort',
         }
     },
     created() {
-        axios.get("https://back-serverdevoeux.herokuapp.com/api/professors").then(response => {
+        axios.get("http://146.59.195.214:8006/api/v1/teachers/all").then(response => {
             this.professors = response.data
-            /*for (let prof of response.data) {
-                console.log(prof)
-                axios.put("https://back-serverdevoeux.herokuapp.com/api/professor/" + prof._id, {
-                    email: prof.email.toLowerCase(),
-                    status: "Indéfini",
-                }).then(response => console.log(response))
-            }*/
+            for (let prof of response.data) {
+                prof.lastName = this.capitalizeTextElement(prof.lastName)
+                prof.firstName = this.capitalizeTextElement(prof.firstName)
+                prof.email = prof.email.toLowerCase()
+                prof.department = prof.department.replaceAll("d&#039;", "d'")
+            }
         })
     },
     methods: {
@@ -128,6 +129,11 @@ export default {
         },
         setElementsPerPage(pageSize) {
             this.pageSize = pageSize
+        },
+        capitalizeTextElement(element) {
+            const firstLetter = element[0].toUpperCase()
+            const rest = element.toLowerCase().substring(1)
+            return firstLetter + rest
         }
     },
     computed: {
@@ -162,28 +168,15 @@ export default {
 #eltPerPage {
     margin-top: 0.60em;
 }
-table {
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    background: linear-gradient(45deg, #405c9b, #b87f3a);
-}
-td {
-    border-top-color: #2c3e50;
-}
-.table thead th {
-    border-bottom-color: #2c3e50;
-}
-thead th {
-    background-color: #6684c1;
-}
-tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-}
 .pageSizeElt {
     cursor: pointer;
     color: #536895;
 }
-.editIcon {
-    color: #2c3e50;
+.btnIcon:hover .faIcon {
+    color: #FFF;
+}
+.editIcon:hover {
+    color: #FFF;
 }
 .page-link {
     color: #536895;

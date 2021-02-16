@@ -13,10 +13,16 @@
                     <router-link class="nav-link" :to="{ name: 'admin-profil'}">Profil</router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link class="nav-link" :to="{ name: 'wishes' }">Gestion des voeux</router-link>
+                    <router-link class="nav-link" :to="{ name: 'wishes' }">
+                        Gestion des voeux
+                        <span class="badge badge-dark">{{ requestNb }}</span>
+                    </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link class="nav-link" :to="{ name: 'conflict-wishes' }">Gestion des conflits</router-link>
+                    <router-link class="nav-link" :to="{ name: 'conflict-wishes' }">
+                        Gestion des conflits
+                        <span class="badge badge-dark">{{ conflictNb }}</span>
+                    </router-link>
                 </li>
             </ul>
             <a class="nav-link my-2 my-lg-0">Déconnexion</a>
@@ -26,7 +32,17 @@
 
 <script>
 export default {
-    name: "Header"
+    name: "Header",
+    data() {
+        return {
+            requestNb: null,
+            conflictNb: null
+        }
+    },
+    created() {
+        // TODO Récupérer le nombre de voeux pour la filiere du prof connecté
+        // TODO Récupérer le nombre de voeux pour la filiere du prof connecté
+    }
 }
 </script>
 

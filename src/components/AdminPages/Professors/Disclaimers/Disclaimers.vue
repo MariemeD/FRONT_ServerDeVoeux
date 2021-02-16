@@ -22,18 +22,18 @@
 
 
             <div class="table-responsive">
-                <table class="table">
+                <table class="table table-striped">
                     <thead>
                     <th>
-                        Nom décharge
+                        Objet de la décharge
                         <font-awesome-icon :icon="sortIcon" @click="sort('lastname')"></font-awesome-icon>
                     </th>
                     <th>
-                        Valeur
+                        Nombre d'heures
                         <font-awesome-icon :icon="sortIcon" @click="sort('firstname')"></font-awesome-icon>
                     </th>
                     <th>
-                        Valeur
+                        Professeur
                         <font-awesome-icon :icon="sortIcon" @click="sort('email')"></font-awesome-icon>
                     </th>
                     <!-- TODO Cette colonne doit apparaitre que si le super admin est connecté -->
@@ -148,22 +148,6 @@ export default {
 .pageSizeElt {
     cursor: pointer;
     color: #536895;
-}
-table {
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    background: linear-gradient(45deg, #405c9b, #b87f3a);
-}
-td {
-    border-top-color: #2c3e50;
-}
-.table thead th {
-    border-bottom-color: #2c3e50;
-}
-thead th {
-    background-color: #6684c1;
-}
-tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.3);
 }
 .page-link {
     color: #536895;
