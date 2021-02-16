@@ -10,7 +10,7 @@
       <a class="nav-item nav-link" href="/branch">Enseignements</a>
       <a class="nav-item nav-link" href="#">Enseignement non couvert</a>
       <a class="nav-item nav-link" href="/demandes">Demande d'enseignement</a>
- 
+      <a class="nav-item nav-link" href="/profil">Profile</a>
     </div>
   </div>
     </nav>

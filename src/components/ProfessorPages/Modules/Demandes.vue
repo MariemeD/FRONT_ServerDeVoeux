@@ -4,7 +4,7 @@
     <div class="card">
       <div class="general">
         <h1>Demandes</h1>
-       
+
         <table class="table">
           <thead>
             <tr>
@@ -23,23 +23,19 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Hennach</td>
-              <td>Leila</td>
+            <tr v-for="demande in Demandes" :key="demande">
+              <td>{{ demande.courseRequested }}</td>
+              <td>{{ demande.status }}</td>
               <td>
-                <font-awesome-icon icon="eye" />
-                <font-awesome-icon icon="trash" />
+                <font-awesome-icon
+                 data-toggle="modal"
+                  data-target="#information"
+                  icon="eye"
+                  @click="showRequest(demande.idDemande)"
+                />
+                <font-awesome-icon icon="trash" data-toggle="modal"
+                  data-target="#delete" @click="setCookie(demande)" />
               </td>
-            </tr>
-            <tr>
-              <td>Bourlier</td>
-              <td>Sylvie</td>
-              <td><font-awesome-icon icon="trash" /></td>
-            </tr>
-            <tr>
-              <td>Bourlier</td>
-              <td>Sylvie</td>
-              <td>Consulter</td>
             </tr>
           </tbody>
         </table>
@@ -95,13 +91,18 @@
                     aria-label=".form-select-lg example"
                     id="matiere"
                   >
-                    <option v-for="matiere in Matieres" :key="matiere" v-bind:value="matiere.matiereName">
+                    <option
+                      v-for="matiere in Matieres"
+                      :key="matiere"
+                      v-bind:value="matiere.matiereName"
+                    >
                       {{ matiere.matiereName }}
                     </option>
                   </select>
                 </div>
                 <button
                   type="button"
+                 
                   class="btn btn-primary pull-right"
                   id="demande"
                   @click="sendRequest()"
@@ -113,6 +114,101 @@
           </div>
         </div>
       </div>
+      <div class="modal fade" id="information" v-if="display === true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Details de la demande :</h4>
+              <button type="button" class="close" data-dismiss="modal">
+                <span>&times;</span>
+              </button>
+            </div>
+            <div class="modal-body row">
+              <form class="col">
+                 <div class="form-group">
+              <label for="prof">Professeur :</label>
+              <input
+                id="prof"
+                class="form-control"
+                type="text"
+                :placeholder="InfoDemande[0].requestor"
+                disabled
+              />
+            </div>
+             <div class="form-group">
+              <label for="prof">Email :</label>
+              <input
+                id="prof"
+                class="form-control"
+                type="text"
+                :placeholder="InfoDemande[0].emailRequestor"
+                disabled
+              />
+            </div>
+             <div class="form-group">
+              <label for="details">Details  :</label>
+              <input
+                id="details"
+                class="form-control"
+                type="text"
+                :placeholder="InfoDemande[0].detailRequest"
+                disabled
+              />
+            </div>
+            <div class="form-group">
+              <label for="group">Groupe  :</label>
+              <input
+                id="group"
+                class="form-control"
+                type="text"
+                :placeholder="InfoDemande[0].groupRequested"
+                disabled
+              />
+            </div>
+            <div class="form-group">
+              <label for="cours">Matière  :</label>
+              <input
+                id="cours"
+                class="form-control"
+                type="text"
+                :placeholder="InfoDemande[0].courseRequested"
+                disabled
+              />
+            </div>
+            <div class="form-group">
+              <label for="status">Statut  :</label>
+              <input
+                id="status"
+                class="form-control"
+                type="text"
+                :placeholder="InfoDemande[0].status"
+                disabled
+              />
+            </div>
+                
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+          <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+            </div>
+            <div class="modal-body">
+              <p v-if="supp=== false">Etes-vous sur de supprimer cette demande ?</p>
+              <p v-if="supp=== true">Vous ne pouvez pas supprimer cette demande</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary"  @click="deleteRequest(idDemande,demandeStatus)" v-if="supp===false">Supprimer</button>
+              <button type="button"  class="btn btn-secondary" data-dismiss="modal" >Annuler</button>
+            </div>
+          </div>
+        </div>
+          </div>
     </div>
   </div>
 </template>
@@ -156,7 +252,7 @@ tbody td {
 select {
   width: 100%;
 }
-h1{
+h1 {
   margin-top: 50px;
 }
 #save {
@@ -166,6 +262,9 @@ h1{
 #demande {
   border-color: #55608f;
   background-color: #55608f;
+}
+.btn-secondary{
+  background-color:#55608f;
 }
 </style>
 <script>
@@ -182,12 +281,34 @@ export default {
       Branches: [],
       BranchesN: [],
       Matieres: [],
+      Demandes: [],
+      InfoDemande: [],
       firstSplit: String,
       branch_Name: String,
       originName: String,
+      display: false,
+      supp: false,
+      idDemande: String,
+      demandeStatus: String
     };
   },
-
+  mounted() {
+    axios
+      .get("https://back-serverdevoeux.herokuapp.com/api/requests")
+      .then((response) => {
+        response.data.forEach((demande) => {
+          this.Demandes.push({
+            idDemande: demande._id,
+            requestor: demande.requestor,
+            emailRequestor: demande.emailRequestor,
+            detailRequest: demande.detailRequest,
+            groupRequested: demande.groupRequested,
+            courseRequested: demande.courseRequested,
+            status: demande.status,
+          });
+        });
+      });
+  },
   methods: {
     removeDuplicate(table) {
       let unique = [];
@@ -369,7 +490,6 @@ export default {
         });
     },
     sendRequest() {
-      
       axios
         .post("https://back-serverdevoeux.herokuapp.com/api/request", {
           requestor: "Didier Courtaud",
@@ -377,12 +497,55 @@ export default {
           detailRequest: "demande de voeux",
           groupRequested: document.getElementById("branch").value,
           courseRequested: document.getElementById("matiere").value,
-          status: "En Attente"
+          status: "En Attente",
         })
         .then(function (response) {
-          console.log("done");
+          
           console.log(response);
+          window.location.reload();
         });
+    },
+    showRequest(id) {
+      this.display = true;
+      console.log(id);
+      this.InfoDemande = [];
+      axios
+        .get("https://back-serverdevoeux.herokuapp.com/api/request/" + id)
+        .then((demande) => {
+          console.log(demande);
+          this.InfoDemande.push({
+            idDemande: demande.data._id,
+            requestor: demande.data.requestor,
+            emailRequestor: demande.data.emailRequestor,
+            detailRequest: demande.data.detailRequest,
+            groupRequested: demande.data.groupRequested,
+            courseRequested: demande.data.courseRequested,
+            status: demande.data.status,
+          });
+          console.log(this.InfoDemande);
+        });
+    },
+    setCookie(demande) {
+      this.$cookies.set("demande", demande.idDemande);
+      this.idDemande = this.$cookies.get("demande");
+      this.$cookies.set("status", demande.status);
+      this.demandeStatus = this.$cookies.get("status");
+       if(this.demandeStatus !== "En Attente"){
+          this.supp = true
+       }
+    },
+    deleteRequest(id) {
+     
+
+          axios
+        .delete("https://back-serverdevoeux.herokuapp.com/api/request/" + id)
+        .then((response) => {
+          console.log(response);
+          window.location.reload();
+        });
+     
+   
+     
     },
   },
 };

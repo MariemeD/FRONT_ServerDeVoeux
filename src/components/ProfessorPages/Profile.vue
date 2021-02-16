@@ -34,27 +34,6 @@
               />
             </div>
 
-            <div class="form-group">
-              <label for="studentNumber">Numéro Etudiant:</label>
-              <input
-                id="studentNumber"
-                class="form-control"
-                type="text"
-               
-                disabled
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="group">Groupe:</label>
-              <input
-                id="group"
-                class="form-control"
-                type="text"
-               
-                disabled
-              />
-            </div>
 
             <div class="form-group">
               <label for="email">Email:</label>
@@ -96,6 +75,23 @@
     </div>
     </div>
 </template>
+<style scoped>
+
+#title {
+  font-family: Georgia, serif;
+  font-size: 40px;
+  font-weight: bold;
+}
+#subtitle {
+  font-family: Georgia, serif;
+  font-size: 19px;
+  font-weight: bold;
+}
+.card {
+  margin-left: 10%;
+  width: 80%;
+}
+</style>
 <script>
 import Navbar from "./Navbar_Prof";
 export default {
