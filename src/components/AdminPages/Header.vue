@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <router-link class="nav-link" to="/admin/profil">Profil</router-link>
+                    <router-link class="nav-link" :to="{ name: 'admin-profil'}">Profil</router-link>
                 </li>
             </ul>
             <a class="nav-link my-2 my-lg-0">Déconnexion</a>
