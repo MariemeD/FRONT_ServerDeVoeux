@@ -1,7 +1,19 @@
+
+import HomeProf from "./components/ProfessorPages/HomePage";
+
 //professor
+
 import Professor from "./components/ProfessorPages/professor/Professors";
 import ProfessorService from "./components/ProfessorPages/professor/Prof_Service";
+import Profil from "./components/ProfessorPages/Profile";
 //modules
+
+
+//import DetailsModule from "./components/ProfessorPages/Modules/Details_Module";
+import EditModule from "./components/ProfessorPages/Modules/Edit_Module";
+import Demandes from "./components/ProfessorPages/Modules/Demandes";
+
+
 import DetailsModule from "./components/ProfessorPages/Modules/Details_Module";
 //Filiere
 import Branch from "./components/ProfessorPages/Filieres/Branch";
@@ -68,12 +80,19 @@ export default [
     {path: '/admin/types-de-cours/ajouter', component: AddType },
     {path: '/admin/types-de-cours/modifier', component: ModifyType },
 
+
+
+    {path: '/home', component: HomeProf},
+    {path: '/profil', component: Profil},
+
     // Professor routes
     {path: '/professors', component: Professor},
     {path: '/professorService', component: ProfessorService},
 
     //Modules
-    {path: '/detailsModule', component: DetailsModule},
+    //{path: '/detailsModule', component: DetailsModule},
+    {path: '/detailsModule', component: EditModule},
+    {path: '/demandes', component: Demandes},
 
     //Branch
     {path: '/branch', component: Branch},
