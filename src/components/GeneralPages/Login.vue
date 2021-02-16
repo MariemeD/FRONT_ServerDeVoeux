@@ -20,8 +20,8 @@
           <div class="modal-body">
             <p class="title"> Connexion </p>
             <form>
-              <div class="input-group"> <input class="input--style-3" type="text" placeholder="Login*" name="email" v-model="connexion.email"> </div>
-              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Password*" name="password" v-model="connexion.password"> </div>
+              <div class="input-group"> <input class="input--style-3" type="text" placeholder="Login*" name="email" v-model.lazy="connexion.email"> </div>
+              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Password*" name="password" v-model.lazy="connexion.password"> </div>
               <div class="extra"> <a href="#"><u>I forgot my password</u></a> </div>
               <div class="p-t-10"><button class="btn btn--pill btn--signin" @click.stop.prevent="Login()">CONNEXION</button></div>
             </form>
@@ -44,23 +44,21 @@
                 Votre inscription a été prise en compte avec succès !
               </div>
             </transition>
-
             <transition>
               <div class="alert alert-danger alert-dismissible" v-if="inscription.error">
                 {{ errorMessage }}
               </div>
             </transition>
             <form>
-              <div class="input-group"> <input class="input--style-3" type="text" placeholder="Email*" name="email" v-model="inscription.email"> </div>
-              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Mot de passe*" name="password" v-model="inscription.password"> </div>
-              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Confirmer mot de passe*" name="passwordConfirmed" v-model="inscription.passwordConfirmed"> </div>
+              <div class="input-group"> <input class="input--style-3" type="text" placeholder="Email*" name="email" v-model.lazy="inscription.emailInscription"> </div>
+              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Mot de passe*" name="password" v-model.lazy="inscription.passwordInscription"> </div>
+              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Confirmer mot de passe*" name="passwordConfirmed" v-model.lazy="inscription.passwordConfirmed"> </div>
               <div class="p-t-10"><button class="btn btn--pill btn--signin" @click.stop.prevent="Register()">S'INSCRIRE</button></div>
             </form>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 <script>
@@ -80,11 +78,12 @@
             page: [],
             email: "",
             password: "",
-            wrong: ""
+            wrong: "",
+            submitted: ""
           },
           inscription:{
-            idNumber: "",
-            password: "",
+            emailInscription: "",
+            passwordInscription: "",
             passwordConfirmed: "",
             profile: "",
             error: false,
@@ -95,13 +94,14 @@
       },
         methods: {
           Login() {
-            if (this.email && this.password !== "") {
+            this.connexion.submitted = true;
+            if (this.connexion.email && this.connexion.password !== "") {
             axios
                 .get(
                     "http://localhost:3000/api/login/" +
-                    this.email +
+                    this.connexion.email +
                     "/" +
-                    this.password
+                    this.connexion.password
                 )
                 .then((user) => {
                   axios
@@ -111,10 +111,10 @@
                           console.log(prof);
                           if (prof.email === user.data.userLogin.email) {
                             console.log(user.data.userLogin);
-                            this.$cookies.set("idProfessor", prof._id);
+                            this.$cookies.set("emailProfessor", prof.email);
                             this.$cookies.set("idUser", user.data.userLogin._id);
                             this.$cookies.set("profile", user.data.userLogin.profile);
-                            console.log(this.$cookies.get("idProfessor"));
+                            console.log(this.$cookies.get("emailProfessor"));
                             console.log(this.$cookies.get("profile"));
                           }
                         }
@@ -139,15 +139,14 @@
             this.inscription.submitted = true;
             // eslint-disable-next-line no-unused-vars
             let userRegistered = {
-              email: this.inscription.idNumber,
-              password: this.inscription.password,
-              type: this.inscription.profile
+              email: this.inscription.emailInscription,
+              password: this.inscription.passwordInscription,
+              profile: this.inscription.profile
             }
-            if (this.inscription.password !== this.inscription.passwordConfirmed) {
+            if (this.inscription.passwordInscription !== this.inscription.passwordConfirmed) {
               this.inscription.error = true
               this.errorMessage = "Les mots de passe saisis sont différents, assurez vous de mettre le même mot de passe dans les deux champs."
             }
-
           }
       }
     }
