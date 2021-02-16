@@ -1,13 +1,15 @@
 <template>
   <div class="container">
     <!-- Button to Open the Modal -->
+    <img src="../../../public/Universite_Evry.png" class="logo">
     <h1>Serveur de voeux </h1>
     <h2>Département informatique - Université d'Evry</h2>
     <h3>2020 - 2021</h3>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"> Connexion </button> <!-- The Modal -->
-    <div class="visiteur"> <a href="/professors" class="linkVisiteur">Liste des professeurs</a> </div>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal2"> Inscription </button> <!-- The Modal -->
+    <!--<div class="visiteur"> <a href="/professors" class="linkVisiteur">Liste des professeurs</a> </div>
     <div class="visiteur"> <a href="/branch" class="linkVisiteur">Liste des enseignements</a> </div>
-    <div class="visiteur"> <a href="#" class="linkVisiteur">Liste des enseignements non couverts</a> </div>
+    <div class="visiteur"> <a href="#" class="linkVisiteur">Liste des enseignements non couverts</a> </div>-->
     <div class="modal fade" id="myModal">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -18,30 +20,52 @@
           <div class="modal-body">
             <p class="title"> Connexion </p>
             <form>
-              <div class="input-group"> <input class="input--style-3" type="text" placeholder="Login*" name="email" v-model="email"> </div>
-              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Password*" name="password" v-model="password"> </div>
+              <div class="input-group"> <input class="input--style-3" type="text" placeholder="Login*" name="email" v-model="connexion.email"> </div>
+              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Password*" name="password" v-model="connexion.password"> </div>
               <div class="extra"> <a href="#"><u>I forgot my password</u></a> </div>
-              <div class="p-t-10"><button class="btn btn--pill btn--signin" @click.stop.prevent="Login()" @click="hideModal">CONNEXION</button></div>
-              <!--<div class="p-t-10"><input type="submit" class="btn btn--pill btn--signin" value="Login" /></div>-->
-              <!--<p class="title">or sign in using apps you love:</p>-->
-              <!--<div class="row">
-                <div class="col">
-                  <div class="p-t-10"> <button class="btn btn--pill btn--green" type="submit">SIGN IN WITH GOOGLE <img src="https://img.icons8.com/color/48/000000/google-logo.png" /> </button> </div>
-                </div>
-                <div class="col">
-                  <div class="p-t-10"> <button class="btn btn--pill btn--green" type="submit">SIGN IN WITH PODIO <img src="https://img.icons8.com/color/48/000000/podio.png" /> </button> </div>
-                </div>
-              </div>
-              <p class="extra new">New to teamdeck? <a href="#"><u>Sign up</u></a></p>-->
+              <div class="p-t-10"><button class="btn btn--pill btn--signin" @click.stop.prevent="Login()">CONNEXION</button></div>
             </form>
           </div>
         </div>
       </div>
     </div>
+    <div class="modal fade" id="myModal2">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <div class="modal-title"><p>Serveur de voeux</p></div>
+          </div> <!-- Modal body -->
+          <div class="modal-body">
+            <p class="title"> Inscription </p>
+            <!-- ALERTS -->
+            <transition name="slide-fade">
+              <div class="alert alert-success" v-if="inscription.submitted && !inscription.error">
+                Votre inscription a été prise en compte avec succès !
+              </div>
+            </transition>
+
+            <transition>
+              <div class="alert alert-danger alert-dismissible" v-if="inscription.error">
+                {{ errorMessage }}
+              </div>
+            </transition>
+            <form>
+              <div class="input-group"> <input class="input--style-3" type="text" placeholder="Email*" name="email" v-model="inscription.email"> </div>
+              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Mot de passe*" name="password" v-model="inscription.password"> </div>
+              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Confirmer mot de passe*" name="passwordConfirmed" v-model="inscription.passwordConfirmed"> </div>
+              <div class="p-t-10"><button class="btn btn--pill btn--signin" @click.stop.prevent="Register()">S'INSCRIRE</button></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 <script>
     import axios from "axios"
+    import $ from 'jquery'
     export default {
         name: "Login"
         ,mounted() {
@@ -52,18 +76,26 @@
         },
         data() {
         return {
-          page: [],
-          email: "",
-          password: "",
-          wrong: ""
+          connexion:{
+            page: [],
+            email: "",
+            password: "",
+            wrong: ""
+          },
+          inscription:{
+            idNumber: "",
+            password: "",
+            passwordConfirmed: "",
+            profile: "",
+            error: false,
+            submitted: false,
+          },
+          errorMessage: ""
         };
       },
         methods: {
-          hideModal() {
-            this.$refs['myModal'].hide()
-          },
           Login() {
-          if (this.email && this.password !== "") {
+            if (this.email && this.password !== "") {
             axios
                 .get(
                     "http://localhost:3000/api/login/" +
@@ -87,10 +119,13 @@
                           }
                         }
                         if (user.data.userLogin.profile === "professeur") {
-                          console.log("OK");
                           this.$router.push("/professors");
+                          $('#myModal').modal('hide')
+                          this.$refs['myModal'].hide();
                         } else {
                           this.$router.push("/admin");
+                          $('#myModal').modal('hide')
+                          this.$refs['myModal'].hide();
                         }
                       });
                 })
@@ -100,6 +135,20 @@
                 });
           }
         },
+          Register(){
+            this.inscription.submitted = true;
+            // eslint-disable-next-line no-unused-vars
+            let userRegistered = {
+              email: this.inscription.idNumber,
+              password: this.inscription.password,
+              type: this.inscription.profile
+            }
+            if (this.inscription.password !== this.inscription.passwordConfirmed) {
+              this.inscription.error = true
+              this.errorMessage = "Les mots de passe saisis sont différents, assurez vous de mettre le même mot de passe dans les deux champs."
+            }
+
+          }
       }
     }
 
@@ -221,7 +270,7 @@ input {
 .btn {
   display: inline-block;
   line-height: 42px;
-  padding: 0 33px;
+  /*padding: 0 33px;*/
   font-family: Poppins,serif;
   cursor: pointer;
   color: #fff;
@@ -288,7 +337,7 @@ input {
 
 .btn-primary {
   width: 40%;
-  margin: 10% 30% 5% 30%;
+  margin: 5% 3%;
   background-color: #C9893C;
 }
 
@@ -323,6 +372,10 @@ a:link, a:visited, a:hover, a:active{
 .visiteur{
   border: 2px solid transparent;
   padding-bottom: 1.5%;
+}
+
+.logo{
+  width: 40%;
 }
 
 </style>
