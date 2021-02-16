@@ -1,15 +1,11 @@
-
+//professor
 import Professor from "./components/ProfessorPages/professor/Professors";
 import ProfessorService from "./components/ProfessorPages/professor/Prof_Service";
 //modules
-
 import DetailsModule from "./components/ProfessorPages/Modules/Details_Module";
-
 //Filiere
 import Branch from "./components/ProfessorPages/Filieres/Branch";
 import DetailsBranch from "./components/ProfessorPages/Filieres/Details_Branch";
-
-
 import Homepage from "@/components/AdminPages/Homepage";
 import Profile from "@/components/AdminPages/Profile";
 import Professors from "@/components/AdminPages/Professors/Professors/Professors";
@@ -33,17 +29,18 @@ import ModifyOrigin from "@/components/AdminPages/Studings/Origins/ModifyOrigin"
 import Types from "@/components/AdminPages/Studings/TypeOfCourses/Types";
 import AddType from "@/components/AdminPages/Studings/TypeOfCourses/AddType";
 import ModifyType from "@/components/AdminPages/Studings/TypeOfCourses/ModifyType";
-
+//General
+import Login from "./components/GeneralPages/Login"
 
 export default [
 
     // Login route
-
+    {path: '/login/', component: Login },
 
     // Register route
 
-
     // Admin routes
+
     {path: '/admin/', name: 'homepage', component: Homepage },
     {path: '/admin/profil', name: 'admin-profil', component: Profile },
 
@@ -70,8 +67,6 @@ export default [
     {path: '/admin/types-de-cours/', component: Types },
     {path: '/admin/types-de-cours/ajouter', component: AddType },
     {path: '/admin/types-de-cours/modifier', component: ModifyType },
-
-
 
     // Professor routes
     {path: '/professors', component: Professor},
