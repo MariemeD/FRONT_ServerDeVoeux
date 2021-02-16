@@ -20,9 +20,6 @@
                                 - <router-link :to="{ name: 'hoursMade'}">Gestion des heures effectuées</router-link>
                             </li>
                             <li>
-                                - <router-link :to="{ name: 'status'}">Gestion des statuts</router-link>
-                            </li>
-                            <li>
                                 - <router-link :to="{ name: 'disclaimers'}">Gestion des décharges</router-link>
                             </li>
                         </ul>
