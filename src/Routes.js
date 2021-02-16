@@ -11,9 +11,6 @@ import Profile from "@/components/AdminPages/Profile";
 import Professors from "@/components/AdminPages/Professors/Professors/Professors";
 import AddProfessor from "@/components/AdminPages/Professors/Professors/AddProfessor";
 import ModifyProfessor from "@/components/AdminPages/Professors/Professors/ModifyProfessor";
-import Bonuses from "@/components/AdminPages/Professors/Bonus/Bonuses";
-import AddBonus from "@/components/AdminPages/Professors/Bonus/AddBonus";
-import ModifyBonus from "@/components/AdminPages/Professors/Bonus/ModifyBonus";
 import HoursMade from "@/components/AdminPages/Professors/Hours/HoursMade";
 import Status from "@/components/AdminPages/Professors/Status/Status";
 import AddStatus from "@/components/AdminPages/Professors/Status/AddStatus";
@@ -43,21 +40,21 @@ export default [
     // Register route
 
     // Admin routes
-    {path: '/admin/', component: Homepage },
-    {path: '/admin/profil', component: Profile },
-    {path: '/admin/enseignants/', component: Professors },
-    {path: '/admin/enseignants/ajouter-un-enseignant', component: AddProfessor },
-    {path: '/admin/enseignants/modifier-un-enseignant', component: ModifyProfessor },
-    {path: '/admin/primes/', component: Bonuses },
-    {path: '/admin/primes/ajouter-une-prime', component: AddBonus },
-    {path: '/admin/primes/modifier-une-prime', component: ModifyBonus },
-    {path: '/admin/heures-effectuees', component: HoursMade },
-    {path: '/admin/statuts/', component: Status },
-    {path: '/admin/statuts/ajouter-un-statut', component: AddStatus },
-    {path: '/admin/statuts/modifier-un-statut', component: ModifyStatus },
-    {path: '/admin/decharges/', component: Disclaimers },
-    {path: '/admin/decharges/ajouter-une-decharge', component: Disclaimers },
-    {path: '/admin/decharges/modifier-une-decharge', component: ModifyDisclaimer },
+
+    {path: '/admin/', name: 'homepage', component: Homepage },
+    {path: '/admin/profil', name: 'admin-profil', component: Profile },
+
+    {path: '/admin/enseignants/', name: 'professors', component: Professors },
+    {path: '/admin/enseignants/ajouter-un-enseignant', name: 'professors-add', component: AddProfessor },
+    {path: '/admin/enseignants/modifier-un-enseignant', name: 'professors-edit', component: ModifyProfessor },
+    {path: '/admin/heures-effectuees', name: 'hoursMade', component: HoursMade },
+    {path: '/admin/statuts/', name: 'status', component: Status },
+    {path: '/admin/statuts/ajouter-un-statut', name: 'status-add', component: AddStatus },
+    {path: '/admin/statuts/modifier-un-statut/:idStatus', name: 'status-edit', component: ModifyStatus },
+    {path: '/admin/decharges/', name: 'disclaimers', component: Disclaimers },
+    {path: '/admin/decharges/ajouter-une-decharge', name: 'disclaimers-add', component: Disclaimers },
+    {path: '/admin/decharges/modifier-une-decharge', name: 'disclaimers-edit', component: ModifyDisclaimer },
+
     {path: '/admin/cursus/', component: Courses },
     {path: '/admin/cursus/ajouter-un-cursus', component: AddCourse },
     {path: '/admin/cursus/modifier-un-cursus', component: ModifyCourse },
