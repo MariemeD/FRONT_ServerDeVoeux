@@ -109,7 +109,7 @@ hr {
   display: block;
   border: none;
   height: 3px;
-  background-color: #5f2c82;
+  background-color: #C9893C;
   margin-top: 15px;
 
   -webkit-animation-name: line-show; /* Safari 4.0 - 8.0 */

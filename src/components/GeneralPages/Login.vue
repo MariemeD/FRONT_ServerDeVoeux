@@ -98,20 +98,22 @@
             if (this.connexion.email && this.connexion.password !== "") {
             axios
                 .get(
-                    "http://localhost:3000/api/login/" +
+                    "https://back-serverdevoeux.herokuapp.com/api/login/" +
                     this.connexion.email +
                     "/" +
                     this.connexion.password
                 )
                 .then((user) => {
                   axios
-                      .get("http://localhost:3000/api/professors/")
+                      .get("https://back-serverdevoeux.herokuapp.com/api/professors")
                       .then((response) => {
                         for (let prof of response.data) {
                           console.log(prof);
                           if (prof.email === user.data.userLogin.email) {
                             console.log(user.data.userLogin);
                             this.$cookies.set("emailProfessor", prof.email);
+                            this.$cookies.set("FnameProfessor", prof.firstName);
+                            this.$cookies.set("LnameProfessor", prof.lastName);
                             this.$cookies.set("idUser", user.data.userLogin._id);
                             this.$cookies.set("profile", user.data.userLogin.profile);
                             console.log(this.$cookies.get("emailProfessor"));

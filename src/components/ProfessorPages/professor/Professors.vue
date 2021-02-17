@@ -5,7 +5,7 @@
     <h2>Liste des Enseignants</h2>
     <table class="table table-bordered table-striped">
       <thead>
-        <tr class="table-active" >
+        <tr  >
           <th  @click="sortLastName()">Nom</th>
           <th @click="sortFirstName()">Prenom</th>
           <th>Origine</th>
@@ -37,7 +37,7 @@ h2 {
   font-family: Georgia, serif;
   font-size: 40px;
   font-weight: bold;
-  margin-top: 100px;
+  margin-top: 30px;
 }
 table {
   width: 90%;
@@ -58,6 +58,8 @@ td {
 th {
   text-align: center;
   cursor: pointer;
+   background-color: #55608f;
+  color: #eee;
 }
 
 
