@@ -98,14 +98,14 @@
             if (this.connexion.email && this.connexion.password !== "") {
             axios
                 .get(
-                    "http://localhost:3000/api/login/" +
+                    "https://back-serverdevoeux.herokuapp.com/api/login/" +
                     this.connexion.email +
                     "/" +
                     this.connexion.password
                 )
                 .then((user) => {
                   axios
-                      .get("http://localhost:3000/api/professors/")
+                      .get("https://back-serverdevoeux.herokuapp.com/api/professors")
                       .then((response) => {
                         for (let prof of response.data) {
                           console.log(prof);
