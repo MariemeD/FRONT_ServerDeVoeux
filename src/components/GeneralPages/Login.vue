@@ -4,7 +4,7 @@
     <img src="../../../public/Universite_Evry.png" class="logo">
     <h1>Serveur de voeux </h1>
     <h2>Département informatique - Université d'Evry</h2>
-    <h3>2020 - 2021</h3>
+    <h3>2020 - 2021</h3>   
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"> Connexion </button> <!-- The Modal -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal2"> Inscription </button> <!-- The Modal -->
     <!--<div class="visiteur"> <a href="/professors" class="linkVisiteur">Liste des professeurs</a> </div>
