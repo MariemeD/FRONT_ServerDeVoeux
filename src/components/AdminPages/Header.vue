@@ -15,13 +15,13 @@
                 <li class="nav-item">
                     <router-link class="nav-link" :to="{ name: 'wishes' }">
                         Gestion des voeux
-                        <span class="badge badge-dark">{{ requestNb }}</span>
+                        <span class="badge badge-dark" v-if="getRequestsForFiliere().length > 0">{{ getRequestsForFiliere().length }}</span>
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link class="nav-link" :to="{ name: 'conflict-wishes' }">
+                    <router-link class="nav-link" :to="{ name: 'conflict-wishes', params: {conflicts: 'conflits'} }">
                         Gestion des conflits
-                        <span class="badge badge-dark">{{ conflictNb }}</span>
+                        <span class="badge badge-dark" v-if="getConflictedRequests().length > 0">{{ getConflictedRequests().length }}</span>
                     </router-link>
                 </li>
             </ul>
@@ -31,17 +31,68 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     name: "Header",
     data() {
         return {
-            requestNb: null,
-            conflictNb: null
+            requests: [],
+            conflicts: [],
+            professorsOfFiliere: [],
         }
     },
     created() {
-        // TODO Récupérer le nombre de voeux pour la filiere du prof connecté
-        // TODO Récupérer le nombre de voeux pour la filiere du prof connecté
+        axios.get("https://back-serverdevoeux.herokuapp.com/api/requests").then(response => {
+            for (let request of response.data.filter(request => request.status === "En attente")) {
+                request.requestor = request.requestor.toLowerCase().trim()
+                this.requests.push(request)
+            }
+        })
+        axios.get("http://146.59.195.214:8006/api/v1/events/teachers/M2MIAA").then(response => {
+            for (let prof of response.data) {
+                this.professorsOfFiliere.push(prof.toLowerCase().trim())
+            }
+        })
+    },
+    methods: {
+        getRequestsForFiliere() {
+            let requestsForFiliere = []
+            for (let request of this.requests.filter(req => req.status === "En attente")) {
+                if (this.professorsOfFiliere.includes(request.requestor)) {
+                    requestsForFiliere.push(request)
+                }
+            }
+           /* console.log(requestsForFiliere.filter(req => {
+                for (let conflict of this.getConflictedRequests()) {
+                    console.log(conflict)
+                    return req !== conflict
+                }
+            }))*/
+            return requestsForFiliere
+        },
+        getConflictedRequests() {
+            let conflictedRequest = []
+            // https://stackoverflow.com/questions/53212020/get-list-of-duplicate-objects-in-an-array-of-objects/53212154
+            let duplicateIds = this.getRequestsForFiliere()
+                .map(e => e['courseRequested'])
+                .map((e, i, final) => final.indexOf(e) !== i && i)
+                .filter(obj=> this.getRequestsForFiliere()[obj])
+                .map(e => this.getRequestsForFiliere()[e]["courseRequested"])
+            conflictedRequest = this.getRequestsForFiliere().filter(obj=> duplicateIds.includes(obj["courseRequested"]));
+            return conflictedRequest
+        }
+    },
+    updated() {
+        axios.get("https://back-serverdevoeux.herokuapp.com/api/requests").then(response => {
+            for (let request of response.data) {
+                request.requestor = request.requestor.toLowerCase().trim()
+            }
+            this.requests = response.data.filter(request => request.status === "En attente")
+        }).catch(error => {
+            console.error("Error on updating Header component")
+            console.error(error)
+        })
     }
 }
 </script>

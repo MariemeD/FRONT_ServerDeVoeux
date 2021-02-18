@@ -6,12 +6,8 @@
 
         <div class="container">
 
-            <div class="row justify-content-between">
-                <router-link :to="{name: 'professors-add'}">
-                    <button id="addProfButton" class="btn btn-outline-info mb-3">Ajouter un nouveau professeur</button>
-                </router-link>
-
-                <p id="eltPerPage" class="mb-0">
+            <div class="row justify-content-start">
+                <p id="eltPerPage" class="mb-2">
                     Afficher
                     <a class="pageSizeElt" @click="setElementsPerPage(5)">5</a>
                     | <a class="pageSizeElt" @click="setElementsPerPage(10)">10</a>
@@ -33,36 +29,14 @@
                             <font-awesome-icon :icon="sortIcon" @click="sort('email')"></font-awesome-icon>
                         </th>
                         <th>Statut</th>
-                        <th>Origine</th>
-                        <!--
-                        TODO Cette colonne doit apparaitre que si le super admin est connecté et uniquement pour les professeurs liés à la filière du prof connecté
-                        -->
-                        <th>Actions</th>
+                        <th>Composante</th>
                     </thead>
                     <tbody>
                         <tr v-for="prof in sortedProfessors" :key="prof.email">
                             <td>{{ prof.lastName }} {{ prof.firstName }}</td>
                             <td>{{ prof.email }}</td>
                             <td>{{ prof.status }}</td>
-                            <td>{{ prof.department }}</td>
-                            <!--
-                            TODO Cette colonne doit apparaitre que si le super admin est connecté et uniquement pour les professeurs liés à la filière du prof connecté
-                            -->
-                            <td>
-                                <router-link :to="{name: 'professor', params: { idProf: prof._id }}">
-                                    <button class="btn btn-outline-primary btnIcon">
-                                        Modifier
-                                        <font-awesome-icon icon="edit"></font-awesome-icon>
-                                    </button>
-                                </router-link>
-                                |
-                                <router-link :to="{name: 'professors-edit', params: { idProf: prof._id }}">
-                                    <button class="btn btn-outline-danger btnIcon">
-                                        Supprimer
-                                        <font-awesome-icon icon="trash"></font-awesome-icon>
-                                    </button>
-                                </router-link>
-                            </td>
+                            <td>{{ prof.composante }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -137,8 +111,7 @@ export default {
         }
     },
     computed: {
-        // TODO Faire la différence avec les profs de la filiere dont le prof connecté est responsable
-        sortedProfessors:function() {
+        sortedProfessors: function() {
             return this.professors.slice().sort((a, b) => {
                 let modifier = 1
                 if(this.currentSortDirection === 'desc') modifier = -1
@@ -156,27 +129,12 @@ export default {
 </script>
 
 <style scoped>
-#addProfButton {
-    color: #536895;
-    border-color: #536895;
-}
-#addProfButton:hover {
-    color: #FFF;
-    border-color: #536895;
-    background-color: #536895;
-}
 #eltPerPage {
     margin-top: 0.60em;
 }
 .pageSizeElt {
     cursor: pointer;
     color: #536895;
-}
-.btnIcon:hover .faIcon {
-    color: #FFF;
-}
-.editIcon:hover {
-    color: #FFF;
 }
 .page-link {
     color: #536895;

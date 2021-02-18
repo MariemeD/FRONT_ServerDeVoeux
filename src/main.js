@@ -16,7 +16,8 @@ import {
     faEye,
     faCheckCircle,
     faTimesCircle,
-    faExclamation
+    faExclamation,
+    faMailBulk
 } from "@fortawesome/free-solid-svg-icons";
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -38,6 +39,7 @@ library.add(faEye)
 library.add(faCheckCircle)
 library.add(faTimesCircle)
 library.add(faExclamation)
+library.add(faMailBulk)
 
 const router = new VueRouter({
   routes: Routes,

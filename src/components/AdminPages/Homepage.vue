@@ -15,13 +15,10 @@
 
                         <ul id="professor-actions" class="text-left mr-auto ml-auto">
                             <li>
-                                - <router-link :to="{ name: 'professors'}">Gestion des enseignants</router-link>
+                                - <router-link :to="{ name: 'professors'}">Liste des enseignants</router-link>
                             </li>
                             <li>
-                                - <router-link :to="{ name: 'hoursMade'}">Gestion des heures effectuées</router-link>
-                            </li>
-                            <li>
-                                - <router-link :to="{ name: 'status'}">Gestion des statuts</router-link>
+                                - <router-link :to="{ name: 'hoursMade'}">Détails des heures effectuées</router-link>
                             </li>
                             <li>
                                 - <router-link :to="{ name: 'disclaimers'}">Gestion des décharges</router-link>
@@ -37,11 +34,12 @@
                         </div>
                         <h6 class="mt-3 mb-0 text-uppercase">Serveur</h6>
                         <hr>
-                        <small class="text-success">Le serveur est ouvert</small>
+                        <small v-if="isServerOpen" class="text-success">Le serveur est <strong>ouvert</strong></small>
+                        <small v-else class="text-danger">Le serveur est <strong>fermé</strong></small>
 
                         <ul id="server-actions" class="text-left mr-auto ml-auto">
                             <li>
-                                - <a href="">Fermer le serveur</a>
+                                - <a href="" @click.prevent="closeOpenServer">Fermer le serveur</a>
                             </li>
                             <li>
                                 - <a href="">Redémarrer le serveur</a>
@@ -71,9 +69,6 @@
                             <li>
                                 - <router-link to="/admin/origines" href="">Gestion des origines</router-link>
                             </li>
-                            <li>
-                                - <router-link to="/admin/types-de-cours" href="">Gestion des types de cours</router-link>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -87,7 +82,17 @@
 import Header from "@/components/AdminPages/Header";
 export default {
     name: "Homepage",
-    components: {Header}
+    components: { Header },
+    data() {
+        return {
+            isServerOpen: true,
+        }
+    },
+    methods: {
+        closeOpenServer() {
+            this.isServerOpen = !this.isServerOpen
+        }
+    }
 }
 </script>
 
