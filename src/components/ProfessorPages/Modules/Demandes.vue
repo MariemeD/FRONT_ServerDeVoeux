@@ -5,7 +5,7 @@
       <div class="general">
         <h1>Demandes</h1>
 
-        <table class="table">
+        <table class="table table-bordered table-striped">
           <thead>
             <tr>
               <th>Demande</th>
@@ -213,38 +213,41 @@
   </div>
 </template>
 <style scoped>
+h1{
+  font-family: Georgia, serif;
+  font-size: 40px;
+  font-weight: bold;
+ 
+}
 .card {
-  margin-top: 5%;
+ 
   border: none;
 }
 table {
   width: 70%;
-  margin-left: 20%;
+   
   border-collapse: collapse;
   overflow: hidden;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  background: #344c80;
-  margin-top: 30px;
+
   margin-left: 15%;
 }
 
 th,
 td {
   padding: 15px;
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #fff;
+
 }
 
 th {
   text-align: center;
+  background-color: #55608f;
+  color: #eee;
 }
 
-thead th {
-  background-color: #55608f;
-}
+
 
 tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0);
 }
 tbody td {
   position: relative;

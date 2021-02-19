@@ -1,14 +1,14 @@
 <template>
     <div>
         <Navbar />
-         <p id="title">Profil</p>
+         
     <div class="card mt-4">
-      <div >
+      <div>
         <div class="card-header">
           <p class="card-title" id="subtitle">
-           test
+           Profil
           </p>
-          <p class="card-subtitle text-muted">name</p>
+         
         </div>
         <div class="card-body text-left">
           <form>
@@ -18,7 +18,7 @@
                 id="lastname"
                 class="form-control"
                 type="text"
-                
+                :placeholder="lastName"
                 disabled
               />
             </div>
@@ -29,7 +29,7 @@
                 id="firstname"
                 class="form-control"
                 type="text"
-               
+                :placeholder="firstName"
                 disabled
               />
             </div>
@@ -41,7 +41,7 @@
                 id="email"
                 class="form-control"
                 type="text"
-                :placeholder="test"
+                :placeholder="email"
                 disabled
               />
             </div>
@@ -77,25 +77,40 @@
 </template>
 <style scoped>
 
-#title {
-  font-family: Georgia, serif;
-  font-size: 40px;
-  font-weight: bold;
-}
+
 #subtitle {
   font-family: Georgia, serif;
   font-size: 19px;
   font-weight: bold;
+  color: #C9893C;
 }
 .card {
   margin-left: 10%;
   width: 80%;
+  margin-top: 80%;
+}
+button{
+  background-color: #55608f;
+  width: 40%;
+  color: aliceblue;
+  margin-left: 30%;
 }
 </style>
 <script>
 import Navbar from "./Navbar_Prof";
 export default {
     name: "Homepage",
-    components: {Navbar}
+    components: {Navbar},
+    data() {
+    return {
+      firstName: this.$cookies.get("FnameProfessor"),
+      lastName:this.$cookies.get("LnameProfessor"),
+      email: this.$cookies.get("emailProfessor"),
+    }
+    },
+    mounted(){
+    
+    }
+  
 }
 </script>

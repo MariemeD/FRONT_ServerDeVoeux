@@ -19,7 +19,7 @@
         <h1>{{ branchName }}</h1>
         <table class="table table-bordered table-striped">
       <thead>
-        <tr class="table-active">
+        <tr>
           <th>Matiere</th>
           <th>Semestre</th>
           <th>Cours</th>
@@ -127,13 +127,13 @@
 #infos {
   width: 200px;
   margin-left: 10px;
-  margin-top: 90px;
+  margin-top: 40px;
 
   height: 400px;
 }
 #details {
   width: 70%;
-  margin-top: 90px;
+  margin-top: 40px;
   margin-left:40px;
   border: none;
   
@@ -183,7 +183,10 @@ td {
 
 th {
   text-align: center;
+  background-color: #55608f;
+  color: #eee;
 }
+
 
 
 tbody tr:hover {

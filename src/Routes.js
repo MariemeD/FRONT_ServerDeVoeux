@@ -13,8 +13,6 @@ import Profil from "./components/ProfessorPages/Profile";
 import EditModule from "./components/ProfessorPages/Modules/Edit_Module";
 import Demandes from "./components/ProfessorPages/Modules/Demandes";
 
-
-import DetailsModule from "./components/ProfessorPages/Modules/Details_Module";
 //Filiere
 import Branch from "./components/ProfessorPages/Filieres/Branch";
 import DetailsBranch from "./components/ProfessorPages/Filieres/Details_Branch";
