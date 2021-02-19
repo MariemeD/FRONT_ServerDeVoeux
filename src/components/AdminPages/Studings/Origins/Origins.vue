@@ -5,19 +5,16 @@
         
         <!-- ALERTS -->
         <div class="container mb-2" v-show="formData.errorOnSubmit || formData.submitted">
-            <transition :duration="5000" name="slide-fade">
+            <transition :duration="5000" name="slide-fade"> 
                 <div class="alert"
                      :class="{'alert-success': formData.submitted, 'alert-danger': formData.errorOnSubmit}">
                     <p class="text-center">
-                        {{ alertMessage }}
-                      <!--  <router-link :to="{name: 'status'}" v-if="formData.submitted" class="mb-auto">
-                            <span class="statusActionBtn mb-3">Retour à la page des orignes</span>
-                        </router-link>  -->
+                        {{ alertMessage }}  
                     </p>
                 </div>
-            </transition>
+            </transition>  
         </div>
-
+ 
     <h1 class="pt-5">Liste des Origines</h1>
       
         <div class="container">
@@ -26,7 +23,7 @@
           <thead>
             <tr> 
              <th >Origine</th>
-             <th  colspan=3>Action souhaitée</th>
+             <th >Action souhaitée</th>
             
             </tr>
           </thead>
@@ -34,22 +31,23 @@
             <tr v-for="(origine,index) in ListeOri" :key="origine">
               <td>{{origine}}</td>
               <td><router-link to="/admin/origines/prof">
-                   <button  class="btn btn-info btn-block" v-on:click="recup(index)">Voir Liste professeur</button>
+                   <button  class="btn btn-outline-info mb-2" v-on:click="recup(index)" v-if="origine ==='Département Informatique'">Voir Liste professeur <font-awesome-icon icon="clipboardList"></font-awesome-icon></button>
+                   <button  class="btn btn-outline-dark mb-2" v-on:click="recup(index)" v-else disabled>Voir Liste professeur <font-awesome-icon icon="spinner"></font-awesome-icon></button>
                   </router-link></td>
-              <td><button  class="btn btn-outline-primary mb-2" v-on:click="modifier">Modifier <font-awesome-icon icon="edit"></font-awesome-icon></button></td>
-              <td><button  class="btn btn-outline-danger mb-2" v-on:click="supprimer">Supprimer <font-awesome-icon icon="trash"></font-awesome-icon></button></td>
+            <!--  <td><button  class="btn btn-outline-primary mb-2" v-on:click="modifier">Modifier <font-awesome-icon icon="edit"></font-awesome-icon></button></td>
+              <td><button  class="btn btn-outline-danger mb-2" v-on:click="supprimer">Supprimer <font-awesome-icon icon="trash"></font-awesome-icon></button></td>  -->
             </tr> 
-            <tr>
+           <!-- <tr>
              <td>
-             <form >
+             <form @submit.prevent="sendForm">
              <div class="form-group">
               <input type="text" class="form-control"  placeholder="Origine" v-model.lazy="formData.OrigineName" required>
-              
+              <td colspan =2> <button class="btn btn-primary btn-block" type="submit">Ajouter <font-awesome-icon icon="plussquare"></font-awesome-icon></button></td>
              </div>
              </form>
              </td>
-             <td colspan =3> <button class="btn btn-primary btn-block" @submit.prevent="sendForm">Ajouter <font-awesome-icon icon="plussquare"></font-awesome-icon></button></td>
-            </tr>
+             
+            </tr> -->
              
          </tbody>
         </table>

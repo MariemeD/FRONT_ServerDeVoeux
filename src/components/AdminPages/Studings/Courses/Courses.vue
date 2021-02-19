@@ -3,7 +3,6 @@
         <Header />
         <h1 class="pt-5">Liste des cursus</h1>
   
-        <br/><br/>
       <div class="container">
         <div class="row">
             <div class="col-md-4 ml-auto">
@@ -31,15 +30,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="matiere in Mat" :key="matiere">
+            <tr v-for="matiere in ListeCours" :key="matiere">
               <td>{{matiere.name}}</td>
               <td>{{matiere.type}}</td>
               <td>{{matiere.Ab}}</td>
-              <td><button class="btn btn-outline-primary mb-2" v-on:click="modif">Modifier <font-awesome-icon icon="edit"></font-awesome-icon></button></td>
-              <td><button class="btn btn-outline-danger mb-2">supprimer <font-awesome-icon icon="trash"></font-awesome-icon></button></td>
+              <td><button class="btn btn-outline-primary mb-2" v-on:click="modif">Filières <font-awesome-icon icon="edit"></font-awesome-icon></button></td>
+           <!--    <td><button class="btn btn-outline-danger mb-2">supprimer <font-awesome-icon icon="trash"></font-awesome-icon></button></td>  -->
             </tr> 
             
-            <tr v-if="Modification">
+      <!--      <tr v-if="Modification">
               <td><input type="text" class="form-control"  placeholder="Nom " v-model="ModiNom"></td>
               <td><input type="text" class="form-control"  placeholder="Type" v-model="modiType"></td>
               <td><input type="text" class="form-control"  placeholder="abbrev" v-model="modiAbrev"></td>
@@ -51,17 +50,22 @@
               <td><input type="text" class="form-control"  placeholder="abbrev" v-model="modiAbrev"></td>
               <td colspan=2><button class="btn btn-outline-success mb-2" v-on:click="Ajouter" >Ajouter <font-awesome-icon icon="plussquare"></font-awesome-icon></button></td>
             </tr>
-
+      -->
           </tbody>
         </table>
+        <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item"><a class="page-link"  @click="prevPage">Précédent</a></li>
+                        <li class="page-item"><a class="page-link"  @click="nextPage">Suivant</a></li>
+                    </ul>
+        </nav>
         </div>
     </div>
 
     <div v-else>
         <Header />
-        <h1 class="pt-5">Liste des cursus</h1>
+        <h1 class="pt-5">Liste des cursus </h1>
   
-        <br/><br/>
         <div class="container">
         <div class="row justify-content-between">
             <button class="btn btn-outline-secondary mb-2" v-on:click="RetourFili">Retour Liste</button>
@@ -90,15 +94,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="matiere in Mat" :key="matiere">
-              <td>{{matiere.name}}</td>
-              <td>{{matiere.type}}</td>
-              <td>{{matiere.Ab}}</td>
-              <td><button class="btn btn-outline-primary mb-2" v-on:click="modif">Modifier <font-awesome-icon icon="edit"></font-awesome-icon></button></td>
-              <td><button class="btn btn-outline-danger mb-2">supprimer <font-awesome-icon icon="trash"></font-awesome-icon></button></td>
+            <tr v-for="matiere in ListeFilCours" :key="matiere">
+              <td>{{matiere}}</td>
+              <td>{{matiere}}</td>
+              <td>{{matiere}}</td>
+              <td><button class="btn btn-outline-primary mb-2" v-on:click="modif">Filières <font-awesome-icon icon="edit"></font-awesome-icon></button></td>
+            <!--  <td><button class="btn btn-outline-danger mb-2">supprimer <font-awesome-icon icon="trash"></font-awesome-icon></button></td> -->
             </tr> 
             
-            <tr v-if="Modification">
+         <!--   <tr v-if="Modification">
               <td><input type="text" class="form-control"  placeholder="Nom " v-model="ModiNom"></td>
               <td><input type="text" class="form-control"  placeholder="Type" v-model="modiType"></td>
               <td><input type="text" class="form-control"  placeholder="abbrev" v-model="modiAbrev"></td>
@@ -110,9 +114,17 @@
               <td><input type="text" class="form-control"  placeholder="abbrev" v-model="modiAbrev"></td>
               <td colspan=2><button class="btn btn-primary btn-block" v-on:click="Ajouter">Ajouter <font-awesome-icon icon="plussquare"></font-awesome-icon></button></td>
             </tr>
+          -->
 
           </tbody>
         </table>
+        <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item"><a class="page-link"  @click="precedent">Précédent</a></li>
+                        <li class="page-item"><a class="page-link"  @click="suivant">Suivant</a></li>
+                    </ul>
+        </nav>
+
         </div>
     </div>
 
@@ -132,8 +144,12 @@ export default {
             success:true,
             OK:true,
             recupFil:null,
+            recupFil2:null,
 
             Mat:[],
+            FilBYmat:[],
+            nbrePage: 15,
+            currentPage: 1,
 
             Nom:String,
             Categ:String,
@@ -177,6 +193,11 @@ export default {
         VoirListeMat() {
            // this.success=false
             this.OK=false
+            axios
+            .get("http://146.59.195.214:8006/api/v1/events/"+this.recupFil+"/matiere")
+            .then(response => (this.FilBYmat = response.data));
+            this.recupFil2=this.recpFil;
+            this.recupFil="";
         },
 
         modif() {
@@ -191,7 +212,52 @@ export default {
             this.Modification=false
         },
 
+         prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+            }
+        },
+
+        precedent() {
+            if (this.currentPage2 > 1) {
+                this.currentPage2--;
+            }
+        },
+        suivant() {
+            if ((this.currentPage * this.nbrePage) < this.ListeFilCours.length) {
+                this.currentPage++;
+            }
+        },
+        nextPage() {
+            if ((this.currentPage * this.nbrePage) < this.ListeCours.length) {
+                this.currentPage++;
+            }
+        },
+         setElementsnbrePage(nbrePage) {
+            this.nbrePage = nbrePage
+        },
+
+    },
+
+    computed:{
+
+      ListeCours:function(){
+            return this.Mat.filter((row, index) => {
+                let start = (this.currentPage - 1) * this.nbrePage;
+                let end = this.currentPage* this.nbrePage;
+                if (index >= start && index < end) return true
+        });
+    },
+
+    ListeFilCours:function(){
+            return this.FilBYmat.filter((row, index) => {
+                let start = (this.currentPage - 1) * this.nbrePage;
+                let end = this.currentPage* this.nbrePage;
+                if (index >= start && index < end) return true
+        });
     }
+    },
+
 }
 </script>
 

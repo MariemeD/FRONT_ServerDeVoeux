@@ -2,10 +2,13 @@
 <div>
         <Header />
         <font-awesome-icon />
-        <h1 class="pt-5">Liste des Profs de {{ListeOrigine}}</h1>
+        <h1 class="pt-5">Liste des Profs du {{ListeOrigine}}</h1>
+     <div class="container">
+        <div class="row justify-content-between">
         <router-link to="/admin/origines/">
-                   <button id="bt1" class="btn btn-info btn-block" >Retour aux origines</button>
+                   <button id="bt1" class="btn btn-outline-secondary mb-2" >Retour aux origines</button>
         </router-link>
+        </div>
         <div class="panel panel-primary">
         <div class="panel-heading"></div>     
         <table class="table table-bordered table-striped">
@@ -17,7 +20,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="prof in tableProf" :key="prof.email">
+            <tr v-for="prof in traitementTable" :key="prof.email">
               <td>{{prof.lastName}} </td>
               <td>{{prof.firstName}}</td>
               <td>{{prof.email}}</td>
@@ -33,6 +36,7 @@
         </nav>
         </div>
     </div>
+    </div>
 </template>
 <script>
 import axios from 'axios';
@@ -46,39 +50,28 @@ export default {
         return {
             success:true,
             tableProf:[],
-            nbrePage: 10,
+            nbrePage: 5,
             currentPage: 1,
             Origines:["Département Informatique","Indéfinies","Département Bio","Département de Math","Université","UFR ST","Privé"]
         }
 
     },
     mounted (){
-        axios
-      .get("http://146.59.195.214:8006/api/v1/teachers/all")
-      .then((response) => {
-        response.data.forEach((branch) => {
+       // axios
+     // .get("http://146.59.195.214:8006/api/v1/teachers/all")
+     // .then((response) => {
+        // response.data.forEach((branch) => {
             //Liste des profs d'une origine
          // if (branch.origine === this.$ori) 
         //  {
         //     this.tableProf.push(branch)
         //  }
-          
-          if (branch.lastName === "Petit") 
-          {
-             this.tableProf.push(branch)
-          }
+   // });
+      // } )
 
-          if (branch.lastName === "Balbali") 
-          {
-             this.tableProf.push(branch)
-          }
-
-          if (branch.lastName === "Regnault") 
-          {
-             this.tableProf.push(branch)
-          }
-        });
-    });
+    axios
+            .get('http://146.59.195.214:8006/api/v1/teachers/all')
+            .then(response => (this.tableProf = response.data));
     },
     methods:{
         RetourOri() {
@@ -91,7 +84,7 @@ export default {
             }
         },
         nextPage() {
-            if ((this.currentPage * this.nbrePage) < this.filieres.length) {
+            if ((this.currentPage * this.nbrePage) < this.tableProf.length) {
                 this.currentPage++;
             }
         },
@@ -107,8 +100,16 @@ export default {
     computed:{
         ListeOrigine:function(){
             return this.$ori
+        },
+
+        traitementTable:function(){
+            return this.tableProf.filter((row, index) => {
+                let start = (this.currentPage - 1) * this.nbrePage;
+                let end = this.currentPage* this.nbrePage;
+                if (index >= start && index < end) return true
+        });
+    },
         }
-    }
 }
 </script>
 

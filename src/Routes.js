@@ -17,7 +17,7 @@ import AddCourse from "@/components/AdminPages/Studings/Courses/AddCourse";
 import ModifyCourse from "@/components/AdminPages/Studings/Courses/ModifyCourse";
 import Pathways from "@/components/AdminPages/Studings/Pathways/Pathways";
 import AddPathway from "@/components/AdminPages/Studings/Pathways/AddPathway";
-import ModifyPathway from "@/components/AdminPages/Studings/Pathways/ModifyPathway";
+import ProfPathway from "@/components/AdminPages/Studings/Pathways/ListeProf";
 import Origins from "@/components/AdminPages/Studings/Origins/Origins";
 import AddOrigin from "@/components/AdminPages/Studings/Origins/AddOrigin";
 import ModifyOrigin from "@/components/AdminPages/Studings/Origins/ModifyOrigin";
@@ -56,7 +56,7 @@ export default [
     {path: '/admin/cursus/modifier-un-cursus', component: ModifyCourse },
     {path: '/admin/filieres/', component: Pathways },
     {path: '/admin/filieres/ajouter-une-filiere', component: AddPathway },
-    {path: '/admin/filieres/modifier-une-filiere', component: ModifyPathway },
+    {path: '/admin/filieres/Professeur', component: ProfPathway },
     {path: '/admin/origines/', component: Origins },
     {path: '/admin/origines/ajouter', component: AddOrigin },
     {path: '/admin/origines/prof', component: ListOrigineProf },

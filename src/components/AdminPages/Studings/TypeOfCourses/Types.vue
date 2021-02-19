@@ -3,6 +3,8 @@
         <Header />
 
         <h1 class="pt-5">Liste des différents types de cours</h1>
+
+        
     </div>
 </template>
 
