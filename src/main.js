@@ -13,20 +13,13 @@ import VueCookies from 'vue-cookies';
 import VueDropdown from 'vue-dynamic-dropdown';
 
 import {
-  faServer,
-  faUsers,
-  faBook,
   faSortDown,
   faSortUp,
   faSort,
-  faTrash,
   faEdit
 } from "@fortawesome/free-solid-svg-icons";
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import VueCookies from 'vue-cookies';
-
-
 
 Vue.config.productionTip = false
 
