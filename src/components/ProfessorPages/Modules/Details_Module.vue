@@ -56,15 +56,7 @@
 </div>
 </template>
 <style scoped>
-nav{
-  background: linear-gradient(45deg, #49a09d, #5f2c82);
-}
-.navbar-brand{
-  font-family: "Lato", "Lucida Grande", "Lucida Sans Unicode", Tahoma,
-    Sans-Serif ;
-  color: #fff;
-  font-size: 20px;
-}
+
 h1{
    font-family: Georgia, serif;
   font-size: 40px;
@@ -76,6 +68,10 @@ h3{
     color: #fff;
     margin-top: 50px;
 }
+a{
+  text-decoration: none;
+  color: black;
+}
 .card {
 
   margin-top: 5%;
@@ -85,17 +81,25 @@ h3{
   text-align: center;
 }
 
-
+.card .additional {
+  position: absolute;
+  width: 200px;
+  height: 100%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  background: #55608f;
+  transition: width 0.4s;
+  overflow: hidden;
+  z-index: 2;
+}
 
 table {
   width: 70%;
-  margin-left: 20%;
+  margin-left: 15%;
   border-collapse: collapse;
   overflow: hidden;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  background: linear-gradient(45deg, #49a09d, #5f2c82);
+  background: #344C80;
   margin-top: 30px;
-  margin-left: 17%;
 }
 
 th,
@@ -119,6 +123,61 @@ tbody tr:hover {
 tbody td {
   position: relative;
 }
+
+  /* 
+	Max width before this PARTICULAR table gets nasty
+	This query will take effect for any screen smaller than 760px
+	and also iPads specifically.
+	*/
+	@media 
+	only screen and (max-width: 760px),
+	(min-device-width: 768px) and (max-device-width: 1024px)  {
+	
+		/* Force table to not be like tables anymore */
+		table, thead, tbody, th, td, tr { 
+			display: block; 
+		}
+		
+		/* Hide table headers (but not display: none;, for accessibility) */
+		thead tr { 
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+		
+		tr { border: 1px solid #ccc; }
+		
+		td { 
+			/* Behave  like a "row" */
+			border: none;
+			border-bottom: 1px solid #eee; 
+			position: relative;
+			padding-left: 50%; 
+		}
+		
+		td:before { 
+			/* Now like a table header */
+			position: absolute;
+			/* Top/left values mimic padding */
+			top: 6px;
+			left: 6px;
+			width: 45%; 
+			padding-right: 10px; 
+			white-space: nowrap;
+		}
+		
+		/*
+		Label the data
+		*/
+     
+		td:nth-of-type(1):before { content: "Type"; }
+		td:nth-of-type(2):before { content: "Volume"; }
+		td:nth-of-type(3):before { content: "Nbr de grp"; }
+		td:nth-of-type(4):before { content: "enseignement"; }
+	
+	}
+	
+
 </style>
 <script>
 import Navbar from '../Navbar_Prof';

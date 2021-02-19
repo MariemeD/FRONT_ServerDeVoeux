@@ -25,7 +25,7 @@
                     </router-link>
                 </li>
             </ul>
-            <a class="nav-link my-2 my-lg-0">Déconnexion</a>
+            <a class="nav-link my-2 my-lg-0" @click="logout">Déconnexion</a>
         </div>
     </nav>
 </template>
@@ -81,6 +81,14 @@ export default {
                 .map(e => this.getRequestsForFiliere()[e]["courseRequested"])
             conflictedRequest = this.getRequestsForFiliere().filter(obj=> duplicateIds.includes(obj["courseRequested"]));
             return conflictedRequest
+        },
+        logout() {
+            this.$cookies.remove("emailProfessor")
+            this.$cookies.remove("FnameProfessor")
+            this.$cookies.remove("LnameProfessor")
+            this.$cookies.remove("idUser")
+            this.$cookies.remove("profile")
+            this.$router.push("/login")
         }
     },
     updated() {
