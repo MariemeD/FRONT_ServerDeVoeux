@@ -152,7 +152,8 @@ export default {
       M1N: [],
       M2: [],
       M2N: [],
-
+      info: [],
+      infoN:[],
       firstSplit: String,
       branch_Name: String,
       originalName: String,
@@ -184,6 +185,12 @@ export default {
             });
 
             this.L1N = this.removeDuplicate(this.L1);
+            this.L1N.forEach((val)=>{
+              this.info.push({
+                branchName: val.branchName,
+                branchCookie: val.branchCookie,
+              });
+            })
           }
           if (branch.startsWith("L2")) {
             this.firstSplit = branch.split("-")[0];
@@ -206,7 +213,14 @@ export default {
               branchCookie: "L2" + this.originalName,
             });
             this.L2N = this.removeDuplicate(this.L2);
+             this.L2N.forEach((val)=>{
+              this.info.push({
+                branchName: val.branchName,
+                branchCookie: val.branchCookie,
+              });
+            })
           }
+        //  console.log(this.removeDuplicate(this.info))
           if (branch.startsWith("L3")) {
             if (branch.indexOf("-") > -1) {
               this.branch_Name = branch.split("-")[1];
@@ -235,6 +249,12 @@ export default {
               branchCookie: "L3" + this.originalName,
             });
             this.L3N = this.removeDuplicate(this.L3);
+             this.L3N.forEach((val)=>{
+              this.info.push({
+                branchName: val.branchName,
+                branchCookie: val.branchCookie,
+              });
+            })
           }
           if (branch.startsWith("M1")) {
             this.firstSplit = branch.split("-")[0];
@@ -255,6 +275,12 @@ export default {
               branchCookie: "M1" + this.originalName,
             });
             this.M1N = this.removeDuplicate(this.M1);
+             this.M1N.forEach((val)=>{
+              this.info.push({
+                branchName: val.branchName,
+                branchCookie: val.branchCookie,
+              });
+            })
           }
           if (branch.startsWith("M2")) {
             this.firstSplit = branch.split("-")[0];
@@ -277,7 +303,14 @@ export default {
             });
 
             this.M2N = this.removeDuplicate(this.M2);
-              console.log(this.M2N)
+              this.M2N.forEach((val)=>{
+              this.info.push({
+                branchName: val.branchName,
+                branchCookie: val.branchCookie,
+              });
+            })
+        this.infoN = this.removeDuplicate(this.info);
+        console.log(this.infoN)
           }
         });
       });
@@ -287,13 +320,13 @@ export default {
       let unique = [];
       var cache = {};
       unique = table.filter(function (elem) {
-        return cache[elem.branchName] ? 0 : (cache[elem.branchName] = 1);
+        return cache[elem.branchCookie] ? 0 : (cache[elem.branchCookie] = 1);
       });
-
+      
     //  console.log(unique);
       return unique;
     },
-
+    
     setCookie(item) {
       this.$cookies.set("filiere", item);
       console.log(this.$cookies.get("filiere"))

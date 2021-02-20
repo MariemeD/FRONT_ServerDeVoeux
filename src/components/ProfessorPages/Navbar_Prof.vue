@@ -20,24 +20,24 @@
         >
 
         <div class="dropdown">
-          <a class="nav-item nav-link" href="#" data-toggle="dropdown">Enseignements</a>
+          <a class="nav-item nav-link active" href="#" data-toggle="dropdown">Enseignements</a>
           <ul class="dropdown-menu">
             <li>
-              <a class="nav-item nav-link" href="/branch">Enseignements</a>
+              <a class="nav-item nav-link active" href="/branch">Enseignements</a>
             </li>
             <li>
-              <a class="nav-item nav-link" href="#">Enseignement non couvert</a>
+              <a class="nav-item nav-link active" href="/ncours">Enseignement non couvert</a>
             </li>
             <li>
-              <a class="nav-item nav-link" href="/demandes"
+              <a class="nav-item nav-link active" href="/demandes"
                 >Demande d'enseignement</a
               >
             </li>
           </ul>
         </div>
 
-        <a class="nav-item nav-link" href="/profil">Profile</a>
-         <a class="nav-item nav-link" href="/login">Deconnexion</a>
+        <a class="nav-item nav-link active" href="/profil">Profile</a>
+         <a class="nav-item nav-link active" href="/login">Deconnexion</a>
       </div>
     </div>
   </nav>

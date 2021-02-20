@@ -1,127 +1,42 @@
 <template>
-<div>
- <Navbar />
-  <div class="modules">
+  <div>
+    <Navbar />
+    <div class="modules">
       <div class="card" id="infos">
-       <div class="additional">
-        <div class="info-card">
-          <h3>{{ branchName }}</h3>
-          <h3>Responsable : email </h3>
-       
-          
+        <div class="additional">
+          <div class="info-card">
+            <h3>{{ branchName }}</h3>
+            <h3>Responsable : email</h3>
+          </div>
         </div>
-      </div>
-
-       
       </div>
       <div class="card" id="details">
         <div class="general">
-        <h1>{{ branchName }}</h1>
-        <table class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th>Matiere</th>
-          <th>Semestre</th>
-          <th>Cours</th>
-          <th>TD</th>
-          <th>TP</th>
-          
-         
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="mat in matieres" :key="mat">
-          <td>{{ mat.matiereName }}</td>
-          <td>Leila</td>
-          <td>testOrigine</td>
-          <td>testStatut</td>
-          <td>testService</td>
-         
-        </tr>
-      </tbody>
-    </table>
-       
-      </div>
-      </div>
-    </div>
-    <!--div class="card">
-      <div class="additional">
-        <div class="info-card">
-          <h3>MIAGE</h3>
-          <h3>Responsable : email </h3>
-          <h3>Etat de filière </h3>
-          
+          <h1>{{ branchName }}</h1>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Matiere</th>
+                <th>Semestre</th>
+                <th>Cours</th>
+                <th>TD</th>
+                <th>TP</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="mat in matN" :key="mat">
+                <td>{{ mat.matiereName }}</td>
+                <td>1</td>
+                <td>{{ mat.nbCours }}</td>
+                <td>{{ mat.nbTD }}</td>
+                <td>{{ mat.nbTP }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <div class="general">
-        <h1>Nom de la Branche</h1>
-        <table class="table">
-      <thead>
-        <tr>
-          <th>Matiere</th>
-          <th>Semestre</th>
-          <th>Cours</th>
-          <th>TD</th>
-          <th>TP</th>
-          <th>TP</th>
-         
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><a href="/detailsModule"> Module_name </a></td>
-          <td>Leila</td>
-          <td>testOrigine</td>
-          <td>testStatut</td>
-          <td>testService</td>
-          <td>100</td>
-        </tr>
-        <tr>
-          <td>Bourlier</td>
-          <td>Sylvie</td>
-          <td>testOrigine</td>
-          <td>testStatut</td>
-          <td>testService</td>
-          <td>100</td>
-        </tr>
-        <tr>
-          <td>Bourlier</td>
-          <td>Sylvie</td>
-          <td>testOrigine</td>
-          <td>testStatut</td>
-          <td>testService</td>
-          <td>100</td>
-        </tr>
-       
-        <tr>
-          <td>Bourlier</td>
-          <td>Sylvie</td>
-          <td>testOrigine</td>
-          <td>testStatut</td>
-          <td>testService</td>
-          <td>100</td>
-        </tr>
-       <tr>
-          <td colspan="5">Total</td>
-          <td>100</td>
-          
-        </tr>
-         <tr>
-          <td colspan="5">Heures Statutaire</td>
-          <td>100</td>
-          
-        </tr>
-         <tr>
-          <td colspan="5">Déficit</td>
-          <td>100</td>
-          
-        </tr>
-      </tbody>
-    </table>
-       
-      </div>
-    </div-->
-</div>
+    </div>
+  </div>
 </template>
 <style scoped>
 #infos {
@@ -134,9 +49,8 @@
 #details {
   width: 70%;
   margin-top: 40px;
-  margin-left:40px;
+  margin-left: 40px;
   border: none;
-  
 }
 .additional {
   position: absolute;
@@ -147,7 +61,6 @@
   transition: width 0.4s;
   overflow: hidden;
   z-index: 2;
-  
 }
 .modules {
   display: flex;
@@ -157,9 +70,8 @@ td {
   cursor: pointer;
 }
 h3 {
-   color: #fff;
-    margin-top: 40px;
-
+  color: #fff;
+  margin-top: 40px;
 }
 
 a {
@@ -168,7 +80,7 @@ a {
 }
 table {
   width: 100%;
-   height: 100%;
+  height: 100%;
   border-collapse: collapse;
   overflow: hidden;
 
@@ -178,7 +90,6 @@ table {
 th,
 td {
   padding: 15px;
-
 }
 
 th {
@@ -186,8 +97,6 @@ th {
   background-color: #55608f;
   color: #eee;
 }
-
-
 
 tbody tr:hover {
   background-color: rgba(255, 255, 255, 0);
@@ -221,14 +130,11 @@ select {
   .card {
     width: 300px;
     margin-left: 20px;
-    
   }
   #infos {
-  
-  margin-top: 20%;
-margin-left: 40px;
- 
-}
+    margin-top: 20%;
+    margin-left: 40px;
+  }
   /* Force table to not be like tables anymore */
   table,
   thead,
@@ -249,7 +155,7 @@ margin-left: 40px;
   tr {
     border: 2px solid #eee;
   }
- 
+
   td {
     /* Behave  like a "row" */
     border: none;
@@ -260,13 +166,13 @@ margin-left: 40px;
 
   td:before {
     /* Now like a table header */
-    position:initial;
+    position: initial;
     /* Top/left values mimic padding */
     top: 6px;
     left: 6px;
     width: 45%;
     padding-right: 100%;
-    white-space:nowrap;
+    white-space: nowrap;
   }
 
   /*
@@ -288,38 +194,104 @@ margin-left: 40px;
   td:nth-of-type(5):before {
     content: "TP";
   }
-   
 }
 </style>
 
 <script>
-import Navbar from '../Navbar_Prof';
+import Navbar from "../Navbar_Prof";
+
 import axios from "axios";
 
 export default {
-  name : 'Details_Filiere',
-   data() {
+  name: "Details_Filiere",
+  components: {
+    Navbar,
+  },
+  data() {
     return {
       matieres: [],
-      branchName:String
+      branchName: String,
+      cmDone:Number,
+      tdDone:Number,
+      tpDone:Number,
+      matN:[],
     };
   },
-  components: {
-   Navbar
-  },
-  mounted (){
-    this.branchName= this.$cookies.get("filiere").branchCookie.substring(0, 2)+" "+this.$cookies.get("filiere").branchName;
-     axios
-      .get("http://146.59.195.214:8006/api/v1/events/"+this.$cookies.get("filiere").branchCookie+"/matiere")
+
+  mounted() {
+    
+    this.branchName =
+      this.$cookies.get("filiere").branchCookie.substring(0, 2) +
+      " " +
+      this.$cookies.get("filiere").branchName;
+    axios
+      .get(
+        "http://146.59.195.214:8006/api/v1/events/" +
+          this.$cookies.get("filiere").branchCookie +
+          "/matiere"
+      )
       .then((response) => {
-        console.log(this.$cookies.get("filiere").branchCookie)
-          response.data.forEach((matiere) => {
-        this.matieres.push({
-          matiereName:matiere
-        })
-       // console.log(this.matieres)
-          });
-      });
-  }
+        console.log(this.$cookies.get("filiere").branchCookie);
+        response.data.forEach((matiere) => {
+          axios
+            .get("http://146.59.195.214:8006/api/v1/events/teacher/" + matiere)
+            .then((prof) => {
+              if (prof.data.length !== 0) {
+                prof.data.forEach((val) => {
+                //  console.log(val.split(" ")[0]);
+
+                  axios
+                    .get(
+                      "http://146.59.195.214:8006/api/v1/stats/teacher/matieres/" +
+                        val.split(" ")[0] +
+                        "/" +
+                        val.split(" ")[1]
+                    )
+                    .then((response) => {
+                      this.cmDone = 0;
+                      this.tdDone = 0;
+                      this.tpDone = 0;
+                   // console.log(response.data.get(key))
+                    for( var i in response.data){
+               //       console.log(response.data[i])
+                    this.cmDone = this.cmDone + response.data[i].cmDone;
+                    this.tdDone = this.tdDone + response.data[i].tdDone;
+                    this.tpDone=  this.tpDone + response.data[i].tpDone;
+                   
+                  //   console.log(this.professors);
 }
+//console.log(this.cmDone)
+                  this.matieres.push({
+                    brName: this.$cookies.get("filiere").branchName,
+                    brCookie: this.$cookies.get("filiere").branchCookie,
+                    matiereName: matiere,
+                    nbCours:this.cmDone,
+                    nbTD: this.tdDone,
+                    nbTP: this.tpDone
+                  });
+                   
+                   this.matN = this.removeDuplicate(this.matieres)
+                   console.log(this.matN)
+                  });
+                });
+              }
+            });
+        });
+      });
+    console.log(this.matieres);
+  },
+   methods: {
+    removeDuplicate(table) {
+      let unique = [];
+      var cache = {};
+      unique = table.filter(function (elem) {
+        return cache[elem.matiereName] ? 0 : (cache[elem.matiereName] = 1);
+      });
+      
+    //  console.log(unique);
+      return unique;
+    },
+ 
+  },
+};
 </script>

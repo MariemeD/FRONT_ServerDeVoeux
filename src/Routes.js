@@ -16,6 +16,7 @@ import Demandes from "./components/ProfessorPages/Modules/Demandes";
 //Filiere
 import Branch from "./components/ProfessorPages/Filieres/Branch";
 import DetailsBranch from "./components/ProfessorPages/Filieres/Details_Branch";
+import NCours from "./components/ProfessorPages/Filieres/NC_Cours";
 import Homepage from "@/components/AdminPages/Homepage";
 import Profile from "@/components/AdminPages/Profile";
 import Professors from "@/components/AdminPages/Professors/Professors/Professors";
@@ -94,8 +95,8 @@ export default [
 
     //Branch
     {path: '/branch', component: Branch},
-    {path: '/detailsBranch', component: DetailsBranch}
-
+    {path: '/detailsBranch', component: DetailsBranch},
+    {path: '/ncours', component: NCours}
     // Professors routes
 
 ]

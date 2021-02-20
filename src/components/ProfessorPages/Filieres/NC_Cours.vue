@@ -6,24 +6,21 @@
     <table class="table table-bordered table-striped">
       <thead>
         <tr>
-          <th @click="sortLastName()">Nom</th>
-          <th @click="sortFirstName()">Prenom</th>
-          <th>Origine</th>
-          <th>Statut</th>
-          <th>Service Statutaire</th>
-          <th>Servcie Efféctué</th>
+          <th @click="sortLastName()">Filiere</th>
+          <th @click="sortFirstName()">Matière</th>
+          <th>Cours</th>
+          <th>TD</th>
+          <th>TP</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="prof in professors" :key="prof">
-          <td @click="setCookie(prof)">
-            {{ prof.lastName }}
-          </td>
-          <td>{{ prof.firstName }}</td>
-          <td>{{ prof.origin }}</td>
-          <td>{{ prof.status }}</td>
-          <td>{{ prof.serviceStatutaire }}</td>
-          <td>{{ prof.serviceEffectue }}</td>
+        <tr v-for="info in matInfo" :key="info">
+          
+          <td>{{ info.filiere }}</td>
+          <td>{{ info.cours }}</td>
+          <td>test</td>
+          <td>test</td>
+          <td>test</td>
         </tr>
       </tbody>
     </table>
@@ -146,44 +143,79 @@ export default {
   components: {
     Navbar,
   },
+  props: ["mat"],
   data() {
     return {
-      info: ["test", "best"],
       professors: [],
+      matInfo:[],
+      matN:[],
     };
   },
 
   mounted() {
-   
+    axios
+      .get("http://146.59.195.214:8006/api/v1/events/matieres")
+      .then((response) => {
+       // console.log(response)
+        response.data.forEach((matiere) => {
+            
+          if (matiere !== ""){
+            
+          //  console.log("in")
+            axios
+              .get(
+                "http://146.59.195.214:8006/api/v1/events/teacher/" + matiere
+              )
+              .then((prof) => {
+             //   console.log(matiere +"        "+ prof.data.length);
+                if (prof.data.length === 0) {
+                  this.professors.push({
+                    name: matiere,
+                  });
+                }
+             //   console.log(this.professors);
+              });
+          }
+        });
+      });
 
     axios
-      .get("http://146.59.195.214:8006/api/v1/teachers/all")
+      .get("http://146.59.195.214:8006/api/v1/events/filieres")
       .then((response) => {
-        response.data.forEach((prof) => {
-          if (prof.department === "Département d&#039;Informatique") {
-            prof.department = "Département Informatique";
-          }
-      axios
-            .get(
-              "http://146.59.195.214:8006/api/v1/stats/teacher/details/" +
-                prof.firstName +
-                "/" +
-                prof.lastName
-            )
-            .then((service) => {
-               
-                
-                this.professors.push({
-                  firstName: prof.firstName,
-                  lastName: prof.lastName,
-                  origin: prof.department,
-                  email: prof.email,
-                  status: prof.status,
-                  serviceStatutaire: prof.service,
-                  serviceEffectue: service.data.Done.cm +service.data.Done.td +service.data.Done.tp
+        //  console.log(response);
+        response.data.forEach((filiere) => {
+          if (
+            filiere !== "DEPOT DE DEVOIR(SFA" &&
+            filiere !== "" &&
+            filiere !== "ORAL(SFA" &&
+            filiere !== "QUIZZ(SFA"
+          ) {
+            axios
+              .get(
+                "http://146.59.195.214:8006/api/v1/events/" +
+                  filiere +
+                  "/matiere"
+              )
+              .then((matr) => {
+                matr.data.forEach((mat) => {
+                  //    console.log(matr);
+                  this.professors.forEach((cours) => {
+                    //console.log(cours.name)
+                    if (cours.name === mat) {
+                      this.matInfo.push({
+                        cours: cours.name,
+                        filiere: filiere,
+
+                      });
+                    }
+                   this.matN = this.removeDuplicate(this.matInfo);
+                    
+                  });
+                  
                 });
-           
-            });
+              });
+              
+          }
         });
       });
   },
@@ -208,6 +240,16 @@ export default {
       //  this.$cookies.set("lastName", lastName);
       // this.$cookies.set("email", email);
       this.$router.push("/professorService");
+    },
+    removeDuplicate(table) {
+      let unique = [];
+      var cache = {};
+      unique = table.filter(function (elem) {
+        return cache[elem.name] ? 0 : (cache[elem.name] = 1);
+      });
+
+      //  console.log(unique);
+      return unique;
     },
   },
 };
