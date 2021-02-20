@@ -1,11 +1,26 @@
+
+import HomeProf from "./components/ProfessorPages/HomePage";
+
+//professor
+
+import Professor from "./components/ProfessorPages/professor/Professors";
+import ProfessorService from "./components/ProfessorPages/professor/Prof_Service";
+import Profil from "./components/ProfessorPages/Profile";
+//modules
+
+
+//import DetailsModule from "./components/ProfessorPages/Modules/Details_Module";
+import EditModule from "./components/ProfessorPages/Modules/Edit_Module";
+import Demandes from "./components/ProfessorPages/Modules/Demandes";
+
+//Filiere
+import Branch from "./components/ProfessorPages/Filieres/Branch";
+import DetailsBranch from "./components/ProfessorPages/Filieres/Details_Branch";
 import Homepage from "@/components/AdminPages/Homepage";
 import Profile from "@/components/AdminPages/Profile";
 import Professors from "@/components/AdminPages/Professors/Professors/Professors";
 import AddProfessor from "@/components/AdminPages/Professors/Professors/AddProfessor";
 import ModifyProfessor from "@/components/AdminPages/Professors/Professors/ModifyProfessor";
-import Bonuses from "@/components/AdminPages/Professors/Bonus/Bonuses";
-import AddBonus from "@/components/AdminPages/Professors/Bonus/AddBonus";
-import ModifyBonus from "@/components/AdminPages/Professors/Bonus/ModifyBonus";
 import HoursMade from "@/components/AdminPages/Professors/Hours/HoursMade";
 import Status from "@/components/AdminPages/Professors/Status/Status";
 import AddStatus from "@/components/AdminPages/Professors/Status/AddStatus";
@@ -26,31 +41,31 @@ import ListOrigineProf from "@/components/AdminPages/Studings/Origins/ListeProf"
 import Types from "@/components/AdminPages/Studings/TypeOfCourses/Types";
 import AddType from "@/components/AdminPages/Studings/TypeOfCourses/AddType";
 import ModifyType from "@/components/AdminPages/Studings/TypeOfCourses/ModifyType";
+//General
+import Login from "./components/GeneralPages/Login"
 
 export default [
-    // Login route
 
+    // Login route
+    {path: '/login/', component: Login },
 
     // Register route
 
-
     // Admin routes
-    {path: '/admin/', component: Homepage },
-    {path: '/admin/profil', component: Profile },
 
-    {path: '/admin/enseignants/', component: Professors },
-    {path: '/admin/enseignants/ajouter-un-enseignant', component: AddProfessor },
-    {path: '/admin/enseignants/modifier-un-enseignant', component: ModifyProfessor },
-    {path: '/admin/primes/', component: Bonuses },
-    {path: '/admin/primes/ajouter-une-prime', component: AddBonus },
-    {path: '/admin/primes/modifier-une-prime', component: ModifyBonus },
-    {path: '/admin/heures-effectuees', component: HoursMade },
-    {path: '/admin/statuts/', component: Status },
-    {path: '/admin/statuts/ajouter-un-statut', component: AddStatus },
-    {path: '/admin/statuts/modifier-un-statut', component: ModifyStatus },
-    {path: '/admin/decharges/', component: Disclaimers },
-    {path: '/admin/decharges/ajouter-une-decharge', component: Disclaimers },
-    {path: '/admin/decharges/modifier-une-decharge', component: ModifyDisclaimer },
+    {path: '/admin/', name: 'homepage', component: Homepage },
+    {path: '/admin/profil', name: 'admin-profil', component: Profile },
+
+    {path: '/admin/enseignants/', name: 'professors', component: Professors },
+    {path: '/admin/enseignants/ajouter-un-enseignant', name: 'professors-add', component: AddProfessor },
+    {path: '/admin/enseignants/modifier-un-enseignant', name: 'professors-edit', component: ModifyProfessor },
+    {path: '/admin/heures-effectuees', name: 'hoursMade', component: HoursMade },
+    {path: '/admin/statuts/', name: 'status', component: Status },
+    {path: '/admin/statuts/ajouter-un-statut', name: 'status-add', component: AddStatus },
+    {path: '/admin/statuts/modifier-un-statut/:idStatus', name: 'status-edit', component: ModifyStatus },
+    {path: '/admin/decharges/', name: 'disclaimers', component: Disclaimers },
+    {path: '/admin/decharges/ajouter-une-decharge', name: 'disclaimers-add', component: Disclaimers },
+    {path: '/admin/decharges/modifier-une-decharge', name: 'disclaimers-edit', component: ModifyDisclaimer },
 
     {path: '/admin/cursus/', component: Courses },
     {path: '/admin/cursus/ajouter-un-cursus', component: AddCourse },
@@ -68,5 +83,23 @@ export default [
     {path: '/admin/types-de-cours/modifier', component: ModifyType },
 
 
+
+    {path: '/home', component: HomeProf},
+    {path: '/profil', component: Profil},
+
+    // Professor routes
+    {path: '/professors', component: Professor},
+    {path: '/professorService', component: ProfessorService},
+
+    //Modules
+    //{path: '/detailsModule', component: DetailsModule},
+    {path: '/detailsModule', component: EditModule},
+    {path: '/demandes', component: Demandes},
+
+    //Branch
+    {path: '/branch', component: Branch},
+    {path: '/detailsBranch', component: DetailsBranch}
+
     // Professors routes
+
 ]
