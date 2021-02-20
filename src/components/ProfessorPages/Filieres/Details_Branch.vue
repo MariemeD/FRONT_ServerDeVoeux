@@ -247,7 +247,7 @@ margin-left: 40px;
   }
 
   tr {
-    border: 2px solid #eee;
+    border: 1px solid #eee;
   }
  
   td {

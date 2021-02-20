@@ -5,10 +5,13 @@
         <h1 class="pt-5" v-else>Gestion des voeux</h1>
 
         <div class="container">
+            <div class="progress mt-4" v-if="isLoading">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%; background-color: #536895"></div>
+            </div>
                 <RequestTable
                     :conflicts="getRequestsForFiliere().conflicts"
                     :requests="getRequestsForFiliere().requests"
-                    :is-conflicts="this.$route.params.conflicts === 'conflits'" />
+                    :is-conflicts="this.$route.params.conflicts === 'conflits'" v-else />
         </div>
     </div>
 </template>
@@ -24,7 +27,7 @@ export default {
     data() {
         return {
             requests: [],
-            professorsOfFiliere: [],
+            isLoading: true
         }
     },
     created() {
@@ -37,21 +40,12 @@ export default {
                 request.requestor = name
                 this.requests.push(request)
             }
-        })
-        axios.get("http://146.59.195.214:8006/api/v1/events/teachers/M2MIAA").then(response => {
-            for (let prof of response.data) {
-                this.professorsOfFiliere.push(prof.toLowerCase().trim())
-            }
+            this.isLoading = false
         })
     },
     methods: {
         getRequestsForFiliere() {
-            let requestsForFiliere = []
-            for (let request of this.requests) {
-                if (this.professorsOfFiliere.includes(request.requestor.toLowerCase().trim())) {
-                    requestsForFiliere.push(request)
-                }
-            }
+            let requestsForFiliere = this.requests.filter(request => request.groupRequested === this.$cookies.get("groupProfessor"))
             let conflictedRequest = []
             // https://stackoverflow.com/questions/53212020/get-list-of-duplicate-objects-in-an-array-of-objects/53212154
             let duplicateIds = requestsForFiliere

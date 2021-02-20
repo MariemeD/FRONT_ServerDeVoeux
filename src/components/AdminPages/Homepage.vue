@@ -39,13 +39,21 @@
 
                         <ul id="server-actions" class="text-left mr-auto ml-auto">
                             <li>
-                                - <a href="" @click.prevent="closeOpenServer">Fermer le serveur</a>
+                                - <span
+                                    @click.prevent="closeServer"
+                                    :class="{'unvailable-link': !isServerOpen}">
+                                        Fermer le serveur
+                                    </span>
                             </li>
                             <li>
-                                - <a href="">Redémarrer le serveur</a>
+                                - <span
+                                    @click.prevent="restartServer"
+                                    :class="{'unvailable-link': isServerOpen}">
+                                    Redémarrer le serveur
+                                </span>
                             </li>
                             <li>
-                                - <a href="">Sauvegarder la base</a>
+                                - <span>Sauvegarder la base</span>
                             </li>
                         </ul>
                     </div>
@@ -89,8 +97,15 @@ export default {
         }
     },
     methods: {
-        closeOpenServer() {
-            this.isServerOpen = !this.isServerOpen
+        closeServer() {
+            if (this.isServerOpen) {
+                this.isServerOpen = !this.isServerOpen
+            }
+        },
+        restartServer() {
+            if (!this.isServerOpen) {
+                this.isServerOpen = !this.isServerOpen
+            }
         }
     }
 }
@@ -130,8 +145,14 @@ h6 {
 #server-card {
     background-color: #344C80;
 }
-#server-actions li, #server-actions a, #server-card h6 {
+#server-actions li, #server-card h6 {
     color: #C9893C;
+}
+span {
+    cursor: pointer;
+}
+.unvailable-link {
+    text-decoration: line-through;
 }
 @media all and (max-width: 992px) and (min-width: 769px) {
     .col-md-8 {
@@ -142,6 +163,9 @@ h6 {
     }
 }
 @media all and (max-width: 768px) {
+    .jumbotron {
+        padding: 0;
+    }
     .col-md-8 {
         margin: 5px auto;
     }
@@ -162,7 +186,7 @@ h6 {
 }
 @media all and (max-width: 576px) {
     #server-card, #professor-card, #studings-card {
-        width: 60%;
+        width: 80%;
         margin: 0 auto 5px;
     }
     #div-server-icon, #div-professor-icon, #div-studings-icon {

@@ -6,7 +6,7 @@
 
         <div class="container">
 
-            <div class="row justify-content-between">
+            <div class="row justify-content-between ml-1">
                 <router-link :to="{name: 'disclaimers-add'}">
                     <button id="addDisclaimerBtn" class="btn btn-outline-info mb-3">Ajouter une nouvelle décharge</button>
                 </router-link>
@@ -20,8 +20,11 @@
                 </p>
             </div>
 
+            <div class="progress mt-4" v-if="isLoading">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%; background-color: #536895"></div>
+            </div>
 
-            <div class="table-responsive">
+            <div class="table-responsive" v-else>
                 <table class="table table-striped">
                     <thead>
                     <th>
@@ -108,6 +111,7 @@ export default {
     components: { Header },
     data() {
         return {
+            isLoading: true,
             discharges: [],
             currentDischarge: {},
             currentSortDirection: 'asc',
@@ -120,6 +124,7 @@ export default {
     created() {
         axios.get("https://back-serverdevoeux.herokuapp.com/api/discharges").then(response => {
             this.discharges = response.data
+            this.isLoading = false
         })
     },
     methods: {
@@ -205,5 +210,52 @@ export default {
 }
 .page-link:hover {
     color: #2c3e50;
+}
+th {
+    text-align: center;
+    background-color: #536895;
+    color: #eee;
+    vertical-align: middle !important;
+}
+@media only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px) {
+    /* Force table to not be like tables anymore */
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+        display: block;
+    }
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    tr {
+        border: 1px solid #eee;
+    }
+    td {
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+    }
+    td:before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 100%;
+        white-space: nowrap;
+    }
+    #addDisclaimerBtn {
+        margin-bottom: 0.2em !important;
+    }
 }
 </style>

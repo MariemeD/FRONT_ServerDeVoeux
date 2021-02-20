@@ -21,7 +21,7 @@
                         <strong><u>Email:</u></strong> {{ currentProfessor.email }}
                     </p>
                     <p>
-                        <strong><u>Responsable de la filière:</u></strong>
+                        <strong><u>Responsable de la filière:</u></strong> {{ $cookies.get("groupProfessor") }}
                     </p>
                     <button class="btn btn-outline-dark">Changer de mot de passe</button>
                     <br>

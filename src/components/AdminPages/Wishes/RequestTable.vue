@@ -16,7 +16,7 @@
             </p>
         </div>
 
-        <div class="row justify-content-start">
+        <div class="row justify-content-start ml-1">
             <p id="eltPerPage" class="mb-2">
                 Afficher
                 <a class="pageSizeElt" @click="setElementsPerPage(5)">5</a>
@@ -28,13 +28,13 @@
 
         <div class="table-responsive">
             <!-- Tableau des voeux avec conflits -->
-            <table class="table table-striped" v-if="isConflicts">
+            <table id="mainRequestTable" class="table table-striped" v-if="isConflicts">
                 <thead>
-                <th>Filière</th>
-                <th>Matière</th>
-                <th>Professeurs</th>
-                <th>Statut</th>
-                <th>Actions</th>
+                    <th>Filière</th>
+                    <th>Matière</th>
+                    <th>Professeurs</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
                 </thead>
                 <tbody>
                 <tr v-for="request in groupConflictByCursus()" :key="request._id">
@@ -46,16 +46,23 @@
                             :key="req._id"
                             data-toggle="modal"
                             data-target="#profModal"
-                            @click.prevent="setCurrentRequest(req)"
+                            @click.prevent="getInfosForProfModal(req)"
                             class="selectProf">
                             {{ req.requestor }} -
                         </span>
                     </td>
                     <td class="text-danger">Conflit</td>
                     <td>
-                        <button class="btn btn-outline-primary">
+                        <!--<button class="btn btn-outline-primary">
                             <font-awesome-icon icon="mail-bulk" />
                             Envoyer un mail à tous
+                        </button>-->
+                        <button
+                            class="btn btn-outline-primary"
+                            @click.prevent="setCurrentRequest(request)"
+                            data-toggle="modal"
+                            data-target="#commentModal">
+                            Ajouter un commentaire
                         </button>
                     </td>
                 </tr>
@@ -73,7 +80,26 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            ...
+                            <table id="hoursTableProf" class="table table-striped">
+                                <thead>
+                                    <th>Type de cours</th>
+                                    <th>Heures effectuées / Heures totales</th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>CM</td>
+                                        <td>{{ infosHoursProf().cmDone + "h / " + infosHoursProf().cmTotal }}h</td>
+                                    </tr>
+                                    <tr>
+                                        <td>TD</td>
+                                        <td>{{ infosHoursProf().tdDone + "h / " + infosHoursProf().tdTotal }}h</td>
+                                    </tr>
+                                    <tr>
+                                        <td>TP</td>
+                                        <td>{{ infosHoursProf().tpDone + "h / " + infosHoursProf().tpTotal }}h</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
@@ -84,27 +110,58 @@
                 </div>
             </div>
 
+            <!-- Modal -->
+            <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="commentModalLabel">Ajouter un commentaire à la demande</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form @submit.prevent="sendComment">
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1" class="form-label">Commentaire :</label>
+                                    <textarea
+                                        class="form-control"
+                                        id="exampleFormControlTextarea1"
+                                        rows="5"
+                                        v-model.lazy="newComment"
+                                        required></textarea>
+                                </div>
+                                <button class="btn btn-outline-success">Ajouter le commentaire aux demandes</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Tableau des voeux sans conflits -->
-            <table class="table table-striped" v-if="!isConflicts">
+            <table id="mainConflictsTable" class="table table-striped" v-if="!isConflicts">
                 <thead>
-                <th>Filière</th>
-                <th>Matière</th>
-                <th>Professeur</th>
-                <th>Statut</th>
-                <th>Actions</th>
+                    <th>Filière</th>
+                    <th>Matière</th>
+                    <th>Professeur</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
                 </thead>
                 <tbody>
-                <tr v-for="request in sortedRequests" :key="request._id">
-                    <td>{{ request.groupRequested }}</td>
-                    <td>{{ request.courseRequested }}</td>
-                    <td>{{ request.requestor }}</td>
-                    <td>{{ request.status }}</td>
-                    <td>
-                        <span class="btn btn-outline-success" @click.prevent="acceptRequest(request)">Accepter</span>
-                        |
-                        <span class="btn btn-outline-danger" @click.prevent="refuseRequest(request)">Refuser</span>
-                    </td>
-                </tr>
+                    <tr v-for="request in sortedRequests" :key="request._id">
+                        <td>{{ request.groupRequested }}</td>
+                        <td>{{ request.courseRequested }}</td>
+                        <td>{{ request.requestor }}</td>
+                        <td>{{ request.status }}</td>
+                        <td>
+                            <span class="btn btn-outline-success" @click.prevent="acceptRequest(request)">Accepter</span>
+                            |
+                            <span class="btn btn-outline-danger" @click.prevent="refuseRequest(request)">Refuser</span>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -134,9 +191,11 @@ export default {
             currentRequest: "",
             currentSortDirection: 'asc',
             currentSort: 'courseRequested',
-            pageSize: 7,
+            pageSize: 5,
             currentPage: 1,
             sortIcon: 'sort',
+            hoursSelectedProf: {},
+            newComment: ''
         }
     },
     created() {
@@ -170,10 +229,7 @@ export default {
             })
         },
         acceptRequestConflict(request) {
-            console.log(request.requestor)
-            console.log(this.groupConflictByCursus()[request.courseRequested])
-            axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${request._id}`, {status: 'Accepté'}).then(response => {
-                console.log(response)
+            axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${request._id}`, {status: 'Accepté'}).then(() => {
                 this.sendAlertMessage(`Le voeu de ${request.requestor} a bien été accepté`)
                 for (let otherConflict of this.groupConflictByCursus()[request.courseRequested].filter(req => req !== request)) {
                     axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${otherConflict._id}`, {status: 'Refusé'}).then(response => {
@@ -197,8 +253,49 @@ export default {
                 return array;
             }, {})
         },
+        getInfosForProfModal(req) {
+            this.currentRequest = req
+            let firstname = req.requestor.split(" ")[0]
+            let lastname = req.requestor.split(" ")[1]
+            axios.get(`http://146.59.195.214:8006/api/v1/stats/teacher/matieres/${firstname}/${lastname}`).then((response) => {
+                this.hoursSelectedProf = response.data
+            })
+        },
         setCurrentRequest(req) {
             this.currentRequest = req
+        },
+        infosHoursProf() {
+            let cmTotal = Object.values(this.hoursSelectedProf).reduce((a, b) => a + (b["cmTotal"] || 0), 0)
+            let tdTotal = Object.values(this.hoursSelectedProf).reduce((a, b) => a + (b["tdTotal"] || 0), 0)
+            let tpTotal = Object.values(this.hoursSelectedProf).reduce((a, b) => a + (b["tpTotal"] || 0), 0)
+            let cmDone = Object.values(this.hoursSelectedProf).reduce((a, b) => a + (b["cmDone"] || 0), 0)
+            let tdDone = Object.values(this.hoursSelectedProf).reduce((a, b) => a + (b["tdDone"] || 0), 0)
+            let tpDone = Object.values(this.hoursSelectedProf).reduce((a, b) => a + (b["tpDone"] || 0), 0)
+            return {
+                cmTotal: cmTotal,
+                tdTotal: tdTotal,
+                tpTotal: tpTotal,
+                cmDone: cmDone,
+                tdDone: tdDone,
+                tpDone: tpDone,
+            }
+        },
+        sendComment() {
+            if (this.newComment !== "") {
+                for (let request of this.currentRequest) {
+                    axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${request._id}`, {
+                        detailRequest: this.newComment
+                    }).then(response => {
+                        console.log(response)
+                        this.sendAlertMessage(`Les voeux ont bien été commentés`)
+                        this.refreshPage(2000)
+                    }).catch(error => {
+                        console.error(error)
+                        this.sendAlertMessage("Une erreur est survenue lors du commentaire des voeux. Veuillez réessayer plus tard.")
+                        this.refreshPage(5000)
+                    })
+                }
+            }
         },
         sendAlertMessage(message) {
             this.alertMessage = message
@@ -280,5 +377,62 @@ export default {
 }
 .selectProf:hover {
     color: #2c3e50;
+}
+th {
+    text-align: center;
+    background-color: #536895;
+    color: #eee;
+    vertical-align: middle !important;
+}
+.table-striped tbody tr:hover {
+    background-color: rgba(96, 124, 184, 0.3);
+}
+.modal-body table tr {
+    height: 2em;
+    vertical-align: middle !important;
+}
+@media only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px) {
+    /* Force table to not be like tables anymore */
+    #mainRequestTable table,
+    #mainRequestTable thead,
+    #mainRequestTable tbody,
+    #mainRequestTable th,
+    #mainRequestTable td,
+    #mainRequestTable tr,
+    #mainConflictsTable table,
+    #mainConflictsTable thead,
+    #mainConflictsTable tbody,
+    #mainConflictsTable th,
+    #mainConflictsTable td,
+    #mainConflictsTable tr {
+        display: block;
+    }
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    tr {
+        border: 1px solid #eee;
+    }
+    td {
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+    }
+    td:before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 100%;
+        white-space: nowrap;
+    }
 }
 </style>

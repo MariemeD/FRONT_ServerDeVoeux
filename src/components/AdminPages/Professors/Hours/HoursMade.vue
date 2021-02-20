@@ -6,15 +6,16 @@
 
         <div class="container">
             <div class="row">
-                <div class="table-responsive">
-                    <table class="table mt-4">
+                <div class="progress mt-4" v-if="isLoading">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%; background-color: #536895"></div>
+                </div>
+                <div class="table-responsive" v-else>
+                    <table class="table table-striped mt-4">
                         <thead>
-                        <tr>
                             <th @click="sort">Professeur</th>
                             <th>CM effectués / totaux</th>
                             <th>TD effectués / totaux</th>
                             <th>TP effectués / totaux</th>
-                        </tr>
                         </thead>
                         <tbody>
                         <tr
@@ -71,17 +72,20 @@
             <hr>
 
             <h2 class="text-left mb-4">Mes heures de travail totales</h2>
-            <div class="row">
+            <div class="progress mt-4 mb-4" v-if="isLoadingPersonalHours">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%; background-color: #536895"></div>
+            </div>
+            <div class="row" v-else>
                 <div class="col-4">
-                    <h4>Heures de CM</h4>
+                    <h4>CM</h4>
                     <hours-chart :data="chartDataCM" :options="options"></hours-chart>
                 </div>
                 <div class="col-4">
-                    <h4>Heures de TD</h4>
+                    <h4>TD</h4>
                     <hours-chart :data="chartDataTD" :options="options"></hours-chart>
                 </div>
                 <div class="col-4">
-                    <h4>Heures de TP</h4>
+                    <h4>TP</h4>
                     <hours-chart :data="chartDataTP" :options="options"></hours-chart>
                 </div>
             </div>
@@ -99,6 +103,8 @@ export default {
     components: { HoursChart, Header },
     data() {
         return {
+            isLoading: true,
+            isLoadingPersonalHours: true,
             hoursData: [],
             professors: [],
             activeProfessor: {},
@@ -177,9 +183,9 @@ export default {
                         response.data.Total.tp - response.data.Done.tp
                         : 0
                 ]
+                this.isLoadingPersonalHours = false
             })
-        //  TODO Demander confirmation aux filles => l'admin voit que les heures des profs dont il est responsable (filière)
-        axios.get("http://146.59.195.214:8006/api/v1/events/teachers/M2MIAA").then(response => {
+        axios.get(`http://146.59.195.214:8006/api/v1/events/teachers/${this.$cookies.get("groupProfessor")}`).then(response => {
             for (let prof of response.data) {
                 let firstname = prof.split(" ")[0].replaceAll("_", " ")
                 let lastname = prof.split(" ")[1].replaceAll("_", " ")
@@ -205,6 +211,7 @@ export default {
                 }
                 this.professors.push(prof)
             }
+            this.isLoading = false
         })
     },
     methods: {
@@ -275,5 +282,47 @@ tbody tr:hover {
 }
 .page-link:hover {
     color: #2c3e50;
+}
+@media only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px) {
+    /* Force table to not be like tables anymore */
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+        display: block;
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr {
+        border: 1px solid #eee;
+    }
+
+    td {
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    td:before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 100%;
+        white-space: nowrap;
+    }
 }
 </style>

@@ -39,7 +39,6 @@ export default {
         return {
             requests: [],
             conflicts: [],
-            professorsOfFiliere: [],
         }
     },
     created() {
@@ -49,20 +48,20 @@ export default {
                 this.requests.push(request)
             }
         })
-        axios.get("http://146.59.195.214:8006/api/v1/events/teachers/M2MIAA").then(response => {
-            for (let prof of response.data) {
-                this.professorsOfFiliere.push(prof.toLowerCase().trim())
+        axios.get(`https://back-serverdevoeux.herokuapp.com/api/responsibles`).then(response => {
+            const connectedAdmin = response.data.find(res =>
+                res.email === this.$cookies.get("emailProfessor"))
+            if (!this.$cookies.get("groupProfessor")) {
+                this.$cookies.set("groupProfessor", connectedAdmin.group)
             }
+        }).catch(error => {
+            console.error("Pas de reponsable correspondant à l'email de la personne connecté")
+            console.error(error)
         })
     },
     methods: {
         getRequestsForFiliere() {
-            let requestsForFiliere = []
-            for (let request of this.requests.filter(req => req.status === "En attente")) {
-                if (this.professorsOfFiliere.includes(request.requestor)) {
-                    requestsForFiliere.push(request)
-                }
-            }
+            let requestsForFiliere = this.requests.filter(request => request.groupRequested === this.$cookies.get("groupProfessor"))
             let conflictedRequest = []
             // https://stackoverflow.com/questions/53212020/get-list-of-duplicate-objects-in-an-array-of-objects/53212154
             let duplicateIds = requestsForFiliere
@@ -82,19 +81,21 @@ export default {
             this.$cookies.remove("LnameProfessor")
             this.$cookies.remove("idUser")
             this.$cookies.remove("profile")
+            this.$cookies.remove("groupProfessor")
             this.$router.push("/login")
         }
     },
     updated() {
-        axios.get("https://back-serverdevoeux.herokuapp.com/api/requests").then(response => {
-            for (let request of response.data) {
+        // TODO Reflexion quand à faire des appels toutes les secondes en cas de nouvelles demandes ou non
+        /*axios.get("https://back-serverdevoeux.herokuapp.com/api/requests").then(response => {
+            for (let request of response.data.filter(request => request.status === "En attente")) {
                 request.requestor = request.requestor.toLowerCase().trim()
             }
-            this.requests = response.data.filter(request => request.status === "En attente")
+            this.requests = response.data
         }).catch(error => {
             console.error("Error on updating Header component")
             console.error(error)
-        })
+        })*/
     }
 }
 </script>

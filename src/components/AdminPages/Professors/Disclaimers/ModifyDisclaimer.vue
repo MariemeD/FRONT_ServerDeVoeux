@@ -100,7 +100,7 @@ export default {
         axios.get(`https://back-serverdevoeux.herokuapp.com/api/discharge/${this.$route.params.idDisclaimer}`).then(response => {
             this.currentDischarge = response.data
         })
-        axios.get("http://146.59.195.214:8006/api/v1/events/teachers/M2MIAA").then(response => {
+        axios.get(`http://146.59.195.214:8006/api/v1/events/teachers/${this.$cookies.get("groupProfessor")}`).then(response => {
             for (let prof of response.data) {
                 let name = ""
                 for (let eltName of prof.split(" ")) {
