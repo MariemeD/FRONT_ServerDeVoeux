@@ -28,7 +28,7 @@
                     <br>
                     <h5><u>Matières enseignées :</u></h5>
                     <ul>
-                        <li v-for="(hours, matiere) in professorCourses" :key="matiere">
+                        <li v-for="matiere in professorCourses" :key="matiere">
                             {{ matiere.toUpperCase() }}
                         </li>
                     </ul>
@@ -48,7 +48,7 @@
           return {
               currentProfessor: {},
               groupSupervised: '',
-              professorCourses: {}
+              professorCourses: []
           }
         },
         created() {
@@ -57,7 +57,7 @@
             })
             axios.get(`http://146.59.195.214:8006/api/v1/stats/teacher/matieres/${this.$cookies.get("FnameProfessor")}/${this.$cookies.get("LnameProfessor")}`)
             .then(response => {
-                this.professorCourses = response.data
+                this.professorCourses = Object.keys(response.data).sort()
             })
         }
     }

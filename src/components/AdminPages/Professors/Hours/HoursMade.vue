@@ -14,7 +14,6 @@
                             <th>CM effectués / totaux</th>
                             <th>TD effectués / totaux</th>
                             <th>TP effectués / totaux</th>
-                            <th>-</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -56,11 +55,6 @@
                                     || prof.hoursData.Done.tp > prof.hoursData.Total.tp
                             }">
                                 {{ prof.hoursData.Done.tp }}h / {{ prof.hoursData.Total.tp }}h
-                            </td>
-                            <td>
-                                <router-link :to="{name: 'hoursMade-details', params: { lastnameProf: prof.lastname, firstnameProf: prof.firstname }}">
-                                    Détail
-                                </router-link>
                             </td>
                         </tr>
                         </tbody>
@@ -216,6 +210,7 @@ export default {
     methods: {
         setActiveProfessor(professor) {
             this.activeProfessor = professor
+            this.$router.push({name: 'hoursMade-details', params: { lastnameProf: professor.lastname, firstnameProf: professor.firstname }})
         },
         /*
         * Inspiration for sorting and pagination :
@@ -240,8 +235,6 @@ export default {
             return firstLetter + rest
         }
     },
-    mounted() {
-    },
     computed: {
         sortedProfessors: function() {
             // Slice method to avoid unexpected side effects
@@ -264,5 +257,23 @@ export default {
 </script>
 
 <style scoped>
-
+th {
+    text-align: center;
+    background-color: #536895;
+    color: #eee;
+    vertical-align: middle !important;
+}
+tbody tr:hover {
+    background-color: rgba(96, 124, 184, 0.3);
+    cursor: pointer;
+}
+.text-warning {
+    color: #ef9a35 !important;
+}
+.page-link {
+    color: #536895;
+}
+.page-link:hover {
+    color: #2c3e50;
+}
 </style>

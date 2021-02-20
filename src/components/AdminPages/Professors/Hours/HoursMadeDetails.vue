@@ -3,63 +3,89 @@
         <Header />
         <h1 class="pt-5">Heures de {{ firstnameProf }} {{ lastnameProf }}</h1>
 
-        {{ statsTest }}
-        {{ testSetFilieres() }}
-
         <div class="container-fluid">
             <div class="table-responsive">
                 <table class="table table-striped mt-4">
                     <thead>
-                    <th>Filières</th>
-                    <th>Matières</th>
-                    <th>CM effectué / CM totaux</th>
-                    <th>TD effectué / TD totaux</th>
-                    <th>TP effectué / TP totaux</th>
+                        <th>Filières</th>
+                        <th>Matières</th>
+                        <th>CM effectués / CM totaux</th>
+                        <th>TD effectués / TD totaux</th>
+                        <th>TP effectués / TP totaux</th>
                     </thead>
                     <tbody>
-                    <tr v-for="(hours, key) in statsTest" :key="key">
-                        <td>{{ getFiliereForCourse(key) }}</td>
-                        <td>{{ key }}</td>
-                        <td>{{ hours.cmDone }}h / {{ hours.cmTotal }}h</td>
-                        <td>{{ hours.tdDone }}h / {{ hours.tdDone }}h</td>
-                        <td>{{ hours.tpDone }}h / {{ hours.tpDone }}h</td>
-                    </tr>
+                        <tr v-for="(hours, key) in setFilieres()" :key="key">
+                            <td>{{ hours.filieres }}</td>
+                            <td>{{ hours.matiere ? hours.matiere : 'Matière indeterminée' }}</td>
+                            <td
+                                class="font-weight-bold"
+                                v-bind:class="{
+                                'text-danger': hours.cmDone < hours.cmTotal / 2,
+                                'text-warning': hours.cmDone >= hours.cmTotal / 2
+                                    && hours.cmDone !== hours.cmTotal,
+                                'text-success': hours.cmDone === hours.cmTotal
+                                    || hours.cmDone > hours.cmTotal,
+                                'text-dark': hours.cmTotal === 0
+                            }">
+                                {{ hours.cmTotal === 0 ? '-' : hours.cmDone + "h / " + hours.cmTotal + "h" }}
+                            </td>
+                            <td
+                                class="font-weight-bold"
+                                v-bind:class="{
+                                'text-danger': hours.tdDone < hours.tdTotal / 2,
+                                'text-warning': hours.tdDone >= hours.tdTotal / 2
+                                    && hours.tdDone !== hours.tdTotal,
+                                'text-success': hours.tdDone === hours.tdTotal
+                                    || hours.tdDone > hours.tdTotal,
+                                'text-dark': hours.tdTotal === 0
+                            }">
+                                {{ hours.tdTotal === 0 ? '-' : hours.tdDone + "h / " + hours.tdTotal + "h" }}
+                            </td>
+                            <td
+                                class="font-weight-bold"
+                                v-bind:class="{
+                                'text-danger': hours.tpDone < hours.tpTotal / 2,
+                                'text-warning': hours.tpDone >= hours.tpTotal / 2
+                                    && hours.tpDone !== hours.tpTotal,
+                                'text-success': hours.tpDone === hours.tpTotal
+                                    || hours.tpDone > hours.tpTotal,
+                                'text-dark': hours.tpTotal === 0
+                            }">
+                                {{ hours.tpTotal === 0 ? '-' : hours.tpDone + "h / " + hours.tpTotal + "h" }}
+                            </td>
+                        </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="2">Total heures:</td>
-                            <td>CM</td>
-                            <td>CM</td>
-                            <td>CM</td>
+                            <td colspan="2" style="background-color: #6c80ab; color: #D5D5D5">
+                                <b>Total heures effectuées:</b><br>
+                                <small style="font-size: 0.7em">( Respectivement CM / TD / TP )</small>
+                            </td>
+                            <td>{{ getDoneHoursCM() }}h</td>
+                            <td>{{ getDoneHoursTD() }}h</td>
+                            <td>{{ getDoneHoursTP() }}h</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="background-color: #6c80ab; color: #D5D5D5">
+                                <b>Total heures statuaires:</b><br>
+                                <small style="font-size: 0.7em">( Respectivement CM / TD / TP )</small>
+                            </td>
+                            <td>{{ getTotalHoursCM() }}h</td>
+                            <td>{{ getTotalHoursTD() }}h</td>
+                            <td>{{ getTotalHoursTP() }}h</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="background-color: #6c80ab; color: #D5D5D5">
+                                <b>{{ this.getFinalDifference() > 0 ? "Heures supplémentaires" :
+                                    this.getFinalDifference() === 0 ? "Sans déficit ni heures supplémentaires"
+                                        : "Déficit"}}</b>
+                                <br>
+                                <small style="font-size: 0.7em">( CM / TD / TP confondus )</small>
+                            </td>
+                            <td colspan="3">{{ this.getFinalDifference() }}h</td>
                         </tr>
                     </tfoot>
                 </table>
-            </div>
-
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                Launch demo modal
-            </button>
-
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            ...
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -79,16 +105,13 @@ export default {
             firstnameProf: this.$route.params.firstnameProf,
             stats: [],
             statsTest: [],
-            statsTest2: []
+            differenceCM: 0,
+            differenceTD: 0,
+            differenceTP: 0
         }
     },
     created() {
         axios.get(`http://146.59.195.214:8006/api/v1/stats/teacher/matieres/${this.firstnameProf}/${this.lastnameProf}`).then((response) => {
-            console.log(response.data)
-            for (let stat in response.data) {
-                console.log(stat)
-                this.statsTest2.push(response.data[stat])
-            }
             this.statsTest = response.data
         })
         axios.get(`http://146.59.195.214:8006/api/v1/stats/teacher/events-grouped-by-categories/${this.firstnameProf}/${this.lastnameProf}`).then((response) => {
@@ -96,44 +119,80 @@ export default {
         })
     },
     methods: {
-        getFiliereForCourse(course) {
-            let filieres = []
-            for (let stat in this.stats) {
-                if (this.stats[stat].find(m => m.matiere === course)) {
-                    filieres.push(stat)
+        setFilieres() {
+            let finalStats = this.statsTest
+            for (let key of Object.keys(this.statsTest)) {
+                let filieres = []
+                for (let stat in this.stats) {
+                    if (this.stats[stat].find(m => m.matiere === key)) {
+                        filieres.push(stat)
+                    }
                 }
+                finalStats[key].matiere = key
+                finalStats[key].filieres = filieres
             }
-            this.statsTest[course].filieres = filieres
-            //console.log(this.statsTest)
-            return filieres
-        },
-        testSetFilieres() {
-            for (let stat in this.stats) {
-                console.log(stat)
-                console.log(this.stats[stat])
-            }
-        }
-    },
-    computed: {
-        sortedHours() {
-            if (this.statsTest) {
-                for (let stat of this.statsTest) {
-                    console.log(stat)
-                    this.getFiliereForCourse(stat)
-                }
-            }
-            return this.statsTest.slice().sort((a, b) => {
+            return Object.values(finalStats).sort((a, b) => {
                 let modifier = 1
                 if(this.currentSortDirection === 'desc') modifier = -1
-                if(a.filieres.toLowerCase() < b.filieres.toLowerCase()) return -1 * modifier
-                if(a.filieres.toLowerCase() > b.filieres.toLowerCase()) return modifier
+                if(a.filieres[0] < b.filieres[0]) return -1 * modifier
+                if(a.filieres[0] > b.filieres[0]) return modifier
                 return 0;
-            });
+            })
+        },
+        getTotalHoursCM() {
+            return Object.values(this.statsTest).reduce((a, b) => a + (b["cmTotal"] || 0), 0)
+        },
+        getTotalHoursTD() {
+            return Object.values(this.statsTest).reduce((a, b) => a + (b["tdTotal"] || 0), 0)
+        },
+        getTotalHoursTP() {
+            return Object.values(this.statsTest).reduce((a, b) => a + (b["tpTotal"] || 0), 0)
+        },
+        getDoneHoursCM() {
+            return Object.values(this.statsTest).reduce((a, b) => a + (b["cmDone"] || 0), 0)
+        },
+        getDoneHoursTD() {
+            return Object.values(this.statsTest).reduce((a, b) => a + (b["tdDone"] || 0), 0)
+        },
+        getDoneHoursTP() {
+            return Object.values(this.statsTest).reduce((a, b) => a + (b["tpDone"] || 0), 0)
+        },
+        getDifferenceTotalDoneCM() {
+           this.differenceCM = this.getDoneHoursCM() - this.getTotalHoursCM()
+            return this.differenceCM
+        },
+        getDifferenceTotalDoneTD() {
+            this.differenceTD = this.getDoneHoursTD() - this.getTotalHoursTD()
+            return this.differenceTD
+        },
+        getDifferenceTotalDoneTP() {
+            this.differenceTP = this.getDoneHoursTP() - this.getTotalHoursTP()
+            return this.differenceTP
+        },
+        getFinalDifference() {
+            return this.getDifferenceTotalDoneCM() + this.getDifferenceTotalDoneTD() + this.getDifferenceTotalDoneTP()
         }
     }
 }
 </script>
 
 <style scoped>
-
+th {
+    text-align: center;
+    background-color: #536895;
+    color: #eee;
+    vertical-align: middle !important;
+}
+.table-striped tbody tr:hover {
+    background-color: rgba(96, 124, 184, 0.3);
+}
+.text-warning {
+    color: #ef9a35 !important;
+}
+td {
+    vertical-align: middle !important;
+}
+tfoot td {
+    font-weight: bold;
+}
 </style>

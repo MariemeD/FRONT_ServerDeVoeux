@@ -18,7 +18,10 @@
 
 
             <div class="table-responsive">
-                <table class="table table-striped">
+                <div class="progress" v-if="isLoading">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%; background-color: #536895"></div>
+                </div>
+                <table class="table table-striped" v-else>
                     <thead>
                         <th>
                             Nom - Prénom
@@ -62,6 +65,7 @@ export default {
     components: { Header },
     data() {
         return {
+            isLoading: true,
             professors: [],
             currentSortDirection: 'asc',
             currentSort: 'lastName',
@@ -72,6 +76,7 @@ export default {
     },
     created() {
         axios.get("http://146.59.195.214:8006/api/v1/teachers/all").then(response => {
+            this.isLoading = false
             this.professors = response.data
             for (let prof of response.data) {
                 prof.lastName = this.capitalizeTextElement(prof.lastName)
