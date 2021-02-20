@@ -6,8 +6,8 @@
 
         <div class="container">
                 <RequestTable
-                    :conflicts="getConflictedRequests()"
-                    :requests="requests"
+                    :conflicts="getRequestsForFiliere().conflicts"
+                    :requests="getRequestsForFiliere().requests"
                     :is-conflicts="this.$route.params.conflicts === 'conflits'" />
         </div>
     </div>
@@ -28,7 +28,16 @@ export default {
         }
     },
     created() {
-        this.callRequests()
+        axios.get("https://back-serverdevoeux.herokuapp.com/api/requests").then(response => {
+            for (let request of response.data.filter(request => request.status === "En attente")) {
+                let name = ""
+                for (let eltName of request.requestor.split(" ")) {
+                    name += this.capitalizeTextElement(eltName) + " "
+                }
+                request.requestor = name
+                this.requests.push(request)
+            }
+        })
         axios.get("http://146.59.195.214:8006/api/v1/events/teachers/M2MIAA").then(response => {
             for (let prof of response.data) {
                 this.professorsOfFiliere.push(prof.toLowerCase().trim())
@@ -36,61 +45,26 @@ export default {
         })
     },
     methods: {
-        callRequests() {
-            let requests = []
-            axios.get("https://back-serverdevoeux.herokuapp.com/api/requests").then(response => {
-                for (let request of response.data) {
-                    if (request.status === "En attente") {
-                        //request.requestor = request.requestor
-                        if (this.professorsOfFiliere.includes(request.requestor.toLowerCase().trim())) {
-                            //request.requestor = this.capitalizeTextElement(request.requestor)
-                            this.requests.push(request)
-                            requests.push(request)
-                        }
-                    }
-                }
-            })
-
-            let duplicateIds = requests
-                .map(e => e['courseRequested'])
-                .map((e, i, final) => final.indexOf(e) !== i && i)
-                .filter(obj=> requests[obj])
-                .map(e => requests[e]["courseRequested"])
-            let conflictedRequest = requests.filter(obj=> duplicateIds.includes(obj["courseRequested"]));
-            console.log(requests)
-            console.log(conflictedRequest)
-            //return conflictedRequest
-        },
         getRequestsForFiliere() {
             let requestsForFiliere = []
-            for (let request of this.requests.filter(req => req.status === "En attente")) {
-                if (this.professorsOfFiliere.includes(request.requestor)) {
+            for (let request of this.requests) {
+                if (this.professorsOfFiliere.includes(request.requestor.toLowerCase().trim())) {
                     requestsForFiliere.push(request)
                 }
             }
-            const uniqueValues = new Set(requestsForFiliere.map(v => v.courseRequested));
-            let duplicates = [...requestsForFiliere]
-            //console.log(duplicates)
-            uniqueValues.forEach((item) => {
-                const i = duplicates.findIndex(v => v.courseRequested === item)
-                duplicates = duplicates
-                    .slice(0, i)
-                    .concat(duplicates.slice(i + 1, duplicates.length))
-            })
-            //console.log(duplicates)
-            //console.log(uniqueValues)
-            return requestsForFiliere;
-        },
-        getConflictedRequests() {
             let conflictedRequest = []
             // https://stackoverflow.com/questions/53212020/get-list-of-duplicate-objects-in-an-array-of-objects/53212154
-            let duplicateIds = this.requests
+            let duplicateIds = requestsForFiliere
                 .map(e => e['courseRequested'])
                 .map((e, i, final) => final.indexOf(e) !== i && i)
-                .filter(obj=> this.requests[obj])
-                .map(e => this.requests[e]["courseRequested"])
-            conflictedRequest = this.requests.filter(obj=> duplicateIds.includes(obj["courseRequested"]));
-            return conflictedRequest
+                .filter(obj=> requestsForFiliere[obj])
+                .map(e => requestsForFiliere[e]["courseRequested"])
+            conflictedRequest = requestsForFiliere.filter(obj=> duplicateIds.includes(obj["courseRequested"]));
+
+            return {
+                requests: requestsForFiliere.filter(allReq => !conflictedRequest.includes(allReq)),
+                conflicts: conflictedRequest
+            }
         },
         capitalizeTextElement(element) {
             const firstLetter = element[0].toUpperCase()

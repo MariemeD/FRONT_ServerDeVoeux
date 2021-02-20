@@ -15,13 +15,13 @@
                 <li class="nav-item">
                     <router-link class="nav-link" :to="{ name: 'wishes' }">
                         Gestion des voeux
-                        <span class="badge badge-dark" v-if="getRequestsForFiliere().length > 0">{{ getRequestsForFiliere().length }}</span>
+                        <span class="badge badge-request" v-if="getRequestsForFiliere().requests.length > 0">{{ getRequestsForFiliere().requests.length }}</span>
                     </router-link>
                 </li>
                 <li class="nav-item">
                     <router-link class="nav-link" :to="{ name: 'conflict-wishes', params: {conflicts: 'conflits'} }">
                         Gestion des conflits
-                        <span class="badge badge-dark" v-if="getConflictedRequests().length > 0">{{ getConflictedRequests().length }}</span>
+                        <span class="badge badge-conflict" v-if="getRequestsForFiliere().conflicts.length > 0">{{ getRequestsForFiliere().conflicts.length }}</span>
                     </router-link>
                 </li>
             </ul>
@@ -63,24 +63,18 @@ export default {
                     requestsForFiliere.push(request)
                 }
             }
-           /* console.log(requestsForFiliere.filter(req => {
-                for (let conflict of this.getConflictedRequests()) {
-                    console.log(conflict)
-                    return req !== conflict
-                }
-            }))*/
-            return requestsForFiliere
-        },
-        getConflictedRequests() {
             let conflictedRequest = []
             // https://stackoverflow.com/questions/53212020/get-list-of-duplicate-objects-in-an-array-of-objects/53212154
-            let duplicateIds = this.getRequestsForFiliere()
+            let duplicateIds = requestsForFiliere
                 .map(e => e['courseRequested'])
                 .map((e, i, final) => final.indexOf(e) !== i && i)
-                .filter(obj=> this.getRequestsForFiliere()[obj])
-                .map(e => this.getRequestsForFiliere()[e]["courseRequested"])
-            conflictedRequest = this.getRequestsForFiliere().filter(obj=> duplicateIds.includes(obj["courseRequested"]));
-            return conflictedRequest
+                .filter(obj=> requestsForFiliere[obj])
+                .map(e => requestsForFiliere[e]["courseRequested"])
+            conflictedRequest = requestsForFiliere.filter(obj=> duplicateIds.includes(obj["courseRequested"]));
+            return {
+                requests: requestsForFiliere.filter(allReq => !conflictedRequest.includes(allReq)),
+                conflicts: conflictedRequest
+            }
         },
         logout() {
             this.$cookies.remove("emailProfessor")
@@ -113,5 +107,14 @@ nav {
 
 .nav-link {
     color: #D5D5D5;
+}
+
+.badge-request {
+    background-color: #C9893C;
+}
+
+.badge-conflict {
+    background-color: #b54444;
+    color: #2c3e50;
 }
 </style>

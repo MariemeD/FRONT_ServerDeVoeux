@@ -28,8 +28,8 @@
                     <br>
                     <h5><u>Matières enseignées :</u></h5>
                     <ul>
-                        <li v-for="matiere in professorCourses" :key="matiere">
-                            {{ matiere }}
+                        <li v-for="(hours, matiere) in professorCourses" :key="matiere">
+                            {{ matiere.toUpperCase() }}
                         </li>
                     </ul>
                 </div>
@@ -55,8 +55,10 @@
             axios.get(`https://back-serverdevoeux.herokuapp.com/api/professor/${this.$cookies.get("emailProfessor")}`).then(response => {
                 this.currentProfessor = response.data
             })
-            axios.get(`http://146.59.195.214:8006/api/v1/stats/teacher/matieres/${this.currentProfessor.firstName}/${this.currentProfessor.lastName}`)
-            .then(response => this.professorCourses = response.data)
+            axios.get(`http://146.59.195.214:8006/api/v1/stats/teacher/matieres/${this.$cookies.get("FnameProfessor")}/${this.$cookies.get("LnameProfessor")}`)
+            .then(response => {
+                this.professorCourses = response.data
+            })
         }
     }
 </script>
@@ -64,5 +66,8 @@
 <style scoped>
 h5, small {
     color: #536895;
+}
+li {
+    list-style: "- ";
 }
 </style>
