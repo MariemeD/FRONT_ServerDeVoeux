@@ -6,7 +6,7 @@
             <div class="card-footer"> 
                <table class="table table-dark" id="tableFil">
                   <tr>
-                     <td v-for="(filiere,index) in donnees" :key="filiere" > {{filiere}} <font-awesome-icon icon="user-tie" id="icProf" v-on:click="recup(index)"></font-awesome-icon> | <font-awesome-icon icon="eye" id="icProf"></font-awesome-icon> </td> 
+                     <td v-for="(filiere,index) in donnees" :key="filiere" > {{filiere}} <font-awesome-icon icon="user-tie" id="icProf" v-on:click="recup(index)"></font-awesome-icon> | <font-awesome-icon icon="eye" id="icProf" v-on:click="recuperer(index)"></font-awesome-icon> </td> 
                   </tr> 
                 </table>
             </div>
@@ -387,6 +387,13 @@ export default {
             //let ooori=this.Origines[index];
            Vue.prototype.$filName=this.donnees[index];
            this.$router.push("/admin/filieres/Professeur");
+
+        },
+
+        recuperer(index){
+            //let ooori=this.Origines[index];
+           Vue.prototype.$filNameMat=this.donnees[index];
+           this.$router.push("/admin/filieres/Matieres");
 
         },
         
