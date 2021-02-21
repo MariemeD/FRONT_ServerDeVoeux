@@ -2,7 +2,8 @@
     <div>
         <Header />
 
-        <div class="container">
+        <div class="jumbotron vertical-center">
+            <div class="container">
             <div class="row pt-3">
                 <div class="col-lg-4 col-md-8 col-sm-6">
                     <div id="professor-card" class="card p-3">
@@ -14,13 +15,10 @@
 
                         <ul id="professor-actions" class="text-left mr-auto ml-auto">
                             <li>
-                                - <router-link :to="{ name: 'professors'}">Gestion des enseignants</router-link>
+                                - <router-link :to="{ name: 'professors'}">Liste des enseignants</router-link>
                             </li>
                             <li>
-                                - <router-link :to="{ name: 'hoursMade'}">Gestion des heures effectuées</router-link>
-                            </li>
-                            <li>
-                                - <router-link :to="{ name: 'status'}">Gestion des statuts</router-link>
+                                - <router-link :to="{ name: 'hoursMade'}">Détails des heures effectuées</router-link>
                             </li>
                             <li>
                                 - <router-link :to="{ name: 'disclaimers'}">Gestion des décharges</router-link>
@@ -36,17 +34,26 @@
                         </div>
                         <h6 class="mt-3 mb-0 text-uppercase">Serveur</h6>
                         <hr>
-                        <small class="text-success">Le serveur est ouvert</small>
+                        <small v-if="isServerOpen" class="text-success">Le serveur est <strong>ouvert</strong></small>
+                        <small v-else class="text-danger">Le serveur est <strong>fermé</strong></small>
 
                         <ul id="server-actions" class="text-left mr-auto ml-auto">
                             <li>
-                                - <a href="">Fermer le serveur</a>
+                                - <span
+                                    @click.prevent="closeServer"
+                                    :class="{'unvailable-link': !isServerOpen}">
+                                        Fermer le serveur
+                                    </span>
                             </li>
                             <li>
-                                - <a href="">Redémarrer le serveur</a>
+                                - <span
+                                    @click.prevent="restartServer"
+                                    :class="{'unvailable-link': isServerOpen}">
+                                    Redémarrer le serveur
+                                </span>
                             </li>
                             <li>
-                                - <a href="">Sauvegarder la base</a>
+                                - <span>Sauvegarder la base</span>
                             </li>
                         </ul>
                     </div>
@@ -70,13 +77,11 @@
                             <li>
                                 - <router-link to="/admin/origines" href="">Gestion des origines</router-link>
                             </li>
-                            <li>
-                                - <router-link to="/admin/types-de-cours" href="">Gestion des types de cours</router-link>
-                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </div>
 </template>
@@ -85,11 +90,36 @@
 import Header from "@/components/AdminPages/Header";
 export default {
     name: "Homepage",
-    components: {Header}
+    components: { Header },
+    data() {
+        return {
+            isServerOpen: true,
+        }
+    },
+    methods: {
+        closeServer() {
+            if (this.isServerOpen) {
+                if (this.$cookies.get("profile") === "admin") {
+                    this.isServerOpen = !this.isServerOpen
+                }
+
+            }
+        },
+        restartServer() {
+            if (this.$cookies.get("profile") === "admin") {
+                if (!this.isServerOpen) {
+                    this.isServerOpen = !this.isServerOpen
+                }
+            }
+        }
+    }
 }
 </script>
 
 <style scoped>
+.jumbotron {
+    background-color: #FFF;
+}
 .container {
     padding-top: 3em;
 }
@@ -120,8 +150,14 @@ h6 {
 #server-card {
     background-color: #344C80;
 }
-#server-actions li, #server-actions a, #server-card h6 {
+#server-actions li, #server-card h6 {
     color: #C9893C;
+}
+span {
+    cursor: pointer;
+}
+.unvailable-link {
+    text-decoration: line-through;
 }
 @media all and (max-width: 992px) and (min-width: 769px) {
     .col-md-8 {
@@ -132,6 +168,9 @@ h6 {
     }
 }
 @media all and (max-width: 768px) {
+    .jumbotron {
+        padding: 0;
+    }
     .col-md-8 {
         margin: 5px auto;
     }
@@ -152,7 +191,7 @@ h6 {
 }
 @media all and (max-width: 576px) {
     #server-card, #professor-card, #studings-card {
-        width: 60%;
+        width: 80%;
         margin: 0 auto 5px;
     }
     #div-server-icon, #div-professor-icon, #div-studings-icon {
