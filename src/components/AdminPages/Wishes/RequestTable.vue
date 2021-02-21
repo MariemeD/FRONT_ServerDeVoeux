@@ -11,7 +11,7 @@
 
         <div class="alert alert-info pb-0" v-if="isConflicts">
             <p>
-                Afin de régler le(s) conflit(s), vous pouvez choisir de contacter chaque professeur par mail avant de faire votre choix final.<br>
+                Afin de régler le(s) conflit(s), vous pouvez choisir d'ajouter un commentaire sur la demande pour notifier chaque professeur avant de faire votre choix final.<br>
                 Ou bien, cliquer sur le nom du professeur pour afficher un récapitulatif de ses heures, et choisir d'accepter ou refuser le voeu.
             </p>
         </div>

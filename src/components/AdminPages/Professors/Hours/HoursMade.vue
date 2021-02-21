@@ -118,7 +118,7 @@ export default {
                 datasets: [
                     {
                         label: "CM Hours",
-                        backgroundColor: ["#41B883", "#E46651", "#00D8FF"],
+                        backgroundColor: ["#536895", "#ef9a35", "#41B883"],
                         data: [1, 1, 1]
                     }
                 ]
@@ -131,7 +131,7 @@ export default {
                 ],
                 datasets: [{
                     label: "TD Hours",
-                    backgroundColor: ["#41B883", "#E46651", "#00D8FF"],
+                    backgroundColor: ["#536895", "#ef9a35", "#41B883"],
                     data: [1, 1, 1]
                 }],
             },
@@ -142,7 +142,7 @@ export default {
                 datasets: [
                     {
                         label: "TP Hours",
-                        backgroundColor: ["#41B883", "#E46651", "#00D8FF"],
+                        backgroundColor: ["#536895", "#ef9a35", "#41B883"],
                         data: [1, 1, 1]
                     }
                 ]
