@@ -99,12 +99,17 @@ export default {
     methods: {
         closeServer() {
             if (this.isServerOpen) {
-                this.isServerOpen = !this.isServerOpen
+                if (this.$cookies.get("profile") === "admin") {
+                    this.isServerOpen = !this.isServerOpen
+                }
+
             }
         },
         restartServer() {
-            if (!this.isServerOpen) {
-                this.isServerOpen = !this.isServerOpen
+            if (this.$cookies.get("profile") === "admin") {
+                if (!this.isServerOpen) {
+                    this.isServerOpen = !this.isServerOpen
+                }
             }
         }
     }

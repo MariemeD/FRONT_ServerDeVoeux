@@ -45,7 +45,13 @@ export default {
     },
     methods: {
         getRequestsForFiliere() {
-            let requestsForFiliere = this.requests.filter(request => request.groupRequested === this.$cookies.get("groupProfessor"))
+            let requestsForFiliere = []
+            if (this.$cookies.get('profile') === 'responsable' ) {
+                requestsForFiliere = this.requests.filter(request => request.groupRequested === this.$cookies.get("groupProfessor"))
+            } else {
+                requestsForFiliere = this.requests
+            }
+
             let conflictedRequest = []
             // https://stackoverflow.com/questions/53212020/get-list-of-duplicate-objects-in-an-array-of-objects/53212154
             let duplicateIds = requestsForFiliere

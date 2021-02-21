@@ -71,22 +71,26 @@
 
             <hr>
 
-            <h2 class="text-left mb-4">Mes heures de travail totales</h2>
-            <div class="progress mt-4 mb-4" v-if="isLoadingPersonalHours">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%; background-color: #536895"></div>
-            </div>
-            <div class="row" v-else>
-                <div class="col-4">
-                    <h4>CM</h4>
-                    <hours-chart :data="chartDataCM" :options="options"></hours-chart>
+            <div v-if="!isPersonalHoursEmpty()">
+                <h2 class="text-left mb-4">Mes heures de travail totales</h2>
+                <div class="progress mt-4 mb-4" v-if="isLoadingPersonalHours">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%; background-color: #536895"></div>
                 </div>
-                <div class="col-4">
-                    <h4>TD</h4>
-                    <hours-chart :data="chartDataTD" :options="options"></hours-chart>
-                </div>
-                <div class="col-4">
-                    <h4>TP</h4>
-                    <hours-chart :data="chartDataTP" :options="options"></hours-chart>
+                <div v-else>
+                    <div class="row">
+                        <div class="col-4">
+                            <h4>CM</h4>
+                            <hours-chart :data="chartDataCM" :options="options"></hours-chart>
+                        </div>
+                        <div class="col-4">
+                            <h4>TD</h4>
+                            <hours-chart :data="chartDataTD" :options="options"></hours-chart>
+                        </div>
+                        <div class="col-4">
+                            <h4>TP</h4>
+                            <hours-chart :data="chartDataTP" :options="options"></hours-chart>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -185,34 +189,64 @@ export default {
                 ]
                 this.isLoadingPersonalHours = false
             })
-        axios.get(`http://146.59.195.214:8006/api/v1/events/teachers/${this.$cookies.get("groupProfessor")}`).then(response => {
-            for (let prof of response.data) {
-                let firstname = prof.split(" ")[0].replaceAll("_", " ")
-                let lastname = prof.split(" ")[1].replaceAll("_", " ")
-                prof = {}
-                prof.firstname = this.capitalizeTextElement(firstname)
-                prof.lastname = lastname.toUpperCase()
-                axios.get(`http://146.59.195.214:8006/api/v1/stats/teacher/details/${firstname}/${lastname}`).then(response => {
-                    prof.hoursData = response.data
-                })
-                if (!prof.hoursData) {
-                    prof.hoursData = {
-                        Done: {
-                            cm: 0,
-                            td: 0,
-                            tp: 0
-                        },
-                        Total: {
-                            cm: 0,
-                            td: 0,
-                            tp: 0
+        if (this.$cookies.get("profile") === "responsable") {
+            axios.get(`http://146.59.195.214:8006/api/v1/events/teachers/${this.$cookies.get("groupProfessor")}`).then(response => {
+                for (let prof of response.data) {
+                    let firstname = prof.split(" ")[0].replaceAll("_", " ")
+                    let lastname = prof.split(" ")[1].replaceAll("_", " ")
+                    prof = {}
+                    prof.firstname = this.capitalizeTextElement(firstname)
+                    prof.lastname = lastname.toUpperCase()
+                    axios.get(`http://146.59.195.214:8006/api/v1/stats/teacher/details/${firstname}/${lastname}`).then(response => {
+                        prof.hoursData = response.data
+                    })
+                    if (!prof.hoursData) {
+                        prof.hoursData = {
+                            Done: {
+                                cm: 0,
+                                td: 0,
+                                tp: 0
+                            },
+                            Total: {
+                                cm: 0,
+                                td: 0,
+                                tp: 0
+                            }
                         }
                     }
+                    this.professors.push(prof)
                 }
-                this.professors.push(prof)
-            }
-            this.isLoading = false
-        })
+                this.isLoading = false
+            })
+        } else {
+            axios.get(`http://146.59.195.214:8006/api/v1/teachers/all`).then(response => {
+                console.log(response.data)
+                for (let prof of response.data) {
+                    prof.firstname = this.capitalizeTextElement(prof.firstName)
+                    prof.lastname = prof.lastName.toUpperCase()
+                    axios.get(`http://146.59.195.214:8006/api/v1/stats/teacher/details/${prof.firstName}/${prof.lastName}`).then(response => {
+                        prof.hoursData = response.data
+                    })
+                    if (!prof.hoursData) {
+                        prof.hoursData = {
+                            Done: {
+                                cm: 0,
+                                td: 0,
+                                tp: 0
+                            },
+                            Total: {
+                                cm: 0,
+                                td: 0,
+                                tp: 0
+                            }
+                        }
+                    }
+                    this.professors.push(prof)
+                }
+                this.isLoading = false
+            })
+        }
+
     },
     methods: {
         setActiveProfessor(professor) {
@@ -240,6 +274,10 @@ export default {
             const firstLetter = element[0].toUpperCase()
             const rest = element.toLowerCase().substring(1)
             return firstLetter + rest
+        },
+        isPersonalHoursEmpty() {
+            return this.hoursData.Done.cm === 0 && this.hoursData.Done.td === 0 && this.hoursData.Done.tp === 0 &&
+                this.hoursData.Total.cm === 0 && this.hoursData.Total.td === 0 && this.hoursData.Total.tp === 0
         }
     },
     computed: {

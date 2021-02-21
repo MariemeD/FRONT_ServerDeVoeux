@@ -43,7 +43,7 @@
                         Professeur
                         <font-awesome-icon :icon="sortIcon" @click="sort('professor')"></font-awesome-icon>
                     </th>
-                    <!-- TODO Cette colonne doit apparaitre que si le super admin est connecté -->
+                    <!-- TODO Cette colonne doit apparaitre que si le super admin est connecté ? -->
                     <th>Actions</th>
                     </thead>
                     <tbody>
@@ -65,6 +65,9 @@
                                 @click.prevent="setCurrentDischarge(discharge)">
                             </font-awesome-icon>
                         </td>
+                    </tr>
+                    <tr v-if="discharges.length === 0">
+                        <td colspan="5">Aucune décharge n'a été crée à ce jour</td>
                     </tr>
                     </tbody>
                 </table>

@@ -34,7 +34,7 @@
                     <th>Matière</th>
                     <th>Professeurs</th>
                     <th>Statut</th>
-                    <th>Actions</th>
+                    <th v-if="$cookies.get('profile') === 'responsable'">Actions</th>
                 </thead>
                 <tbody>
                 <tr v-for="request in groupConflictByCursus()" :key="request._id">
@@ -52,7 +52,7 @@
                         </span>
                     </td>
                     <td class="text-danger">Conflit</td>
-                    <td>
+                    <td v-if="$cookies.get('profile') === 'responsable'">
                         <!--<button class="btn btn-outline-primary">
                             <font-awesome-icon icon="mail-bulk" />
                             Envoyer un mail à tous
@@ -65,6 +65,9 @@
                             Ajouter un commentaire
                         </button>
                     </td>
+                </tr>
+                <tr v-if="conflicts.length === 0">
+                    <td colspan="5">Aucun conflit pour des voeux n'est survenu pour le moment.</td>
                 </tr>
                 </tbody>
             </table>
@@ -103,8 +106,16 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                            <button type="button" class="btn btn-success" @click.prevent="acceptRequestConflict(currentRequest)">Accepter</button>
-                            <button type="button" class="btn btn-danger" @click.prevent="refuseRequest(currentRequest)">Refuser</button>
+                            <button
+                                type="button"
+                                class="btn btn-success"
+                                @click.prevent="acceptRequestConflict(currentRequest)"
+                                v-if="$cookies.get('profile') === 'responsable'">Accepter</button>
+                            <button
+                                type="button"
+                                class="btn btn-danger"
+                                @click.prevent="refuseRequest(currentRequest)"
+                                v-if="$cookies.get('profile') === 'responsable'">Refuser</button>
                         </div>
                     </div>
                 </div>
@@ -148,7 +159,7 @@
                     <th>Matière</th>
                     <th>Professeur</th>
                     <th>Statut</th>
-                    <th>Actions</th>
+                    <th v-if="$cookies.get('profile') === 'responsable'">Actions</th>
                 </thead>
                 <tbody>
                     <tr v-for="request in sortedRequests" :key="request._id">
@@ -156,11 +167,14 @@
                         <td>{{ request.courseRequested }}</td>
                         <td>{{ request.requestor }}</td>
                         <td>{{ request.status }}</td>
-                        <td>
+                        <td v-if="$cookies.get('profile') === 'responsable'">
                             <span class="btn btn-outline-success" @click.prevent="acceptRequest(request)">Accepter</span>
                             |
                             <span class="btn btn-outline-danger" @click.prevent="refuseRequest(request)">Refuser</span>
                         </td>
+                    </tr>
+                    <tr v-if="sortedRequests.length === 0">
+                        <td colspan="5">Aucun voeu n'a été formulé à ce jour</td>
                     </tr>
                 </tbody>
             </table>

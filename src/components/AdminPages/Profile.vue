@@ -20,18 +20,21 @@
                     <p>
                         <strong><u>Email:</u></strong> {{ currentProfessor.email }}
                     </p>
-                    <p>
+                    <p v-if="$cookies.get('groupProfessor')">
                         <strong><u>Responsable de la filière:</u></strong> {{ $cookies.get("groupProfessor") }}
                     </p>
                     <button class="btn btn-outline-dark">Changer de mot de passe</button>
                     <br>
                     <br>
                     <h5><u>Matières enseignées :</u></h5>
-                    <ul>
+                    <ul v-if="professorCourses.length > 0">
                         <li v-for="matiere in professorCourses" :key="matiere">
                             {{ matiere.toUpperCase() }}
                         </li>
                     </ul>
+                    <div v-else>
+                        <p>Pour le moment, vous n'enseignez aucune matière.</p>
+                    </div>
                 </div>
             </div>
         </div>
