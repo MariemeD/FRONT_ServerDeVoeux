@@ -1,7 +1,7 @@
 <template>
     <div>
         <Header />
-        <h1 class="pt-5">Liste des professeurs</h1>
+        <h1 :class="{'pt-5': $cookies.get('emailProfessor')}">Liste des professeurs</h1>
 
         <div class="container">
 

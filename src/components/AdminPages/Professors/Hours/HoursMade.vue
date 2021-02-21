@@ -2,9 +2,9 @@
     <div>
         <Header />
 
-        <h1 class="pt-5">Liste des heures effectuées</h1>
+        <h1 :class="{'pt-5': $cookies.get('emailProfessor')}">Liste des heures effectuées</h1>
 
-        <div class="container">
+        <div class="container" v-if="$cookies.get('emailProfessor')">
             <div class="row">
                 <div class="progress mt-4" v-if="isLoading">
                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%; background-color: #536895"></div>

@@ -1,9 +1,9 @@
 <template>
     <div>
         <Header />
-        <h1 class="pt-5">Profil</h1>
+        <h1 :class="{'pt-5': $cookies.get('emailProfessor')}">Profil</h1>
 
-        <div class="container">
+        <div class="container" v-if="$cookies.get('emailProfessor')">
             <div class="card mt-4">
                 <div class="card-header">
                     <h4>{{ currentProfessor.lastName.toUpperCase() }} {{ currentProfessor.firstName }}</h4>
