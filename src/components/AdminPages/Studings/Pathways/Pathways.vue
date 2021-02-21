@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="table-responsive">
         <Header />
         <br><br>
         <div class="card border-warning mb-3">
@@ -11,21 +11,22 @@
                 </table>
             </div>
         <br>
+         <div class="container">
             <div class="card-group">
-                <div class="col-lg-4 col-md-4 col-sm-6" style="max-width: 15rem;">
+                <div class="col-lg-4 col-md-4 col-sm-6">
                     <div class="card p-3">
                         <h6 class="mt-3 mb-0 text-uppercase">Licence 1</h6>
                         <hr>
 
                         <table >
-                            <tr v-for="filiere in separL1" :key="filiere">
-                                <td>~ {{filiere}} </td> 
+                            <tr>
+                                <td>~ L1 Informatique </td> 
                             </tr>
                         </table>
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-md-4 col-sm-6" style="max-width: 15rem;">
+                <div class="col-lg-4 col-md-4 col-sm-6" >
                     <div id="server-card" class="card p-3">
                         <h6 class="mt-3 mb-0 text-uppercase">Licence 2</h6>
                         <hr>
@@ -39,7 +40,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-md-4 col-sm-6" style="max-width: 15rem;">
+                <div class="col-lg-4 col-md-4 col-sm-6" >
                     <div id="professor-card" class="card p-3">
                         <h6 class="mt-3 mb-0 text-uppercase">Licence 3</h6>
                         <hr>
@@ -52,7 +53,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-md-4 col-sm-6" style="max-width: 20rem;">
+                <div class="col-lg-4 col-md-4 col-sm-6" >
                     <div class="card p-3">
                         <h6 class="mt-3 mb-0 text-uppercase">Master 1</h6>
                         <hr>
@@ -65,7 +66,7 @@
                     </div>
                 </div>
                 
-                <div class="col-lg-4 col-md-4 col-sm-6" style="max-width: 18rem;">
+                <div class="col-lg-4 col-md-4 col-sm-6" >
                     <div id="server-card" class="card p-3">
                         <h6 class="mt-3 mb-0 text-uppercase">Master 2</h6>
                         <hr>
@@ -80,6 +81,7 @@
                 </div>
 
             </div>
+         </div>
             <br><br>
             <div class="card-footer"> 
 

@@ -4,8 +4,7 @@
         <h1 class="pt-5">Liste des cursus</h1>
   
       <div class="container">
-        <div class="row">
-            <div class="col-md-4 ml-auto">
+        <div class="row justify-content-between">
              <div class="form-inline" id="MargeBouton">
              <form class="form-inline">
               <div class="form-group">
@@ -14,7 +13,15 @@
              </form>
               <button class="btn btn-info" v-on:click="VoirListeMat">Voir matières</button>
             </div>
-            </div>
+
+             <p id="eltPerPage" class="mb-2">
+                    Afficher
+                    <a class="pageSizeElt" @click="setElementsPerPage(5)">5</a>
+                    | <a class="pageSizeElt" @click="setElementsPerPage(10)">10</a>
+                    | <a class="pageSizeElt" @click="setElementsPerPage(20)">20</a>
+                    | <a class="pageSizeElt" @click="setElementsPerPage(30)">30</a>
+                    éléments
+        </p>
         </div>
         
         <div class="panel-heading"></div>      
@@ -23,34 +30,15 @@
             <tr> 
              
              <th >Matières</th>
-             <th >Type</th>
-             <th >Abbréviation</th>
-             <th  colspan=2>Action souhaitée</th>
+             <th >Filière</th>
             
             </tr>
           </thead>
           <tbody>
             <tr v-for="matiere in ListeCours" :key="matiere">
               <td>{{matiere.name}}</td>
-              <td>{{matiere.type}}</td>
-              <td>{{matiere.Ab}}</td>
-              <td><button class="btn btn-outline-primary mb-2" v-on:click="modif">Filières <font-awesome-icon icon="edit"></font-awesome-icon></button></td>
-           <!--    <td><button class="btn btn-outline-danger mb-2">supprimer <font-awesome-icon icon="trash"></font-awesome-icon></button></td>  -->
+              <td>{{matiere.filière}}</td>
             </tr> 
-            
-      <!--      <tr v-if="Modification">
-              <td><input type="text" class="form-control"  placeholder="Nom " v-model="ModiNom"></td>
-              <td><input type="text" class="form-control"  placeholder="Type" v-model="modiType"></td>
-              <td><input type="text" class="form-control"  placeholder="abbrev" v-model="modiAbrev"></td>
-              <td colspan=2><button class="btn btn-outline-primary mb-2" v-on:click="MethodeModifier">Modifier</button></td>
-            </tr>
-            <tr v-else>
-              <td><input type="text" class="form-control"  placeholder="Nom " v-model="ModiNom"></td>
-              <td><input type="text" class="form-control"  placeholder="Type" v-model="modiType"></td>
-              <td><input type="text" class="form-control"  placeholder="abbrev" v-model="modiAbrev"></td>
-              <td colspan=2><button class="btn btn-outline-success mb-2" v-on:click="Ajouter" >Ajouter <font-awesome-icon icon="plussquare"></font-awesome-icon></button></td>
-            </tr>
-      -->
           </tbody>
         </table>
         <nav aria-label="Page navigation example">
@@ -86,36 +74,16 @@
           <thead>
             <tr> 
              
-             <th >Matières Fil</th>
-             <th >Type</th>
-             <th >Abbréviation Fil</th>
-             <th  colspan=2>Action souhaitée</th>
+             <th colspan=2 >Matières Fil</th>
+             
             
             </tr>
           </thead>
           <tbody>
             <tr v-for="matiere in ListeFilCours" :key="matiere">
-              <td>{{matiere}}</td>
-              <td>{{matiere}}</td>
-              <td>{{matiere}}</td>
-              <td><button class="btn btn-outline-primary mb-2" v-on:click="modif">Filières <font-awesome-icon icon="edit"></font-awesome-icon></button></td>
-            <!--  <td><button class="btn btn-outline-danger mb-2">supprimer <font-awesome-icon icon="trash"></font-awesome-icon></button></td> -->
+              <td colspan=2>{{matiere}}</td>
+              
             </tr> 
-            
-         <!--   <tr v-if="Modification">
-              <td><input type="text" class="form-control"  placeholder="Nom " v-model="ModiNom"></td>
-              <td><input type="text" class="form-control"  placeholder="Type" v-model="modiType"></td>
-              <td><input type="text" class="form-control"  placeholder="abbrev" v-model="modiAbrev"></td>
-              <td colspan=2><button class="btn btn-outline-primary mb-2" v-on:click="MethodeModifier">Modifier</button></td>
-            </tr>
-            <tr v-else>
-              <td><input type="text" class="form-control"  placeholder="Nom " v-model="ModiNom"></td>
-              <td><input type="text" class="form-control"  placeholder="Type" v-model="modiType"></td>
-              <td><input type="text" class="form-control"  placeholder="abbrev" v-model="modiAbrev"></td>
-              <td colspan=2><button class="btn btn-primary btn-block" v-on:click="Ajouter">Ajouter <font-awesome-icon icon="plussquare"></font-awesome-icon></button></td>
-            </tr>
-          -->
-
           </tbody>
         </table>
         <nav aria-label="Page navigation example">
@@ -140,7 +108,6 @@ export default {
     data () {
         return {
             matieres: null,
-            Modification:false,
             success:true,
             OK:true,
             recupFil:null,
@@ -148,8 +115,21 @@ export default {
 
             Mat:[],
             FilBYmat:[],
-            nbrePage: 15,
+            nbrePage: 150,
+            pageSize: 150,
             currentPage: 1,
+            ToutesMatiere:[],
+            Toutesm1Ini:[],
+            Toutesm2Ini:[],
+            Toutesm1App:[],
+            Toutesm2App:[],
+            Toutesm2Cil:[],
+            Toutesm2Asr:[],
+
+            ToutesLmIageApp:[],
+            ToutesLmIni:[],
+            ToutesCil:[],
+            ToutesAsr:[],
 
             Nom:String,
             Categ:String,
@@ -168,8 +148,6 @@ export default {
 
                         this.Nom="";
                         this.Categ="";
-
-                
                         this.Nom=branch.nom_complet.split("-")[0];
                         this.Categ=branch.nom_complet.split("-")[1];
 
@@ -180,6 +158,103 @@ export default {
 
                  });
             });
+
+            // L3 MIAGE
+
+             axios
+            .get("http://146.59.195.214:8006/api/v1/events/MIAGE/matiere")
+            .then((response) => {
+                response.data.forEach((branch)=> {
+                this.ToutesLmIni.push({"name":branch,
+                                   "filière":"MIAGE"});
+            });
+            })
+
+
+            //L3 CILS
+
+            axios
+            .get("http://146.59.195.214:8006/api/v1/events/CIL/matiere")
+            .then((response) => {
+                response.data.forEach((branch)=> {
+                this.ToutesCil.push({"name":branch,
+                                   "filière":"CILS"});
+            });
+            })
+
+            // L3 ASR
+
+            axios
+            .get("http://146.59.195.214:8006/api/v1/events/ASR/matiere")
+            .then((response) => {
+                response.data.forEach((branch)=> {
+                this.ToutesAsr.push({"name":branch,
+                                   "filière":"ASR"});
+            });
+            })
+
+             // M1MIAGE
+                 axios
+            .get("http://146.59.195.214:8006/api/v1/events/M1MIAI/matiere")
+            .then((response) => {
+                response.data.forEach((branch)=> {
+                this.Toutesm1Ini.push({"name":branch,
+                                   "filière":"MIAGE"});
+            });
+            })
+                    
+                 axios
+            .get("http://146.59.195.214:8006/api/v1/events/M1MIAA/matiere")
+            .then((response) => {
+                response.data.forEach((branch)=> {
+                this.Toutesm1App.push({"name":branch,
+                                   "filière":"MIAGE"});
+            });
+            })
+                                           
+            //M2 MIAGE Initiale
+
+             axios
+            .get("http://146.59.195.214:8006/api/v1/events/M2MIAI/matiere")
+            .then((response) => {
+                response.data.forEach((branch)=> {
+                this.Toutesm2Ini.push({"name":branch,
+                                   "filière":"MIAGE"});
+            });
+            })
+            
+           // M2 MIAGE App
+
+            axios
+            .get("http://146.59.195.214:8006/api/v1/events/M2MIAA/matiere")
+            .then((response) => {
+                response.data.forEach((branch)=> {
+                this.Toutesm2App.push({"name":branch,
+                                   "filière":"MIAGE"});
+            });
+            })
+
+            //CILS
+
+             axios
+            .get("http://146.59.195.214:8006/api/v1/events/M2CIL/matiere")
+            .then((response) => {
+                response.data.forEach((branch)=> {
+                this.Toutesm2Cil.push({"name":branch,
+                                   "filière":"CILS"});
+            });
+            })
+
+            //ASR
+
+             axios
+            .get("http://146.59.195.214:8006/api/v1/events/M2ASR/matiere")
+             .then((response) => {
+                response.data.forEach((branch)=> {
+                this.Toutesm2Asr.push({"name":branch,
+                                   "filière":"ASR"});
+            });
+            })
 
 
     },
@@ -198,18 +273,6 @@ export default {
             .then(response => (this.FilBYmat = response.data));
             this.recupFil2=this.recpFil;
             this.recupFil="";
-        },
-
-        modif() {
-            this.Modification=true
-        },
-
-        Ajouter() {
-            this.Modification=false
-        },
-
-        MethodeModifier() {
-            this.Modification=false
         },
 
          prevPage() {
@@ -237,12 +300,16 @@ export default {
             this.nbrePage = nbrePage
         },
 
+        setElementsPerPage(pageSize) {
+            this.pageSize = pageSize
+        },
+
     },
 
     computed:{
 
       ListeCours:function(){
-            return this.Mat.filter((row, index) => {
+           return this.Toutesm1Ini.concat( this.Toutesm1App, this.Toutesm2Ini, this.Toutesm2App, this.ToutesLmIni, this.ToutesLmIageApp, this.ToutesAsr, this.ToutesCil, this.Toutesm2Asr, this.Toutesm2Cil).filter((row, index) => {
                 let start = (this.currentPage - 1) * this.nbrePage;
                 let end = this.currentPage* this.nbrePage;
                 if (index >= start && index < end) return true
@@ -262,6 +329,11 @@ export default {
 </script>
 
 <style scoped>
+
+.pageSizeElt {
+    cursor: pointer;
+    color: #536895;
+}
 
 #MargeBouton {
     margin-bottom:5px;
