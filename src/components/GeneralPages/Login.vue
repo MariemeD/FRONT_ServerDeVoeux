@@ -7,9 +7,6 @@
     <h3>2020 - 2021</h3>   
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"> Connexion </button> <!-- The Modal -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal2"> Inscription </button> <!-- The Modal -->
-    <!--<div class="visiteur"> <a href="/professors" class="linkVisiteur">Liste des professeurs</a> </div>
-    <div class="visiteur"> <a href="/branch" class="linkVisiteur">Liste des enseignements</a> </div>
-    <div class="visiteur"> <a href="#" class="linkVisiteur">Liste des enseignements non couverts</a> </div>-->
     <div class="modal fade" id="myModal">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -22,7 +19,7 @@
             <form>
               <div class="input-group"> <input class="input--style-3" type="text" placeholder="Login*" name="email" v-model.lazy="connexion.email"> </div>
               <div class="input-group"> <input class="input--style-3" type="password" placeholder="Password*" name="password" v-model.lazy="connexion.password"> </div>
-              <div class="extra"> <a href="#"><u>I forgot my password</u></a> </div>
+              <div class="extra"> <a data-toggle="modal" data-target="#myModal3" ><u>Mot de passe oublié</u></a> </div>
               <div class="p-t-10"><button class="btn btn--pill btn--signin" @click.stop.prevent="Login()">CONNEXION</button></div>
             </form>
           </div>
@@ -59,6 +56,37 @@
         </div>
       </div>
     </div>
+    <div class="modal fade" id="myModal3">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <div class="modal-title"><p>Serveur de voeux</p></div>
+          </div> <!-- Modal body -->
+          <div class="modal-body">
+            <p class="title"> Changement de mot de passe </p>
+            <!-- ALERTS -->
+            <transition>
+              <div class="alert alert-danger alert-dismissible" v-if="changePassword.error">
+                {{ errorMessage }}
+              </div>
+            </transition>
+            <transition name="slide-fade">
+              <div class="alert alert-success" v-if="changePassword.submitted && !changePassword.error">
+                Mot de passe changé !
+              </div>
+            </transition>
+
+            <form>
+              <div class="input-group"> <input class="input--style-3" type="text" placeholder="Email*" name="email" v-model.lazy="changePassword.emailChangement"> </div>
+              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Nouveau Mot de passe*" name="password" v-model.lazy="changePassword.newPassword"> </div>
+              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Confirmer nouveau mot de passe*" name="passwordConfirmed" v-model.lazy="changePassword.newPasswordConfirmed"> </div>
+              <div class="p-t-10"><button class="btn btn--pill btn--signin" @click.stop.prevent="passwordChange()" type="submit">CHANGER MOT DE PASSE</button></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -89,6 +117,13 @@
             error: false,
             submitted: false,
           },
+          changePassword:{
+            emailChangement: "",
+            newPassword: "",
+            newPasswordConfirmed: "",
+            error: false
+          }
+          ,
           errorMessage: ""
         };
       },
@@ -139,18 +174,81 @@
         },
           Register(){
             this.inscription.submitted = true;
-            // eslint-disable-next-line no-unused-vars
             let userRegistered = {
               email: this.inscription.emailInscription,
               password: this.inscription.passwordInscription,
-              profile: this.inscription.profile
             }
             if (this.inscription.passwordInscription !== this.inscription.passwordConfirmed) {
               this.inscription.error = true
               this.errorMessage = "Les mots de passe saisis sont différents, assurez vous de mettre le même mot de passe dans les deux champs."
             }
+            else{
+              axios.post("https://back-serverdevoeux.herokuapp.com/api/user", userRegistered).then(
+                  response => {
+                    this.inscription.error = false
+                    console.log(response)
+                    this.inscription.emailInscription = ""
+                    this.inscription.passwordConfirmed = ""
+                    this.inscription.passwordInscription = ""
+                  }
+              ).catch(error => {
+                console.log(error)
+                this.inscription.error = true
+                this.inscription.submitted = false
+                switch(error.response.status) {
+                  case 401:
+                    this.errorMessage = "Utilisateur déjà existant ! Connectez-vous !"
+                    break;
+                  case 403:
+                    this.errorMessage = "Votre email professeur n'existe pas dans notre base. Contactez l'administrateur !"
+                    break;
+                  default:
+                    this.errorMessage = "Une erreur est survenue lors de votre inscription.. Réessayez !"
+                    break;
+                }
+              })
+            }
+          },
+          passwordChange(){
+            this.changePassword.submitted = true;
+            if (this.changePassword.newPassword !== this.changePassword.newPasswordConfirmed) {
+              this.changePassword.error = true
+              this.errorMessage = "Les mots de passe saisis sont différents, assurez vous de mettre le même mot de passe dans les deux champs."
+            }
+            else{
+              axios.put("https://back-serverdevoeux.herokuapp.com/api/user/"+this.changePassword.emailChangement,
+                  {
+                    password: this.changePassword.newPassword
+                  }).then(
+                  response => {
+                    this.changePassword.error = false
+                    console.log(response)
+                    this.changePassword.emailChangement = ""
+                    this.changePassword.newPassword = ""
+                    this.changePassword.newPasswordConfirmed = ""
+                  }
+              ).catch(error => {
+                console.log(error)
+                this.changePassword.error = true
+                this.changePassword.submitted = false
+                this.changePassword.emailChangement = ""
+                this.changePassword.newPassword = ""
+                this.changePassword.newPasswordConfirmed = ""
+                switch(error.response.status) {
+                  case 404:
+                    this.errorMessage = "Utilisateur inexistant !"
+                    break;
+                  case 204:
+                    this.errorMessage = "Echec mise à jour  !"
+                    break;
+                  default:
+                    this.errorMessage = "Une erreur est survenue lors de votre inscription.. Réessayez !"
+                    break;
+                }
+              })
+            }
           }
-      }
+        }
     }
 
 </script>
@@ -244,7 +342,7 @@ input {
   border-bottom: 1px solid rgba(204, 204, 204, 0.459)
 }
 
-.input--style-3 {
+.input--style-3{
   font-size: 14px;
   color: rgb(143, 141, 141);
   background: transparent
@@ -367,7 +465,7 @@ h1,h2,h3{
 
 a:link, a:visited, a:hover, a:active{
   text-decoration: none;
-  color: white;
+  color: black;
 }
 
 .visiteur{
