@@ -254,7 +254,7 @@ margin-left: 40px;
   }
 
   tr {
-    border: 2px solid #eee;
+    border: 1px solid #eee;
   }
   tbody tr:hover {
     background-color: rgba(255, 255, 255, 0.3);
