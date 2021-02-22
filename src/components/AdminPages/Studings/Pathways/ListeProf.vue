@@ -215,7 +215,7 @@ export default {
 
             if (this.$filName ==="MIAGE") {
                  var tester=this.professeur.concat(this.m1Ini, this.m1App, this.m2Ini, this.m2App);
-              return this.supprimerDouble(tester, "lastName").slice().sort((a, b) => {
+              return this.supprimerDouble (tester, "lastName").slice().sort((a, b) => {
                 let modifier = 1
                 if(this.currentSortDirection === 'desc') modifier = -1
                 if(a[this.currentSort].toLowerCase() < b[this.currentSort].toLowerCase()) return -1 * modifier
@@ -304,7 +304,30 @@ methods:{
             }
         },
         nextPage() {
-            if ((this.currentPage * this.pageSize) < this.miage.length) {
+             
+             var Tab;
+
+             if (this.$filName ==="MIAGE"){
+               Tab = this.supprimerDouble (this.professeur.concat(this.m1Ini, this.m1App, this.m2Ini, this.m2App), "lastName");
+             }
+
+             else if (this.$filName ==="CIL"){
+                Tab = this.supprimerDouble(this.professeur.concat( this.m2Cil),"lastName");
+             }
+
+             else if (this.$filName ==="ASR"){
+                Tab = this.supprimerDouble(this.professeur.concat( this.m2Asr),"lastName");
+             }
+
+             else if (this.$filName ==="INFO"){
+                Tab = this.supprimerDouble(this.professeur.concat(this.m1Ini, this.m1App, this.m2Ini, this.m2App,this.m2Asr,this.m2Cil), "lastName");
+             }
+
+             else{
+                Tab = this.professeur;
+             }
+
+            if ((this.currentPage * this.pageSize) < Tab.length) {
                 this.currentPage++;
             }
         },
@@ -322,7 +345,9 @@ methods:{
                  unique.push(lookupObject[i]);
                }
              return unique;
+
     },
+
 
      sortFirstName() {
       this.miage.sort((a, b) => {

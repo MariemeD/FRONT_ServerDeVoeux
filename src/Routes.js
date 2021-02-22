@@ -31,6 +31,7 @@ import Courses from "@/components/AdminPages/Studings/Courses/Courses";
 import AddCourse from "@/components/AdminPages/Studings/Courses/AddCourse";
 import ModifyCourse from "@/components/AdminPages/Studings/Courses/ModifyCourse";
 import Pathways from "@/components/AdminPages/Studings/Pathways/Pathways";
+import ListeRespoF from "@/components/AdminPages/Studings/Pathways/ListeRespo";
 import AddPathway from "@/components/AdminPages/Studings/Pathways/AddPathway";
 import ProfPathway from "@/components/AdminPages/Studings/Pathways/ListeProf";
 import ListeMatiere from "@/components/AdminPages/Studings/Pathways/ListeMatiere";
@@ -73,6 +74,7 @@ export default [
     {path: '/admin/filieres/', component: Pathways },
     {path: '/admin/filieres/ajouter-une-filiere', component: AddPathway },
     {path: '/admin/filieres/Professeur', component: ProfPathway },
+    {path: '/admin/filieres/RespoFil', component: ListeRespoF },
     {path: '/admin/filieres/Matieres', component: ListeMatiere},
     {path: '/admin/origines/', component: Origins },
     {path: '/admin/origines/ajouter', component: AddOrigin },

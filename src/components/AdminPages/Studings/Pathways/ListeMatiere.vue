@@ -137,10 +137,29 @@ export default {
             }
         },
         nextPage() {
-            if ((this.currentPage * this.pageSize) < this.miage.length) {
+            var Tab;
+
+             if (this.$filName ==="MIAGE"){
+               Tab = this.supDoublon(this.FilBYmat.concat(this.m1Ini, this.m1App, this.m2Ini, this.m2App));
+             }
+
+             else if (this.$filName ==="CIL"){
+                Tab = this.supDoublon(this.FilBYmat.concat( this.m2Cil));
+             }
+
+             else if (this.$filName ==="ASR"){
+                Tab = this.supDoublon(this.FilBYmat.concat( this.m2Asr));
+             }
+
+             else{
+                Tab = this.FilBYmat;
+             }
+
+            if ((this.currentPage * this.pageSize) < Tab.length) {
                 this.currentPage++;
             }
         },
+
         setElementsPerPage(pageSize) {
             this.pageSize = pageSize
         },

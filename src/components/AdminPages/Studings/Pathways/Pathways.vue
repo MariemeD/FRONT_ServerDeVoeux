@@ -1,88 +1,68 @@
+
 <template>
-    <div class="table-responsive">
-        <Header />
-        <br><br>
-        <div class="card border-warning mb-3">
-            <div class="card-footer"> 
+  <div class="container">
+    <Header />
+    <div class="title">
+      <h2>Filières</h2> 
+      <router-link to="/admin/filieres/RespoFil">
+                   <button id="bt1" class="btn btn-outline-secondary mb-2" >Tous les responsables de filière</button>
+      </router-link>
+    </div>
+    <div class="card-footer"> 
                <table class="table table-dark" id="tableFil">
                   <tr>
                      <td v-for="(filiere,index) in donnees" :key="filiere" > {{filiere}} <font-awesome-icon icon="user-tie" id="icProf" v-on:click="recup(index)"></font-awesome-icon> | <font-awesome-icon icon="eye" id="icProf" v-on:click="recuperer(index)"></font-awesome-icon> </td> 
                   </tr> 
                 </table>
-            </div>
-        <br>
-         <div class="container">
-            <div class="card-group">
-                <div class="col-lg-4 col-md-4 col-sm-6">
-                    <div class="card p-3">
-                        <h6 class="mt-3 mb-0 text-uppercase">Licence 1</h6>
-                        <hr>
+      </div>
+    <div class="modules">
+      <div class="card">
+        <h4>Licence 1</h4>
+        <hr />
 
-                        <table >
-                            <tr>
-                                <td>~ L1 Informatique </td> 
+        <table >
+                            <tr v-for="filiere in separL1" :key="filiere">
+                                <td>~ {{filiere}} </td> 
                             </tr>
                         </table>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-4 col-sm-6" >
-                    <div id="server-card" class="card p-3">
-                        <h6 class="mt-3 mb-0 text-uppercase">Licence 2</h6>
-                        <hr>
-                        
-
-                        <table >
+      </div>
+      <div class="card">
+        <h4>Licence 2</h4>
+        <hr />
+        <table >
                             <tr v-for="filiere in separL2" :key="filiere">
                                 <td>~ {{filiere}} </td> 
                             </tr>
                         </table>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-4 col-sm-6" >
-                    <div id="professor-card" class="card p-3">
-                        <h6 class="mt-3 mb-0 text-uppercase">Licence 3</h6>
-                        <hr>
-
-                        <table id="colCard">
+      </div>
+      <div class="card">
+        <h4>Licence 3</h4>
+        <hr />
+        <table id="colCard">
                             <tr v-for="filiere in separL3" :key="filiere">
                                 <td>~ {{filiere}} </td> 
                             </tr>
                         </table>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-4 col-sm-6" >
-                    <div class="card p-3">
-                        <h6 class="mt-3 mb-0 text-uppercase">Master 1</h6>
-                        <hr>
-
-                        <table >
+      </div>
+      <div class="card">
+        <h4>Master 1</h4>
+        <hr />
+        <table id="colCard">
                             <tr v-for="filiere in separM1" :key="filiere">
                                 <td>~ {{filiere}} </td> 
                             </tr>
                         </table>
-                    </div>
-                </div>
-                
-                <div class="col-lg-4 col-md-4 col-sm-6" >
-                    <div id="server-card" class="card p-3">
-                        <h6 class="mt-3 mb-0 text-uppercase">Master 2</h6>
-                        <hr>
-                        
-
-                        <table >
+      </div>
+      <div class="card">
+        <h4>Master 2</h4>
+        <hr />
+        <table id="colCard">
                             <tr v-for="filiere in separM2" :key="filiere">
                                 <td>~ {{filiere}} </td> 
                             </tr>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
-         </div>
-            <br><br>
+        </table>
+      </div>
+    </div> <br><br>
             <div class="card-footer"> 
 
                <table class="table table-dark" id="tableFil">
@@ -92,8 +72,7 @@
                   </tr> 
                 </table>
             </div>
-        </div>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -440,130 +419,58 @@ export default {
 </script>
 
 <style scoped>
-.container {
-    padding-top: 3em;
+.card {
+  width: 700px;
+  margin-left: 10px;
+  margin-top: 5%;
+  background-color: #8ea3d1;
+  height: 400px;
 }
-
-.card ul {
-    list-style: none;
-    padding: 5px 0 0;
+.modules {
+  display: flex;
 }
-
-#server-card, #studings-card {
-    background-color: #D5D5D5;
+td {
+  margin-top: 5%;
+  cursor: pointer;
 }
-
-#div-server-icon, #div-professor-icon, #div-studings-icon {
-    border: 1px solid #B5B9D1;
-    border-radius: 50%;
-    background-color: #B5B9D1;
-    padding: 15px;
-    width: 50%;
-    margin: 0 auto;
+h2 {
+  margin-top: 100px;
+  font-family: Georgia, serif;
+  font-size: 40px;
+  font-weight: bold;
 }
-
-#group{
-  margin-top:20px;
-
-
+h4 {
+  margin-top: 10px;
 }
-
-h6 {
-    font-weight: bold;
+a {
+  text-decoration: none;
+  color: black;
 }
-
-#server-card hr {
-    margin-bottom: 0;
+.title {
+  margin-top: 30px;
 }
-
-#server-actions li, #studings-actions li, #server-actions a, #studings-actions a, #server-card h6, #studings-card h6{
-    color: #344C80;
+hr {
+  display: block;
+  border: none;
+  height: 3px;
+  background-color: #C9893C;
+  margin-top: 15px;
+  -webkit-animation-name: line-show; /* Safari 4.0 - 8.0 */
+  -webkit-animation-duration: 0.3s; /* Safari 4.0 - 8.0 */
+  animation-name: line-show;
+  animation-duration: 0.3s;
+  -webkit-transition-timing-function: cubic-bezier(0.795, 0, 0.165, 1);
+  -o-transition-timing-function: cubic-bezier(0.795, 0, 0.165, 1);
+  transition-timing-function: cubic-bezier(0.795, 0, 0.165, 1); /* custom */
 }
-
-#professor-card {
-    background-color: #344C80;
+@media only screen and (max-width: 760px),
+  (min-device-width: 768px) and (max-device-width: 1024px) {
+  .modules {
+    flex-flow: row wrap;
+  }
+  .card {
+    width: 300px;
+    margin-left: 20px;
+  }
 }
-
-#colCard, #professor-actions a, #professor-card h6 {
-    color: #C9893C;
-}
-
-
-@media all and (max-width: 992px) and (min-width: 769px) {
-    #server-icon, #professor-icon, #studings-icon {
-        width: 0.7em;
-    }
-}
-
-@media all and (max-width: 768px) {
-    #server-card, #professor-card, #studings-card {
-        width: 100%;
-        margin-bottom: 5px;
-    }
-
-    #div-server-icon, #div-professor-icon, #div-studings-icon {
-        border: 1px solid #B5B9D1;
-        border-radius: 50%;
-        background-color: #B5B9D1;
-        padding: 10px;
-        width: 70%;
-        margin: 0 auto;
-    }
-    #server-icon, #professor-icon, #studings-icon {
-        width: 0.6em;
-    }
-}
-
-@media all and (max-width: 576px) {
-    #server-card, #professor-card, #studings-card {
-        width: 60%;
-        margin: 0 auto 5px;
-    }
-
-    #div-server-icon, #div-professor-icon, #div-studings-icon {
-        border: 1px solid #B5B9D1;
-        border-radius: 50%;
-        background-color: #B5B9D1;
-        padding: 10px;
-        width: 45%;
-        margin: 0 auto;
-    }
-    #server-icon, #professor-icon, #studings-icon {
-        width: 0.7em;
-    }
-}
-
-@media all and (max-width: 390px) {
-    .container {
-        padding-top: 1em;
-    }
-
-    #server-card, #professor-card, #studings-card {
-        width: 80%;
-        margin: 0 auto 5px;
-    }
-
-    #div-server-icon, #div-professor-icon, #div-studings-icon {
-        border: 1px solid #B5B9D1;
-        border-radius: 50%;
-        background-color: #B5B9D1;
-        padding: 10px;
-        width: 45%;
-        margin: 0 auto;
-    }
-
-    #icProf{
-      float:right;
-      text-align:right;
-      margin: 0 ;
-    }
-    #server-icon, #professor-icon, #studings-icon {
-        width: 0.7em;
-    }
-    #tableFil{
-      text-align:left;
-      border:none;
-    }
-}
-
 </style>

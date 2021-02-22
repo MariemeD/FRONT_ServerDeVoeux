@@ -2,7 +2,7 @@
     <div v-if="OK">
         <Header />
         <h1 class="pt-5">Liste des cursus</h1>
-  
+           {{$nomPrenom}}
       <div class="container">
         <div class="row justify-content-between">
              <div class="form-inline" id="MargeBouton">
@@ -30,14 +30,17 @@
             <tr> 
              
              <th >Matières</th>
-             <th >Filière</th>
+             <th @click="sort(filière)">Filière</th>
+             <th >Prof</th>
             
             </tr>
           </thead>
           <tbody>
-            <tr v-for="matiere in ListeCours" :key="matiere">
+            <tr v-for="(matiere,index) in ListeCours" :key="matiere">
               <td>{{matiere.name}}</td>
-              <td>{{matiere.filière}}</td>
+              <td >{{matiere.filière}}</td>
+            <!--  <td ><table> <tr v-for="prof in matiere.prof" :key="prof"><td>{{prof}} </td></tr></table></td>  -->
+             <td v-on:click="prendre(index)">{{matiere.prof}}</td>
             </tr> 
           </tbody>
         </table>
@@ -52,7 +55,7 @@
 
     <div v-else>
         <Header />
-        <h1 class="pt-5">Liste des cursus </h1>
+        <h1 class="pt-5">{{transition}} </h1>
   
         <div class="container">
         <div class="row justify-content-between">
@@ -74,22 +77,22 @@
           <thead>
             <tr> 
              
-             <th colspan=2 >Matières Fil</th>
+             <th colspan=2 >Matières </th>
              
             
             </tr>
           </thead>
           <tbody>
             <tr v-for="matiere in ListeFilCours" :key="matiere">
-              <td colspan=2>{{matiere}}</td>
+              <td colspan=2>{{matiere.name}}</td>
               
             </tr> 
           </tbody>
         </table>
         <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
-                        <li class="page-item"><a class="page-link"  @click="precedent">Précédent</a></li>
-                        <li class="page-item"><a class="page-link"  @click="suivant">Suivant</a></li>
+                        <li class="page-item"><a class="page-link"  @click="prevPage">Précédent</a></li>
+                        <li class="page-item"><a class="page-link"  @click="nextPage">Suivant</a></li>
                     </ul>
         </nav>
 
@@ -100,6 +103,7 @@
 
 <script>
 import axios from 'axios';
+import Vue from 'vue';
 import Header from "@/components/AdminPages/Header";
 
 export default {
@@ -111,12 +115,13 @@ export default {
             success:true,
             OK:true,
             recupFil:null,
-            recupFil2:null,
+            transition:null,
 
             Mat:[],
+            Mat2:[],
             FilBYmat:[],
             nbrePage: 150,
-            pageSize: 150,
+            pageSize: 10,
             currentPage: 1,
             ToutesMatiere:[],
             Toutesm1Ini:[],
@@ -125,6 +130,10 @@ export default {
             Toutesm2App:[],
             Toutesm2Cil:[],
             Toutesm2Asr:[],
+
+            profFirstName:String,
+            profLastName:String,
+
 
             ToutesLmIageApp:[],
             ToutesLmIni:[],
@@ -137,6 +146,9 @@ export default {
             ModiNom:null,
             modiAbrev:null,
             modiType:null,
+
+            currentSortDirection: 'asc',
+            currentSort: 'filière',
 
         }
     },
@@ -151,7 +163,7 @@ export default {
                         this.Nom=branch.nom_complet.split("-")[0];
                         this.Categ=branch.nom_complet.split("-")[1];
 
-                        this.Mat.push({"name":this.Nom,
+                        this.Mat2.push({"name":this.Nom,
                                    "type":this.Categ,
                                     "Ab":branch.abbreviation});
                         //this.MatType.push(this.Mat);
@@ -164,23 +176,46 @@ export default {
              axios
             .get("http://146.59.195.214:8006/api/v1/events/MIAGE/matiere")
             .then((response) => {
-                response.data.forEach((branch)=> {
-                this.ToutesLmIni.push({"name":branch,
-                                   "filière":"MIAGE"});
+                response.data.forEach((l3Mbranch)=> {
+
+                     axios
+            .get("http://146.59.195.214:8006/api/v1/events/teacher/" + l3Mbranch)
+            .then((response) => {
+                response.data.forEach((valeur)=> {
+                    this.profFirstName= valeur.split("")[0];
+                    this.profLastName= valeur.split("")[1];
+
+                    
+
+                this.ToutesLmIni.push({"name":l3Mbranch,
+                                      "filière":"Licence 3 MIAGE",
+                                       "prof":valeur});
             });
             })
+                });
+                })
 
-
+                
             //L3 CILS
 
             axios
             .get("http://146.59.195.214:8006/api/v1/events/CIL/matiere")
             .then((response) => {
-                response.data.forEach((branch)=> {
-                this.ToutesCil.push({"name":branch,
-                                   "filière":"CILS"});
+                response.data.forEach((CILL3branch)=> {
+
+                     axios
+            .get("http://146.59.195.214:8006/api/v1/events/teacher/" + CILL3branch)
+            .then((response) => {
+                response.data.forEach((valeur)=> {
+
+                this.ToutesCil.push({"name":CILL3branch,
+                                      "filière":"Licence 3 CILS",
+                                       "prof":valeur});
             });
             })
+                });
+                })
+
 
             // L3 ASR
 
@@ -188,40 +223,92 @@ export default {
             .get("http://146.59.195.214:8006/api/v1/events/ASR/matiere")
             .then((response) => {
                 response.data.forEach((branch)=> {
+
+                     axios
+            .get("http://146.59.195.214:8006/api/v1/events/teacher/" + branch)
+            .then((response) => {
+                response.data.forEach((valeur)=> {
+
                 this.ToutesAsr.push({"name":branch,
-                                   "filière":"ASR"});
+                                      "filière":"Licence 3 ASR",
+                                       "prof":valeur});
             });
             })
+                });
+                })
 
              // M1MIAGE
-                 axios
+             axios
             .get("http://146.59.195.214:8006/api/v1/events/M1MIAI/matiere")
             .then((response) => {
                 response.data.forEach((branch)=> {
+                    if((branch === "BASE DE DONNEES APPROFONDIES") || (branch === "ANALDON") || (branch === "BADA")) 
+                {
+                    this.Nom="";
+                }
+                
+                else{
+
+                     axios
+            .get("http://146.59.195.214:8006/api/v1/events/teacher/" + branch)
+            .then((response) => {
+                response.data.forEach((valeur)=> {
+
                 this.Toutesm1Ini.push({"name":branch,
-                                   "filière":"MIAGE"});
+                                      "filière":"Master 1 MIAGE",
+                                       "prof":valeur});
             });
             })
-                    
-                 axios
+                }
+                });
+                })
+
+
+     
+     axios
             .get("http://146.59.195.214:8006/api/v1/events/M1MIAA/matiere")
             .then((response) => {
                 response.data.forEach((branch)=> {
+                    if((branch === "BASE DE DONNEES APPROFONDIES") || (branch === "ANALDON") || (branch === "BADA")) 
+                {
+                    this.Nom="";
+                }
+                
+                else{
+
+                     axios
+            .get("http://146.59.195.214:8006/api/v1/events/teacher/" + branch)
+            .then((response) => {
+                response.data.forEach((valeur)=> {
+
                 this.Toutesm1App.push({"name":branch,
-                                   "filière":"MIAGE"});
+                                      "filière":"Master 1 MIAGE",
+                                       "prof":valeur});
             });
             })
+                }
+                });
+                })
                                            
             //M2 MIAGE Initiale
 
-             axios
+            axios
             .get("http://146.59.195.214:8006/api/v1/events/M2MIAI/matiere")
             .then((response) => {
                 response.data.forEach((branch)=> {
+
+                     axios
+            .get("http://146.59.195.214:8006/api/v1/events/teacher/" + branch)
+            .then((response) => {
+                response.data.forEach((valeur)=> {
+
                 this.Toutesm2Ini.push({"name":branch,
-                                   "filière":"MIAGE"});
+                                      "filière":"Master 2 MIAGE",
+                                       "prof":valeur});
             });
             })
+                });
+                })
             
            // M2 MIAGE App
 
@@ -229,10 +316,19 @@ export default {
             .get("http://146.59.195.214:8006/api/v1/events/M2MIAA/matiere")
             .then((response) => {
                 response.data.forEach((branch)=> {
+
+                     axios
+            .get("http://146.59.195.214:8006/api/v1/events/teacher/" + branch)
+            .then((response) => {
+                response.data.forEach((valeur)=> {
+                
                 this.Toutesm2App.push({"name":branch,
-                                   "filière":"MIAGE"});
+                                      "filière":"Master 2 MIAGE",
+                                       "prof":valeur});
             });
             })
+                });
+                })
 
             //CILS
 
@@ -240,21 +336,39 @@ export default {
             .get("http://146.59.195.214:8006/api/v1/events/M2CIL/matiere")
             .then((response) => {
                 response.data.forEach((branch)=> {
+
+                     axios
+            .get("http://146.59.195.214:8006/api/v1/events/teacher/" + branch)
+            .then((response) => {
+                response.data.forEach((valeur)=> {
+
                 this.Toutesm2Cil.push({"name":branch,
-                                   "filière":"CILS"});
+                                      "filière":"Master 2 CILS",
+                                       "prof":valeur});
             });
             })
+                });
+                })
 
             //ASR
 
              axios
             .get("http://146.59.195.214:8006/api/v1/events/M2ASR/matiere")
-             .then((response) => {
+            .then((response) => {
                 response.data.forEach((branch)=> {
+
+                     axios
+            .get("http://146.59.195.214:8006/api/v1/events/teacher/" + branch)
+            .then((response) => {
+                response.data.forEach((valeur)=> {
+
                 this.Toutesm2Asr.push({"name":branch,
-                                   "filière":"ASR"});
+                                      "filière":"Master 2 ASR",
+                                       "prof":valeur});
             });
             })
+                });
+                })
 
 
     },
@@ -265,14 +379,48 @@ export default {
             this.OK=true;
         },
 
+         suppressionDoublon(table) {
+            var unique = [];
+            var auxi= {};
+            for (var i in table) {
+                 auxi [table[i]]= 0;
+               }
+               for (i in auxi){
+                 unique.push(i);
+               }
+             return unique;
+    },
+
+
+       deleteDouble(table, prop) {
+              var unique = [];
+              var lookupObject ={};
+               for (var i in table) {
+                 lookupObject [table[i][prop]]= table[i];
+               }
+               for (i in lookupObject){
+                 unique.push(lookupObject[i]);
+               }
+             return unique;
+
+    },
+
         VoirListeMat() {
            // this.success=false
             this.OK=false
             axios
             .get("http://146.59.195.214:8006/api/v1/events/"+this.recupFil+"/matiere")
-            .then(response => (this.FilBYmat = response.data));
-            this.recupFil2=this.recpFil;
+            .then((response) => {
+                response.data.forEach((branch)=> {
+                this.Mat.push({"name":branch,
+                                "filière":"Licence 3 "+ this.recupFil});
+            });
+            })
+
+            this.transition=this.recupFil;
             this.recupFil="";
+
+
         },
 
          prevPage() {
@@ -281,27 +429,35 @@ export default {
             }
         },
 
-        precedent() {
-            if (this.currentPage2 > 1) {
-                this.currentPage2--;
-            }
-        },
-        suivant() {
-            if ((this.currentPage * this.nbrePage) < this.ListeFilCours.length) {
-                this.currentPage++;
-            }
-        },
         nextPage() {
-            if ((this.currentPage * this.nbrePage) < this.ListeCours.length) {
+
+           let Ta =  this.Toutesm1Ini.concat( this.Toutesm1App, this.Toutesm2Ini, this.Toutesm2App, this.ToutesLmIni, this.ToutesLmIageApp, this.ToutesAsr, this.ToutesCil, this.Toutesm2Asr, this.Toutesm2Cil);
+            if ((this.currentPage * this.pageSize) < Ta.length) {
                 this.currentPage++;
             }
         },
-         setElementsnbrePage(nbrePage) {
-            this.nbrePage = nbrePage
+         setElementsnbrePage(pageSize) {
+            this.pageSize = pageSize
+        },
+
+     prendre(index){
+            //let ooori=this.Origines[index];
+           // let Ta =  this.Toutesm1Ini.concat( this.Toutesm1App, this.Toutesm2Ini, this.Toutesm2App, this.ToutesLmIni, this.ToutesLmIageApp, this.ToutesAsr, this.ToutesCil, this.Toutesm2Asr, this.Toutesm2Cil);
+           
+           Vue.prototype.$nomPrenom= this.Toutesm1Ini.concat( this.Toutesm1App, this.Toutesm2Ini, this.Toutesm2App, this.ToutesLmIni, this.ToutesLmIageApp, this.ToutesAsr, this.ToutesCil, this.Toutesm2Asr, this.Toutesm2Cil)[index].prof;
+
         },
 
         setElementsPerPage(pageSize) {
             this.pageSize = pageSize
+        },
+
+        sort(criteria) {
+            if(criteria === this.currentSort) {
+                this.currentSortDirection = this.currentSortDirection === 'asc' ? 'desc' : 'asc'
+            }
+            this.sortIcon = this.currentSortDirection === 'asc' ? 'sort-up' : 'sort-down'
+            this.currentSort = criteria;
         },
 
     },
@@ -309,20 +465,56 @@ export default {
     computed:{
 
       ListeCours:function(){
-           return this.Toutesm1Ini.concat( this.Toutesm1App, this.Toutesm2Ini, this.Toutesm2App, this.ToutesLmIni, this.ToutesLmIageApp, this.ToutesAsr, this.ToutesCil, this.Toutesm2Asr, this.Toutesm2Cil).filter((row, index) => {
-                let start = (this.currentPage - 1) * this.nbrePage;
-                let end = this.currentPage* this.nbrePage;
+           return this.Toutesm1Ini.concat( this.Toutesm1App, this.Toutesm2Ini, this.Toutesm2App, this.ToutesLmIni, this.ToutesAsr, this.ToutesCil, this.Toutesm2Asr, this.Toutesm2Cil).filter((row, index) => {
+                let start = (this.currentPage - 1) * this.pageSize;
+                let end = this.currentPage * this.pageSize;
                 if (index >= start && index < end) return true
-        });
-    },
+            }).sort((a, b) => {
+                let modifier = 1
+                if(this.currentSortDirection === 'desc') modifier = -1
+                if(a[this.currentSort].toLowerCase() < b[this.currentSort].toLowerCase()) return -1 * modifier
+                if(a[this.currentSort].toLowerCase() > b[this.currentSort].toLowerCase()) return modifier
+                return 0;
+            });
+
+
+            },
 
     ListeFilCours:function(){
-            return this.FilBYmat.filter((row, index) => {
-                let start = (this.currentPage - 1) * this.nbrePage;
-                let end = this.currentPage* this.nbrePage;
+
+        if (this.transition.toUpperCase() ==="MIAGE"){
+              return  this.deleteDouble(this.Mat.concat(this.Toutesm1Ini, this.Toutesm1App, this.Toutesm2Ini, this.Toutesm2App),"name").filter((row, index) => {
+                let start = (this.currentPage - 1) * this.pageSize;
+                let end = this.currentPage * this.pageSize;
                 if (index >= start && index < end) return true
-        });
-    }
+            });
+            }
+
+        else if (this.transition ==="CIL"){
+              return  this.deleteDouble(this.Mat.concat( this.Toutesm2Cil),"name").filter((row, index) => {
+                let start = (this.currentPage - 1) * this.pageSize;
+                let end = this.currentPage * this.pageSize;
+                if (index >= start && index < end) return true
+            });
+            }
+
+        else if (this.transition.toUpperCase() ==="ASR"){
+                return this.deleteDouble(this.Mat.concat( this.Toutesm2Asr),"name").filter((row, index) => {
+                let start = (this.currentPage - 1) * this.pageSize;
+                let end = this.currentPage * this.pageSize;
+                if (index >= start && index < end) return true
+            });
+            }
+
+        else{
+               return this.Mat.filter((row, index) => {
+                let start = (this.currentPage - 1) * this.pageSize;
+                let end = this.currentPage * this.pageSize;
+                if (index >= start && index < end) return true
+            });
+            }
+            
+            }
     },
 
 }
