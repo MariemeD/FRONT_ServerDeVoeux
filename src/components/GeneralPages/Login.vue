@@ -196,39 +196,45 @@
         },
           Register(){
             this.inscription.submitted = true;
-            let userRegistered = {
-              email: this.inscription.emailInscription,
-              password: this.inscription.passwordInscription,
-            }
-            if (this.inscription.passwordInscription !== this.inscription.passwordConfirmed) {
-              this.inscription.error = true
-              this.errorMessage = "Les mots de passe saisis sont différents, assurez vous de mettre le même mot de passe dans les deux champs."
-            }
-            else{
-              axios.post("https://back-serverdevoeux.herokuapp.com/api/user", userRegistered).then(
-                  response => {
-                    this.inscription.error = false
-                    console.log(response)
-                    this.inscription.emailInscription = ""
-                    this.inscription.passwordConfirmed = ""
-                    this.inscription.passwordInscription = ""
-                  }
-              ).catch(error => {
-                console.log(error)
+            if(this.inscription.emailInscription && this.inscription.passwordInscription && this.inscription.passwordConfirmed !== "") {
+              let userRegistered = {
+                email: this.inscription.emailInscription,
+                password: this.inscription.passwordInscription,
+              }
+              if (this.inscription.passwordInscription !== this.inscription.passwordConfirmed) {
                 this.inscription.error = true
-                this.inscription.submitted = false
-                switch(error.response.status) {
-                  case 401:
-                    this.errorMessage = "Utilisateur déjà existant ! Connectez-vous !"
-                    break;
-                  case 403:
-                    this.errorMessage = "Votre email professeur n'existe pas dans notre base. Contactez l'administrateur !"
-                    break;
-                  default:
-                    this.errorMessage = "Une erreur est survenue lors de votre inscription.. Réessayez !"
-                    break;
-                }
-              })
+                this.errorMessage = "Les mots de passe saisis sont différents, assurez vous de mettre le même mot de passe dans les deux champs."
+              } else {
+                axios.post("https://back-serverdevoeux.herokuapp.com/api/user", userRegistered).then(
+                    response => {
+                      this.inscription.error = false
+                      console.log(response)
+                      this.inscription.emailInscription = ""
+                      this.inscription.passwordConfirmed = ""
+                      this.inscription.passwordInscription = ""
+                    }
+                ).catch(error => {
+                  console.log(error)
+                  this.inscription.error = true
+                  this.inscription.submitted = false
+                  switch (error.response.status) {
+                    case 401:
+                      this.errorMessage = "Utilisateur déjà existant ! Connectez-vous !"
+                      break;
+                    case 403:
+                      this.errorMessage = "Votre email professeur n'existe pas dans notre base. Contactez l'administrateur !"
+                      break;
+                    default:
+                      this.errorMessage = "Une erreur est survenue lors de votre inscription.. Réessayez !"
+                      break;
+                  }
+                })
+              }
+            }else
+            {
+              this.inscription.submitted = false
+              this.inscription.error = true
+              this.errorMessage = "Remplissez tous les champs"
             }
           },
           passwordChange(){
