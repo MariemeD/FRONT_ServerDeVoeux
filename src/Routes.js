@@ -6,14 +6,14 @@ import Professor from "./components/ProfessorPages/professor/Professors";
 import ProfessorService from "./components/ProfessorPages/professor/Prof_Service";
 import Profil from "./components/ProfessorPages/Profile";
 //modules
-//import DetailsModule from "./components/ProfessorPages/Modules/Details_Module";
-import EditModule from "./components/ProfessorPages/Modules/Edit_Module";
+
+
+
 import Demandes from "./components/ProfessorPages/Modules/Demandes";
 //Filiere
 import Branch from "./components/ProfessorPages/Filieres/Branch";
 import DetailsBranch from "./components/ProfessorPages/Filieres/Details_Branch";
-
-// Admin interface
+import NCours from "./components/ProfessorPages/Filieres/NC_Cours";
 import Homepage from "@/components/AdminPages/Homepage";
 import Profile from "@/components/AdminPages/Profile";
 import Professors from "@/components/AdminPages/Professors/Professors/Professors";
@@ -72,16 +72,16 @@ export default [
     // Professor routes
     {path: '/professors', component: Professor},
     {path: '/professorService', component: ProfessorService},
+    {path: '/professorService/:emailProf', component: ProfessorService},
 
     //Modules
-    //{path: '/detailsModule', component: DetailsModule},
-    {path: '/detailsModule', component: EditModule},
+
     {path: '/demandes', component: Demandes},
 
     //Branch
     {path: '/branch', component: Branch},
-    {path: '/detailsBranch', component: DetailsBranch}
-
-    // Professors routes
+    {path: '/detailsBranch', component: DetailsBranch},
+    {path: '/ncours', component: NCours}
+  
 
 ]

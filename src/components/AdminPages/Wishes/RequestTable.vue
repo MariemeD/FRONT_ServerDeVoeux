@@ -219,8 +219,7 @@ export default {
         acceptRequest(request) {
             const acceptedRequest = request
             acceptedRequest.status = 'Validé'
-            axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${request._id}`, acceptedRequest).then(response => {
-                console.log(response)
+            axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${request._id}`, acceptedRequest).then(() => {
                 this.sendAlertMessage(`Le voeu de ${request.requestor} a bien été accepté`)
                 /*axios.post(`https://back-serverdevoeux.herokuapp.com/api/sendMail/`, {
                     to: request.emailRequestor,
@@ -244,8 +243,7 @@ export default {
         refuseRequest(request) {
             const refusedRequest = request
             refusedRequest.status = 'Refusé'
-            axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${request._id}`, refusedRequest).then(response => {
-                console.log(response)
+            axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${request._id}`, refusedRequest).then(() => {
                 this.sendAlertMessage(`Le voeu de ${request.requestor} a bien été refusé`)
                 /*axios.post(`https://back-serverdevoeux.herokuapp.com/api/sendMail/`, {
                     to: request.emailRequestor,
@@ -270,8 +268,7 @@ export default {
             axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${request._id}`, {status: 'Accepté'}).then(() => {
                 this.sendAlertMessage(`Le voeu de ${request.requestor} a bien été accepté`)
                 for (let otherConflict of this.groupConflictByCursus()[request.courseRequested].filter(req => req !== request)) {
-                    axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${otherConflict._id}`, {status: 'Refusé'}).then(response => {
-                        console.log(response)
+                    axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${otherConflict._id}`, {status: 'Refusé'}).then(() => {
                         console.log("Les voeux des autres professeurs ont été refusés")
                         axios.post(`https://back-serverdevoeux.herokuapp.com/api/sendMail/`, {
                             to: otherConflict.emailRequestor,
@@ -279,8 +276,7 @@ export default {
                             text: `Bonjour,\n\n
                             Suite à un conflit entre plusieurs voeux de vos professeurs
                             et le votre concernant la matière ${otherConflict.courseRequested}, votre voeu ne vous a pas été accordé`
-                        }).then(response => {
-                            console.log(response)
+                        }).then(() => {
                             console.log("Le mail a bien été envoyé")
                         }).catch(error => {
                             console.error(error)
@@ -336,8 +332,7 @@ export default {
                 for (let request of this.currentRequest) {
                     axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${request._id}`, {
                         detailRequest: this.newComment
-                    }).then(response => {
-                        console.log(response)
+                    }).then(() => {
                         this.sendAlertMessage(`Les voeux ont bien été commentés`)
                         this.refreshPage(2000)
                     }).catch(error => {
@@ -387,19 +382,6 @@ export default {
     computed: {
         sortedRequests() {
             return this.requests.slice().sort((a, b) => {
-                let modifier = 1
-                if(this.currentSortDirection === 'desc') modifier = -1
-                if(a[this.currentSort].toLowerCase() < b[this.currentSort].toLowerCase()) return -1 * modifier
-                if(a[this.currentSort].toLowerCase() > b[this.currentSort].toLowerCase()) return modifier
-                return 0;
-            }).filter((row, index) => {
-                let start = (this.currentPage - 1) * this.pageSize;
-                let end = this.currentPage * this.pageSize;
-                if (index >= start && index < end) return true
-            });
-        },
-        sortedConflicts() {
-            return this.groupConflictByCursus().slice().sort((a, b) => {
                 let modifier = 1
                 if(this.currentSortDirection === 'desc') modifier = -1
                 if(a[this.currentSort].toLowerCase() < b[this.currentSort].toLowerCase()) return -1 * modifier

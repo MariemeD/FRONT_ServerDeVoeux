@@ -226,7 +226,6 @@ export default {
             })
         } else {
             axios.get(`http://146.59.195.214:8006/api/v1/teachers/all`).then(response => {
-                console.log(response.data)
                 for (let prof of response.data) {
                     prof.firstname = this.capitalizeTextElement(prof.firstName)
                     prof.lastname = prof.lastName.toUpperCase()

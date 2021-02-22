@@ -61,7 +61,6 @@ export default {
         }).catch(error => console.error(error))
         axios.get(`https://back-serverdevoeux.herokuapp.com/api/responsible/${this.$cookies.get("emailProfessor")}`).then(response => {
             const connectedAdmin = response.data
-            console.log(connectedAdmin)
             if (!this.$cookies.get("groupProfessor")) {
                 this.$cookies.set("groupProfessor", connectedAdmin.group)
             }
