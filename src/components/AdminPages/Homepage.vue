@@ -62,16 +62,13 @@
 
                         <ul id="studings-actions" class="text-left mr-auto ml-auto">
                             <li>
-                                - <router-link to="/admin/cursus" href="">Gestion des cursus</router-link>
+                                - <router-link to="/admin/cursus" href="">Liste des matières</router-link>
                             </li>
                             <li>
-                                - <router-link to="/admin/filieres" href="">Gestion des filières</router-link>
+                                - <router-link to="/admin/filieres" href="">Liste des filières</router-link>
                             </li>
                             <li>
-                                - <router-link to="/admin/origines" href="">Gestion des origines</router-link>
-                            </li>
-                            <li>
-                                - <router-link to="/admin/types-de-cours" href="">Gestion des types de cours</router-link>
+                                - <router-link to="/admin/origines" href="">Liste des origines</router-link>
                             </li>
                         </ul>
                     </div>

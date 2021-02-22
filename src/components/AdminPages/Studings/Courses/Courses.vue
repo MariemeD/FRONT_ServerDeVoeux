@@ -2,7 +2,6 @@
     <div v-if="OK">
         <Header />
         <h1 class="pt-5">Liste des cursus</h1>
-           {{$nomPrenom}}
       <div class="container">
         <div class="row justify-content-between">
              <div class="form-inline" id="MargeBouton">
@@ -55,7 +54,7 @@
 
     <div v-else>
         <Header />
-        <h1 class="pt-5">{{transition}} </h1>
+        <h1 class="pt-5">Filière {{transition}} </h1>
   
         <div class="container">
         <div class="row justify-content-between">
@@ -78,6 +77,7 @@
             <tr> 
              
              <th colspan=2 >Matières </th>
+             <th>Professeur </th>
              
             
             </tr>
@@ -85,6 +85,7 @@
           <tbody>
             <tr v-for="matiere in ListeFilCours" :key="matiere">
               <td colspan=2>{{matiere.name}}</td>
+              <td >{{matiere.prof}}</td>
               
             </tr> 
           </tbody>
@@ -407,19 +408,27 @@ export default {
 
         VoirListeMat() {
            // this.success=false
-            this.OK=false
+            this.OK=false;
+            this.transition=this.recupFil;
+
             axios
             .get("http://146.59.195.214:8006/api/v1/events/"+this.recupFil+"/matiere")
             .then((response) => {
-                response.data.forEach((branch)=> {
-                this.Mat.push({"name":branch,
-                                "filière":"Licence 3 "+ this.recupFil});
+                response.data.forEach((l3Mbranch)=> {
+
+                     axios
+            .get("http://146.59.195.214:8006/api/v1/events/teacher/" + l3Mbranch)
+            .then((response) => {
+                response.data.forEach((valeur)=> {
+                    this.Mat.push({"name":l3Mbranch,
+                                      "filière":"Licence 3 MIAGE",
+                                       "prof":valeur});
             });
             })
-
+                });
+            })
             this.transition=this.recupFil;
             this.recupFil="";
-
 
         },
 
@@ -465,7 +474,7 @@ export default {
     computed:{
 
       ListeCours:function(){
-           return this.Toutesm1Ini.concat( this.Toutesm1App, this.Toutesm2Ini, this.Toutesm2App, this.ToutesLmIni, this.ToutesAsr, this.ToutesCil, this.Toutesm2Asr, this.Toutesm2Cil).filter((row, index) => {
+           return this.deleteDouble(this.Toutesm1Ini.concat( this.Toutesm1App, this.Toutesm2Ini, this.Toutesm2App, this.ToutesLmIni, this.ToutesAsr, this.ToutesCil, this.Toutesm2Asr, this.Toutesm2Cil),"name").filter((row, index) => {
                 let start = (this.currentPage - 1) * this.pageSize;
                 let end = this.currentPage * this.pageSize;
                 if (index >= start && index < end) return true
