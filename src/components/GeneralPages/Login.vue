@@ -12,10 +12,18 @@
         <div class="modal-content">
           <!-- Modal Header -->
           <div class="modal-header">
-            <div class="modal-title"><p>Serveur de voeux</p></div>
+            <div class="modal-title"><h4 style="color: white">Serveur de voeux</h4></div>
           </div> <!-- Modal body -->
           <div class="modal-body">
             <p class="title"> Connexion </p>
+            <!-- ALERTS -->
+            <transition name="slide-fade">
+            </transition>
+            <transition>
+              <div class="alert alert-danger alert-dismissible" v-if="connexion.error">
+                {{ errorMessage }}
+              </div>
+            </transition>
             <form>
               <div class="input-group"> <input class="input--style-3" type="text" placeholder="Login*" name="email" v-model.lazy="connexion.email"> </div>
               <div class="input-group"> <input class="input--style-3" type="password" placeholder="Password*" name="password" v-model.lazy="connexion.password"> </div>
@@ -31,7 +39,7 @@
         <div class="modal-content">
           <!-- Modal Header -->
           <div class="modal-header">
-            <div class="modal-title"><p>Serveur de voeux</p></div>
+            <div class="modal-title"><h4 style="color: white">Serveur de voeux</h4></div>
           </div> <!-- Modal body -->
           <div class="modal-body">
             <p class="title"> Inscription </p>
@@ -61,26 +69,26 @@
         <div class="modal-content">
           <!-- Modal Header -->
           <div class="modal-header">
-            <div class="modal-title"><p>Serveur de voeux</p></div>
+            <div class="modal-title"><h4 style="color: white">Serveur de voeux</h4></div>
           </div> <!-- Modal body -->
           <div class="modal-body">
             <p class="title"> Changement de mot de passe </p>
             <!-- ALERTS -->
+            <transition name="slide-fade">
+              <div class="alert alert-success" v-if="changePassword.submitted && !changePassword.error">
+                Nouveau mot de passe envoyé
+                Veuillez le changer à votre prochaine connexion
+              </div>
+            </transition>
             <transition>
               <div class="alert alert-danger alert-dismissible" v-if="changePassword.error">
                 {{ errorMessage }}
               </div>
             </transition>
-            <transition name="slide-fade">
-              <div class="alert alert-success" v-if="changePassword.submitted && !changePassword.error">
-                Mot de passe changé !
-              </div>
-            </transition>
-
             <form>
               <div class="input-group"> <input class="input--style-3" type="text" placeholder="Email*" name="email" v-model.lazy="changePassword.emailChangement"> </div>
-              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Nouveau Mot de passe*" name="password" v-model.lazy="changePassword.newPassword"> </div>
-              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Confirmer nouveau mot de passe*" name="passwordConfirmed" v-model.lazy="changePassword.newPasswordConfirmed"> </div>
+              <!--<div class="input-group"> <input class="input--style-3" type="password" placeholder="Nouveau Mot de passe*" name="password" v-model.lazy="changePassword.newPassword"> </div>
+              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Confirmer nouveau mot de passe*" name="passwordConfirmed" v-model.lazy="changePassword.newPasswordConfirmed"> </div>-->
               <div class="p-t-10"><button class="btn btn--pill btn--signin" @click.stop.prevent="passwordChange()" type="submit">CHANGER MOT DE PASSE</button></div>
             </form>
           </div>
@@ -107,7 +115,8 @@
             email: "",
             password: "",
             wrong: "",
-            submitted: ""
+            submitted: "",
+            error: false
           },
           inscription:{
             emailInscription: "",
@@ -121,7 +130,8 @@
             emailChangement: "",
             newPassword: "",
             newPasswordConfirmed: "",
-            error: false
+            error: false,
+            submitted: false
           }
           ,
           errorMessage: ""
@@ -144,6 +154,7 @@
                       .then((response) => {
                         for (let prof of response.data) {
                           console.log(prof);
+                          console.log(user.data.userLogin)
                           if (prof.email === user.data.userLogin.email) {
                             console.log(user.data.userLogin);
                             this.$cookies.set("emailProfessor", prof.email);
@@ -168,7 +179,18 @@
                 })
                 .catch((error) => {
                   console.log(error.response);
-                  this.wrongPr= error.response.data.error
+                  this.connexion.error = true
+                  this.connexion.email = ""
+                  this.connexion.password =""
+                  this.connexion.submitted = false
+                  switch(error.response.status) {
+                    case 401:
+                      this.errorMessage = "Utilisateur ou mot de passe incorrect"
+                      break;
+                    default:
+                      this.errorMessage = "Une erreur est survenue lors de votre inscription.. Réessayez !"
+                      break;
+                  }
                 });
           }
         },
@@ -211,46 +233,40 @@
           },
           passwordChange(){
             this.changePassword.submitted = true;
-            if (this.changePassword.newPassword !== this.changePassword.newPasswordConfirmed) {
-              this.changePassword.error = true
-              this.errorMessage = "Les mots de passe saisis sont différents, assurez vous de mettre le même mot de passe dans les deux champs."
+            let userReset = {
+              email: this.changePassword.emailChangement,
             }
-            else{
-              axios.put("https://back-serverdevoeux.herokuapp.com/api/user/"+this.changePassword.emailChangement,
-                  {
-                    password: this.changePassword.newPassword
-                  }).then(
+            if(this.changePassword.emailChangement === ""){
+              this.changePassword.error = true
+              this.errorMessage = "Remplissez le champ email"
+            }
+            else {
+              axios.post("https://back-serverdevoeux.herokuapp.com/api/reset", userReset)
+                  .then(
                   response => {
+                    this.changePassword.submitted = true
                     this.changePassword.error = false
                     console.log(response)
                     this.changePassword.emailChangement = ""
-                    this.changePassword.newPassword = ""
-                    this.changePassword.newPasswordConfirmed = ""
                   }
               ).catch(error => {
-                console.log(error)
-                this.changePassword.error = true
-                this.changePassword.submitted = false
-                this.changePassword.emailChangement = ""
-                this.changePassword.newPassword = ""
-                this.changePassword.newPasswordConfirmed = ""
-                switch(error.response.status) {
-                  case 404:
-                    this.errorMessage = "Utilisateur inexistant !"
-                    break;
-                  case 204:
-                    this.errorMessage = "Echec mise à jour  !"
-                    break;
-                  default:
-                    this.errorMessage = "Une erreur est survenue lors de votre inscription.. Réessayez !"
-                    break;
-                }
+                  console.log(error)
+                  this.changePassword.error = true
+                  this.changePassword.submitted = false
+                  console.log(error)
+                  switch(error.response.status) {
+                    case 404:
+                      this.errorMessage = "Utilisateur inexistant"
+                      break;
+                    default:
+                      this.errorMessage = "Une erreur est survenue... Réessayez !"
+                      break;
+                  }
               })
             }
           }
         }
     }
-
 </script>
 
 <style scoped>
@@ -476,5 +492,6 @@ a:link, a:visited, a:hover, a:active{
 .logo{
   width: 40%;
 }
+
 
 </style>
