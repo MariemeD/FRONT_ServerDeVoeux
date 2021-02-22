@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Serveur des Voeux</a>
+    <a href="/home">  <img alt="Vue logo" src="../../assets/Logo_Universite_Evry.png" width="160"  class="img-fluid"></a>
     <button
       class="navbar-toggler"
       type="button"
@@ -15,29 +15,30 @@
 
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
+      
         <a class="nav-item nav-link active" href="/professors"
           >Enseignants<span class="sr-only">(current)</span></a
         >
 
         <div class="dropdown">
-          <a class="nav-item nav-link" href="#" data-toggle="dropdown">Enseignements</a>
+          <a class="nav-item nav-link active" href="#" data-toggle="dropdown">Enseignements</a>
           <ul class="dropdown-menu">
             <li>
-              <a class="nav-item nav-link" href="/branch">Enseignements</a>
+              <a class="nav-item nav-link active" href="/branch">Enseignements</a>
             </li>
             <li>
-              <a class="nav-item nav-link" href="#">Enseignement non couvert</a>
+              <a class="nav-item nav-link active" href="/ncours">Enseignement non couvert</a>
             </li>
             <li>
-              <a class="nav-item nav-link" href="/demandes"
+              <a class="nav-item nav-link active" href="/demandes"
                 >Demande d'enseignement</a
               >
             </li>
           </ul>
         </div>
 
-        <a class="nav-item nav-link" href="/profil">Profile</a>
-         <a class="nav-item nav-link" href="/login">Deconnexion</a>
+        <a class="nav-item nav-link active" href="/profil">Profile</a>
+         <a class="nav-item nav-link active" @click="logout()">Deconnexion</a>
       </div>
     </div>
   </nav>
@@ -46,6 +47,7 @@
 <style scoped>
 nav {
   background: linear-gradient(45deg, #8ea3d1, #344c80);
+  
 }
 .navbar-brand {
   font-family: "Lato", "Lucida Grande", "Lucida Sans Unicode", Tahoma,
@@ -53,6 +55,28 @@ nav {
   color: #fff;
   font-size: 20px;
 }
+.navbar-nav{
+  margin-top: 7px;
+}
+a{
+  cursor: pointer;
+}
 
 </style>
+<script>
+export default {
+  name: "Navbar_Prof",
+  methods:{
+     logout() {
+            this.$cookies.remove("emailProfessor")
+            this.$cookies.remove("FnameProfessor")
+            this.$cookies.remove("LnameProfessor")
+            this.$cookies.remove("idUser")
+            this.$cookies.remove("profile")
+            this.$cookies.remove("groupProfessor")
+            this.$router.push("/login")
+        }
+  }
+}
+</script>
 
