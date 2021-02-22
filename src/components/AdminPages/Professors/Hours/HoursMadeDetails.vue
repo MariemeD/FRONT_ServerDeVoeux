@@ -70,9 +70,7 @@
                                 <b>Total heures statuaires:</b><br>
                                 <small style="font-size: 0.7em">( Respectivement CM / TD / TP )</small>
                             </td>
-                            <td>{{ getTotalHoursCM() }}h</td>
-                            <td>{{ getTotalHoursTD() }}h</td>
-                            <td>{{ getTotalHoursTP() }}h</td>
+                            <td colspan="3">{{ professor.service }}h</td>
                         </tr>
                         <tr>
                             <td colspan="2" style="background-color: #6c80ab; color: #D5D5D5">
@@ -82,7 +80,7 @@
                                 <br>
                                 <small style="font-size: 0.7em">( CM / TD / TP confondus )</small>
                             </td>
-                            <td colspan="3">{{ this.getFinalDifference() }}h</td>
+                            <td colspan="3">{{ getFinalDifference() }}h</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -101,8 +99,9 @@ export default {
     components: { Header },
     data() {
         return {
-            lastnameProf: this.$route.params.lastnameProf,
-            firstnameProf: this.$route.params.firstnameProf,
+            professor: {},
+            lastnameProf: this.$cookies.get("currentProfLastname"),
+            firstnameProf: this.$cookies.get("currentProfFirstname"),
             stats: [],
             statsTest: [],
             differenceCM: 0,
@@ -111,6 +110,9 @@ export default {
         }
     },
     created() {
+        axios.get(`https://back-serverdevoeux.herokuapp.com/api/professor/${this.$route.params.emailProf}`).then(response => {
+            this.professor = response.data
+        })
         axios.get(`http://146.59.195.214:8006/api/v1/stats/teacher/matieres/${this.firstnameProf}/${this.lastnameProf}`).then((response) => {
             this.statsTest = response.data
         })
@@ -139,38 +141,17 @@ export default {
                 return 0;
             })
         },
-        getTotalHoursCM() {
-            return Object.values(this.statsTest).reduce((a, b) => a + (b["cmTotal"] || 0), 0)
-        },
-        getTotalHoursTD() {
-            return Object.values(this.statsTest).reduce((a, b) => a + (b["tdTotal"] || 0), 0)
-        },
-        getTotalHoursTP() {
-            return Object.values(this.statsTest).reduce((a, b) => a + (b["tpTotal"] || 0), 0)
-        },
         getDoneHoursCM() {
-            return Object.values(this.statsTest).reduce((a, b) => a + (b["cmDone"] || 0), 0)
+            return Math.ceil(Object.values(this.statsTest).reduce((a, b) => a + (b["cmDone"] || 0), 0) * 100) / 100
         },
         getDoneHoursTD() {
-            return Object.values(this.statsTest).reduce((a, b) => a + (b["tdDone"] || 0), 0)
+            return Math.ceil(Object.values(this.statsTest).reduce((a, b) => a + (b["tdDone"] || 0), 0) * 100) / 100
         },
         getDoneHoursTP() {
-            return Object.values(this.statsTest).reduce((a, b) => a + (b["tpDone"] || 0), 0)
-        },
-        getDifferenceTotalDoneCM() {
-           this.differenceCM = this.getDoneHoursCM() - this.getTotalHoursCM()
-            return this.differenceCM
-        },
-        getDifferenceTotalDoneTD() {
-            this.differenceTD = this.getDoneHoursTD() - this.getTotalHoursTD()
-            return this.differenceTD
-        },
-        getDifferenceTotalDoneTP() {
-            this.differenceTP = this.getDoneHoursTP() - this.getTotalHoursTP()
-            return this.differenceTP
+            return Math.ceil(Object.values(this.statsTest).reduce((a, b) => a + (b["tpDone"] || 0), 0) * 100) / 100
         },
         getFinalDifference() {
-            return this.getDifferenceTotalDoneCM() + this.getDifferenceTotalDoneTD() + this.getDifferenceTotalDoneTP()
+            return Math.ceil(((this.getDoneHoursCM() + this.getDoneHoursTD() + this.getDoneHoursTP()) - this.professor.service) * 100) / 100
         }
     }
 }

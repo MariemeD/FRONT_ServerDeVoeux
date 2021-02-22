@@ -52,18 +52,35 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
-                            <form @submit.prevent="sendComment">
-                                <div class="form-group">
-                                    <label for="exampleFormControlTextarea1" class="form-label">Commentaire :</label>
-                                    <textarea
-                                        class="form-control"
-                                        id="exampleFormControlTextarea1"
-                                        rows="5"
-                                        v-model.lazy="newComment"
-                                        required></textarea>
+                        <!-- ALERTS -->
+                        <div class="container" v-if="formData.isSubmitted || formData.isError">
+                            <transition :duration="5000" name="slide-fade">
+                                <div class="alert alert-info">
+                                    <p class="text-center mb-0">{{ alertMessage }}</p>
                                 </div>
-                                <button class="btn btn-outline-success">Ajouter le commentaire aux demandes</button>
+                            </transition>
+                        </div>
+                        <div class="modal-body">
+                            <form @submit.prevent="changePassword">
+                                <div class="form-group">
+                                    <label for="inputNewPassword" class="form-label">Nouveau mot de passe :</label>
+                                    <input
+                                        class="form-control"
+                                        id="inputNewPassword"
+                                        type="password"
+                                        v-model.lazy="formData.newPassword"
+                                        required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputConfirmedNewPassword" class="form-label">Confirmation du nouveau mot de passe :</label>
+                                    <input
+                                        class="form-control"
+                                        id="inputConfirmedNewPassword"
+                                        type="password"
+                                        v-model.lazy="formData.newPasswordConfirmed"
+                                        required />
+                                </div>
+                                <button class="btn btn-outline-success">Changer de mot de passe</button>
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -106,45 +123,46 @@ export default {
             })
     },
     methods: {
-        passwordChange(){
-            this.changePassword.submitted = true;
-            if (this.changePassword.newPassword !== this.changePassword.newPasswordConfirmed) {
-                this.changePassword.error = true
+        changePassword(){
+            this.formData.isSubmitted = true;
+            if (this.formData.newPassword !== this.formData.newPasswordConfirmed) {
+                this.formData.isError = true
                 this.errorMessage = "Les mots de passe saisis sont différents, assurez vous de mettre le même mot de passe dans les deux champs."
-            }
-            else{
-                axios.put("https://back-serverdevoeux.herokuapp.com/api/user/"+this.changePassword.emailChangement,
+            } else {
+                axios.put(`https://back-serverdevoeux.herokuapp.com/api/user/${this.$cookies.get('emailProfessor')}`,
                     {
-                        password: this.changePassword.newPassword
-                    }).then(
-                    response => {
-                        this.changePassword.error = false
+                        password: this.formData.newPassword
+                    })
+                    .then(response => {
                         console.log(response)
-                        this.changePassword.emailChangement = ""
-                        this.changePassword.newPassword = ""
-                        this.changePassword.newPasswordConfirmed = ""
-                    }
-                ).catch(error => {
+                        this.formData.isError = false
+                        this.formData.newPassword = ""
+                        this.formData.newPasswordConfirmed = ""
+                        this.alertMessage = "Votre mot de passe a bien été changé"
+                        this.refreshPage(2000)
+                    })
+                    .catch(error => {
                     console.log(error)
-                    this.changePassword.error = true
-                    this.changePassword.submitted = false
-                    this.changePassword.emailChangement = ""
-                    this.changePassword.newPassword = ""
-                    this.changePassword.newPasswordConfirmed = ""
+                    this.formData.isError = true
+                    this.formData.isSubmitted = false
+                    this.formData.newPassword = ""
+                    this.formData.newPasswordConfirmed = ""
                     switch(error.response.status) {
-                        case 404:
-                            this.errorMessage = "Utilisateur inexistant !"
-                            break;
                         case 204:
-                            this.errorMessage = "Echec mise à jour  !"
+                            this.errorMessage = "Echec mise à jour !"
                             break;
                         default:
-                            this.errorMessage = "Une erreur est survenue lors de votre inscription.. Réessayez !"
+                            this.errorMessage = "Une erreur est survenue lors du changement de votre mot de passe.. Réessayez !"
                             break;
                     }
                 })
             }
-        }
+        },
+        refreshPage(timeout) {
+            return setTimeout(function() {
+                window.location.reload()
+            }, timeout)
+        },
     }
 }
 </script>

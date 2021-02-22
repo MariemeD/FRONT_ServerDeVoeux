@@ -58,10 +58,10 @@ export default {
                 request.requestor = request.requestor.toLowerCase().trim()
                 this.requests.push(request)
             }
-        })
-        axios.get(`https://back-serverdevoeux.herokuapp.com/api/responsibles`).then(response => {
-            const connectedAdmin = response.data.find(res =>
-                res.email === this.$cookies.get("emailProfessor"))
+        }).catch(error => console.error(error))
+        axios.get(`https://back-serverdevoeux.herokuapp.com/api/responsible/${this.$cookies.get("emailProfessor")}`).then(response => {
+            const connectedAdmin = response.data
+            console.log(connectedAdmin)
             if (!this.$cookies.get("groupProfessor")) {
                 this.$cookies.set("groupProfessor", connectedAdmin.group)
             }
@@ -96,18 +96,22 @@ export default {
             this.$router.push("/login")
         }
     },
-    updated() {
+    /*updated() {
         // TODO Reflexion quand à faire des appels toutes les secondes en cas de nouvelles demandes ou non
-        /*axios.get("https://back-serverdevoeux.herokuapp.com/api/requests").then(response => {
-            for (let request of response.data.filter(request => request.status === "En attente")) {
-                request.requestor = request.requestor.toLowerCase().trim()
+        axios.get("https://back-serverdevoeux.herokuapp.com/api/requests").then(response => {
+            if (this.$cookies.get('profile') === 'responsable') {
+                this.requests = response.data.filter(request => {
+                    return request.groupRequested === this.$cookies.get("groupProfessor")
+                        && request.status === 'En attente'
+                })
+            } else {
+                this.requests = response.data.filter(request => request.status === "En attente")
             }
-            this.requests = response.data
         }).catch(error => {
             console.error("Error on updating Header component")
             console.error(error)
-        })*/
-    }
+        })
+    }*/
 }
 </script>
 

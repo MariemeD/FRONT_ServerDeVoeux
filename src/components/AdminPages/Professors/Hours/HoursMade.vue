@@ -58,9 +58,12 @@
                                 {{ prof.hoursData.Done.tp }}h / {{ prof.hoursData.Total.tp }}h
                             </td>
                         </tr>
+                        <tr v-if="sortedProfessors.length === 0">
+                            <td colspan="4">Vous n'êtes responsable d'aucune filière, vous ne pouvez consulter les heures d'aucun professeur</td>
+                        </tr>
                         </tbody>
                     </table>
-                    <nav aria-label="Page navigation example">
+                    <nav aria-label="Page navigation example" v-if="sortedProfessors.length !== 0">
                         <ul class="pagination justify-content-center">
                             <li class="page-item"><a class="page-link" @click="prevPage">Précédent</a></li>
                             <li class="page-item"><a class="page-link" @click="nextPage">Suivant</a></li>
@@ -111,6 +114,7 @@ export default {
             isLoadingPersonalHours: true,
             hoursData: [],
             professors: [],
+            getAllProfessors: [],
             activeProfessor: {},
             currentSortDirection: '',
             pageSize: 5,
@@ -161,10 +165,12 @@ export default {
         }
     },
     created() {
+        axios.get('http://146.59.195.214:8006/api/v1/teachers/all').then(response => {
+            this.getAllProfessors = response.data
+        })
         axios
             .get(`http://146.59.195.214:8006/api/v1/stats/teacher/details/${this.$cookies.get("FnameProfessor")}/${this.$cookies.get("LnameProfessor")}`)
             .then(response => {
-                console.log(response.data)
                 this.hoursData = response.data
                 this.chartDataCM.datasets[0].data = [
                     response.data.Done.cm,
@@ -189,7 +195,7 @@ export default {
                 ]
                 this.isLoadingPersonalHours = false
             })
-        if (this.$cookies.get("profile") === "responsable") {
+        if (this.$cookies.get('profile') === 'responsable') {
             axios.get(`http://146.59.195.214:8006/api/v1/events/teachers/${this.$cookies.get("groupProfessor")}`).then(response => {
                 for (let prof of response.data) {
                     let firstname = prof.split(" ")[0].replaceAll("_", " ")
@@ -251,7 +257,13 @@ export default {
     methods: {
         setActiveProfessor(professor) {
             this.activeProfessor = professor
-            this.$router.push({name: 'hoursMade-details', params: { lastnameProf: professor.lastname, firstnameProf: professor.firstname }})
+            this.$cookies.set('currentProfLastname', professor.lastname)
+            this.$cookies.set('currentProfFirstname', professor.firstname)
+            professor = this.getAllProfessors.find(pr =>
+                pr.lastName.toLowerCase() === professor.lastname.toLowerCase()
+                && pr.firstName.toLowerCase() === professor.firstname.toLowerCase()
+            )
+            this.$router.push({name: 'hoursMade-details', params: { emailProf: professor.email }})
         },
         /*
         * Inspiration for sorting and pagination :

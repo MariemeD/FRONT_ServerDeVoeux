@@ -144,6 +144,7 @@
                       .then((response) => {
                         for (let prof of response.data) {
                           console.log(prof);
+                          console.log(user.data)
                           if (prof.email === user.data.userLogin.email) {
                             console.log(user.data.userLogin);
                             this.$cookies.set("emailProfessor", prof.email);
@@ -153,6 +154,7 @@
                             this.$cookies.set("profile", user.data.userLogin.profile);
                             console.log(this.$cookies.get("emailProfessor"));
                             console.log(this.$cookies.get("profile"));
+                            console.log(prof)
                           }
                         }
                         if (user.data.userLogin.profile === "professeur") {

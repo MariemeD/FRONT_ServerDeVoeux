@@ -34,7 +34,7 @@
                     <th>Matière</th>
                     <th>Professeurs</th>
                     <th>Statut</th>
-                    <th v-if="$cookies.get('profile') === 'responsable'">Actions</th>
+                    <th v-if="$cookies.get('groupProfessor')">Actions</th>
                 </thead>
                 <tbody>
                 <tr v-for="request in groupConflictByCursus()" :key="request._id">
@@ -52,7 +52,7 @@
                         </span>
                     </td>
                     <td class="text-danger">Conflit</td>
-                    <td v-if="$cookies.get('profile') === 'responsable'">
+                    <td v-if="$cookies.get('groupProfessor')">
                         <!--<button class="btn btn-outline-primary">
                             <font-awesome-icon icon="mail-bulk" />
                             Envoyer un mail à tous
@@ -222,6 +222,18 @@ export default {
             axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${request._id}`, acceptedRequest).then(response => {
                 console.log(response)
                 this.sendAlertMessage(`Le voeu de ${request.requestor} a bien été accepté`)
+                /*axios.post(`https://back-serverdevoeux.herokuapp.com/api/sendMail/`, {
+                    to: request.emailRequestor,
+                    subject: `[SERVEUR DE VOEUX - UNIV EVRY] Votre demande de voeu a été acceptée`,
+                    text: `Bonjour,\n\n
+                    Votre demande de voeu concernant la matière ${request.courseRequested} a bien été acceptée.`
+                }).then(response => {
+                    console.log(response)
+                    console.log("Le mail a bien été envoyé")
+                }).catch(error => {
+                    console.error(error)
+                    console.error("L'envoi du mail a échoué")
+                })*/
                 this.refreshPage(2000)
             }).catch(error => {
                 console.error(error)
@@ -235,6 +247,18 @@ export default {
             axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${request._id}`, refusedRequest).then(response => {
                 console.log(response)
                 this.sendAlertMessage(`Le voeu de ${request.requestor} a bien été refusé`)
+                /*axios.post(`https://back-serverdevoeux.herokuapp.com/api/sendMail/`, {
+                    to: request.emailRequestor,
+                    subject: `[SERVEUR DE VOEUX - UNIV EVRY] Votre demande de voeu a été refusée`,
+                    text: `Bonjour,\n\n
+                    Votre demande de voeu concernant la matière ${request.courseRequested} a été refusée.`
+                }).then(response => {
+                    console.log(response)
+                    console.log("Le mail a bien été envoyé")
+                }).catch(error => {
+                    console.error(error)
+                    console.error("L'envoi du mail a échoué")
+                })*/
                 this.refreshPage(2000)
             }).catch(error => {
                 console.error(error)
@@ -249,6 +273,19 @@ export default {
                     axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${otherConflict._id}`, {status: 'Refusé'}).then(response => {
                         console.log(response)
                         console.log("Les voeux des autres professeurs ont été refusés")
+                        axios.post(`https://back-serverdevoeux.herokuapp.com/api/sendMail/`, {
+                            to: otherConflict.emailRequestor,
+                            subject: `[SERVEUR DE VOEUX - UNIV EVRY] Votre demande de voeu a été refusée`,
+                            text: `Bonjour,\n\n
+                            Suite à un conflit entre plusieurs voeux de vos professeurs
+                            et le votre concernant la matière ${otherConflict.courseRequested}, votre voeu ne vous a pas été accordé`
+                        }).then(response => {
+                            console.log(response)
+                            console.log("Le mail a bien été envoyé")
+                        }).catch(error => {
+                            console.error(error)
+                            console.error("L'envoi du mail a échoué")
+                        })
                     }).catch(error => {
                         console.error(error)
                         console.log("Une erreur est survenue. Les voeux des autres professeurs n'ont pas été refusés")

@@ -51,7 +51,7 @@ export default [
 
     {path: '/admin/enseignants/', name: 'professors', component: Professors },
     {path: '/admin/heures-effectuees', name: 'hoursMade', component: HoursMade },
-    {path: '/admin/heures-effectuees/:lastnameProf/:firstnameProf', name: 'hoursMade-details', component: HoursMadeDetails },
+    {path: '/admin/heures-effectuees/:emailProf', name: 'hoursMade-details', component: HoursMadeDetails },
     {path: '/admin/decharges/', name: 'disclaimers', component: Disclaimers },
     {path: '/admin/decharges/ajouter-une-decharge', name: 'disclaimers-add', component: AddDisclaimer },
     {path: '/admin/decharges/modifier-une-decharge/:idDisclaimer', name: 'disclaimers-edit', component: ModifyDisclaimer },
