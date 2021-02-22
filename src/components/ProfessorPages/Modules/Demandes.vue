@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div v-if="this.$cookies.get('emailProfessor') !== null">
     <Navbar />
     <div class="card">
       <div class="general">
-        <h1>Demandes</h1>
+        <h1>Mes demandes</h1>
 
         <table class="table table-bordered table-striped">
           <thead>
@@ -25,16 +25,27 @@
           <tbody>
             <tr v-for="demande in Demandes" :key="demande">
               <td>{{ demande.courseRequested }}</td>
-              <td>{{ demande.status }}</td>
+              <td   v-bind:class="{
+                            
+                                'text-warning': demande.status === 'En attente',
+                                'text-success': demande.status === 'Validé',
+                                
+                            }">{{ demande.status }}</td>
               <td>
                 <font-awesome-icon
-                 data-toggle="modal"
+                  data-toggle="modal"
                   data-target="#information"
                   icon="eye"
+                  style="color: #55608f;"
                   @click="showRequest(demande.idDemande)"
                 />
-                <font-awesome-icon icon="trash" data-toggle="modal"
-                  data-target="#delete" @click="setCookie(demande)" />
+                <font-awesome-icon
+                  icon="trash"
+                  data-toggle="modal"
+                  data-target="#delete"
+                 style="color: #55608f;"
+                  @click="setCookie(demande)"
+                />
               </td>
             </tr>
           </tbody>
@@ -100,9 +111,9 @@
                     </option>
                   </select>
                 </div>
+
                 <button
                   type="button"
-                 
                   class="btn btn-primary pull-right"
                   id="demande"
                   @click="sendRequest()"
@@ -125,107 +136,134 @@
             </div>
             <div class="modal-body row">
               <form class="col">
-                 <div class="form-group">
-              <label for="prof">Professeur :</label>
-              <input
-                id="prof"
-                class="form-control"
-                type="text"
-                :placeholder="InfoDemande[0].requestor"
-                disabled
-              />
-            </div>
-             <div class="form-group">
-              <label for="prof">Email :</label>
-              <input
-                id="prof"
-                class="form-control"
-                type="text"
-                :placeholder="InfoDemande[0].emailRequestor"
-                disabled
-              />
-            </div>
-             <div class="form-group">
-              <label for="details">Details  :</label>
-              <input
-                id="details"
-                class="form-control"
-                type="text"
-                :placeholder="InfoDemande[0].detailRequest"
-                disabled
-              />
-            </div>
-            <div class="form-group">
-              <label for="group">Groupe  :</label>
-              <input
-                id="group"
-                class="form-control"
-                type="text"
-                :placeholder="InfoDemande[0].groupRequested"
-                disabled
-              />
-            </div>
-            <div class="form-group">
-              <label for="cours">Matière  :</label>
-              <input
-                id="cours"
-                class="form-control"
-                type="text"
-                :placeholder="InfoDemande[0].courseRequested"
-                disabled
-              />
-            </div>
-            <div class="form-group">
-              <label for="status">Statut  :</label>
-              <input
-                id="status"
-                class="form-control"
-                type="text"
-                :placeholder="InfoDemande[0].status"
-                disabled
-              />
-            </div>
-                
+                <div class="form-group">
+                  <label for="prof">Professeur :</label>
+                  <input
+                    id="prof"
+                    class="form-control"
+                    type="text"
+                    :placeholder="InfoDemande[0].requestor"
+                    disabled
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="prof">Email :</label>
+                  <input
+                    id="prof"
+                    class="form-control"
+                    type="text"
+                    :placeholder="InfoDemande[0].emailRequestor"
+                    disabled
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="group">Groupe :</label>
+                  <input
+                    id="group"
+                    class="form-control"
+                    type="text"
+                    :placeholder="InfoDemande[0].groupRequested"
+                    disabled
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="cours">Matière :</label>
+                  <input
+                    id="cours"
+                    class="form-control"
+                    type="text"
+                    :placeholder="InfoDemande[0].courseRequested"
+                    disabled
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="status">Statut :</label>
+                  <input
+                    id="status"
+                    class="form-control"
+                    type="text"
+                    :placeholder="InfoDemande[0].status"
+                    disabled
+                  />
+                </div>
               </form>
             </div>
           </div>
         </div>
       </div>
-          <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-hidden="true">
+      <div
+        class="modal fade"
+        id="delete"
+        tabindex="-1"
+        role="dialog"
+        aria-hidden="true"
+      >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">x</span>
+              </button>
             </div>
             <div class="modal-body">
-              <p v-if="supp=== false">Etes-vous sur de supprimer cette demande ?</p>
-              <p v-if="supp=== true">Vous ne pouvez pas supprimer cette demande</p>
+              <p v-if="supp === false">
+                Etes-vous sur de supprimer cette demande ?
+              </p>
+              <p v-if="supp === true">
+                Vous ne pouvez pas supprimer cette demande
+              </p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary"  @click="deleteRequest(idDemande,demandeStatus)" v-if="supp===false">Supprimer</button>
-              <button type="button"  class="btn btn-secondary" data-dismiss="modal" >Annuler</button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="deleteRequest(idDemande, demandeStatus)"
+                v-if="supp === false"
+              >
+                Supprimer
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Annuler
+              </button>
             </div>
           </div>
         </div>
-          </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="card alert alert-danger alert-dismissible"
+    style="height: 200px; width: 500px; margin-left: 30%; margin-top: 50px"
+    v-else
+  >
+    <div style="margin-top: 50px">
+      Veuillez vous connecter pour accéder aux données. <br />
+      <a href="/login"> Se connecter </a>
     </div>
   </div>
 </template>
 <style scoped>
-h1{
+h1 {
   font-family: Georgia, serif;
   font-size: 40px;
   font-weight: bold;
- 
 }
 .card {
- 
   border: none;
 }
 table {
   width: 70%;
-   
+
   border-collapse: collapse;
   overflow: hidden;
 
@@ -235,7 +273,6 @@ table {
 th,
 td {
   padding: 15px;
-
 }
 
 th {
@@ -243,8 +280,6 @@ th {
   background-color: #55608f;
   color: #eee;
 }
-
-
 
 tbody tr:hover {
   background-color: rgba(255, 255, 255, 0);
@@ -266,8 +301,8 @@ h1 {
   border-color: #55608f;
   background-color: #55608f;
 }
-.btn-secondary{
-  background-color:#55608f;
+.btn-secondary {
+  background-color: #55608f;
 }
 </style>
 <script>
@@ -292,23 +327,26 @@ export default {
       display: false,
       supp: false,
       idDemande: String,
-      demandeStatus: String
+      demandeStatus: String,
     };
   },
   mounted() {
+    //get all professor's requests
     axios
       .get("https://back-serverdevoeux.herokuapp.com/api/requests")
       .then((response) => {
         response.data.forEach((demande) => {
-          this.Demandes.push({
-            idDemande: demande._id,
-            requestor: demande.requestor,
-            emailRequestor: demande.emailRequestor,
-            detailRequest: demande.detailRequest,
-            groupRequested: demande.groupRequested,
-            courseRequested: demande.courseRequested,
-            status: demande.status,
-          });
+          if (demande.emailRequestor === this.$cookies.get("emailProfessor")) {
+            this.Demandes.push({
+              idDemande: demande._id,
+              requestor: demande.requestor,
+              emailRequestor: demande.emailRequestor,
+              detailRequest: demande.detailRequest,
+              groupRequested: demande.groupRequested,
+              courseRequested: demande.courseRequested,
+              status: demande.status,
+            });
+          }
         });
       });
   },
@@ -320,19 +358,16 @@ export default {
         return cache[elem.branchName] ? 0 : (cache[elem.branchName] = 1);
       });
 
-      //  console.log(unique);
       return unique;
     },
     changeVal() {
       var BranchName = document.getElementById("mySelect").value;
       this.Branches = [];
-      //console.log(BranchName);
+
       axios
         .get("http://146.59.195.214:8006/api/v1/events/filieres")
         .then((response) => {
           response.data.forEach((branch) => {
-            //  console.log("pst")
-
             if (BranchName === "L1") {
               console.log("l1");
 
@@ -401,8 +436,6 @@ export default {
                     this.branch_Name = this.branch_Name + "-Apprentissage";
                   }
 
-                  //this.branch_Name = this.firstSplit.split("L3")[1];
-                  // console.log(this.firstSplit.split("L3"));
                   if (this.branch_Name === "CIL") {
                     this.branch_Name = "CILS";
                   }
@@ -495,15 +528,16 @@ export default {
     sendRequest() {
       axios
         .post("https://back-serverdevoeux.herokuapp.com/api/request", {
-          requestor: "Didier Courtaud",
-          emailRequestor: "didier.courtaud@univ-evry.fr",
-          detailRequest: "demande de voeux",
+          requestor:
+            this.$cookies.get("FnameProfessor") +
+            " " +
+            this.$cookies.get("LnameProfessor"),
+          emailRequestor: this.$cookies.get("emailProfessor"),
           groupRequested: document.getElementById("branch").value,
           courseRequested: document.getElementById("matiere").value,
-          status: "En Attente",
+          status: "En attente",
         })
         .then(function (response) {
-          
           console.log(response);
           window.location.reload();
         });
@@ -533,22 +567,17 @@ export default {
       this.idDemande = this.$cookies.get("demande");
       this.$cookies.set("status", demande.status);
       this.demandeStatus = this.$cookies.get("status");
-       if(this.demandeStatus !== "En Attente"){
-          this.supp = true
-       }
+      if (this.demandeStatus !== "En attente") {
+        this.supp = true;
+      }
     },
     deleteRequest(id) {
-     
-
-          axios
+      axios
         .delete("https://back-serverdevoeux.herokuapp.com/api/request/" + id)
         .then((response) => {
           console.log(response);
           window.location.reload();
         });
-     
-   
-     
     },
   },
 };
