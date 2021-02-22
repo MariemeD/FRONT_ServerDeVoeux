@@ -9,8 +9,7 @@ import Profil from "./components/ProfessorPages/Profile";
 //modules
 
 
-//import DetailsModule from "./components/ProfessorPages/Modules/Details_Module";
-import EditModule from "./components/ProfessorPages/Modules/Edit_Module";
+
 import Demandes from "./components/ProfessorPages/Modules/Demandes";
 
 //Filiere
@@ -87,16 +86,16 @@ export default [
     // Professor routes
     {path: '/professors', component: Professor},
     {path: '/professorService', component: ProfessorService},
+    {path: '/professorService/:emailProf', component: ProfessorService},
 
     //Modules
-    //{path: '/detailsModule', component: DetailsModule},
-    {path: '/detailsModule', component: EditModule},
+
     {path: '/demandes', component: Demandes},
 
     //Branch
     {path: '/branch', component: Branch},
     {path: '/detailsBranch', component: DetailsBranch},
     {path: '/ncours', component: NCours}
-    // Professors routes
+  
 
 ]

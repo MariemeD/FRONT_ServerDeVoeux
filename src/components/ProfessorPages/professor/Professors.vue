@@ -1,5 +1,5 @@
 <template>
-  <div class="table-responsive">
+  <div class="table-responsive" v-if="this.$cookies.get('emailProfessor') !== null">
     <!-- navbar with links to others pages-->
     <Navbar />
     <h2>Liste des Enseignants</h2>
@@ -28,6 +28,10 @@
       </tbody>
     </table>
   </div>
+  <div class="card alert alert-danger alert-dismissible" style="height: 200px; width: 500px; margin-left:30%; margin-top:50px;" v-else>
+    <div style="margin-top:50px" > Veuillez vous connecter pour accéder aux données. <br> <a href="/login">
+        Se connecter </a></div>
+  </div>
 </template>
 
 <style scoped>
@@ -37,7 +41,7 @@ h2 {
   font-family: Georgia, serif;
   font-size: 40px;
   font-weight: bold;
-  margin-top: 30px;
+  margin-top: 50px;
 }
 table {
   width: 90%;
@@ -154,8 +158,8 @@ export default {
   },
 
   mounted() {
-   
-
+  
+    // get List od professors
     axios
       .get("http://146.59.195.214:8006/api/v1/teachers/all")
       .then((response) => {
@@ -163,6 +167,7 @@ export default {
           if (prof.department === "Département d&#039;Informatique") {
             prof.department = "Département Informatique";
           }
+          // get Professor's details
       axios
             .get(
               "http://146.59.195.214:8006/api/v1/stats/teacher/details/" +
@@ -172,7 +177,7 @@ export default {
             )
             .then((service) => {
                
-                
+          
                 this.professors.push({
                   firstName: prof.firstName,
                   lastName: prof.lastName,
@@ -205,8 +210,6 @@ export default {
     setCookie(prof) {
       this.$cookies.set("prof", prof);
       console.log(this.$cookies.get("prof"));
-      //  this.$cookies.set("lastName", lastName);
-      // this.$cookies.set("email", email);
       this.$router.push("/professorService");
     },
   },

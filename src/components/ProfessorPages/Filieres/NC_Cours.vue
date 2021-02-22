@@ -1,29 +1,47 @@
 <template>
-  <div class="table-responsive">
+  <div
+    class="table-responsive"
+    v-if="this.$cookies.get('emailProfessor') !== null"
+  >
     <!-- navbar with links to others pages-->
     <Navbar />
     <h2>Liste des Enseignants</h2>
-    <table class="table table-bordered table-striped">
+    <div class="progress mt-4" v-if="isLoading">
+      <div
+        class="progress-bar progress-bar-striped progress-bar-animated"
+        role="progressbar"
+        aria-valuenow="90"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        style="width: 90%; background-color: #536895"
+      ></div>
+    </div>
+    <table class="table table-bordered table-striped" v-else>
       <thead>
         <tr>
-          <th @click="sortLastName()">Filiere</th>
-          <th @click="sortFirstName()">Matière</th>
-          <th>Cours</th>
-          <th>TD</th>
-          <th>TP</th>
+          <th @click="sortFiliere()">Filiere</th>
+          <th @click="sortMatiere()">Matière</th>
+          <th>Volume d'heure par groupe</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="info in matInfo" :key="info">
-          
           <td>{{ info.filiere }}</td>
           <td>{{ info.cours }}</td>
-          <td>test</td>
-          <td>test</td>
-          <td>test</td>
+          <td>{{ info.nbrCours }}</td>
         </tr>
       </tbody>
     </table>
+  </div>
+  <div
+    class="card alert alert-danger alert-dismissible"
+    style="height: 200px; width: 500px; margin-left: 30%; margin-top: 50px"
+    v-else
+  >
+    <div style="margin-top: 50px">
+      Veuillez vous connecter pour accéder aux données. <br />
+      <a href="/login"> Se connecter </a>
+    </div>
   </div>
 </template>
 
@@ -147,42 +165,38 @@ export default {
   data() {
     return {
       professors: [],
-      matInfo:[],
-      matN:[],
+      matInfo: [],
+      matN: [],
+      isLoading: true,
     };
   },
 
   mounted() {
+    // get Non covered cours
     axios
       .get("http://146.59.195.214:8006/api/v1/events/matieres")
       .then((response) => {
-       // console.log(response)
         response.data.forEach((matiere) => {
-            
-          if (matiere !== ""){
-            
-          //  console.log("in")
+          if (matiere !== "") {
             axios
               .get(
                 "http://146.59.195.214:8006/api/v1/events/teacher/" + matiere
               )
               .then((prof) => {
-             //   console.log(matiere +"        "+ prof.data.length);
                 if (prof.data.length === 0) {
                   this.professors.push({
-                    name: matiere,
+                    matiere: matiere,
                   });
                 }
-             //   console.log(this.professors);
               });
           }
         });
       });
-
+      //get branch of NC cours
     axios
       .get("http://146.59.195.214:8006/api/v1/events/filieres")
       .then((response) => {
-        //  console.log(response);
+       
         response.data.forEach((filiere) => {
           if (
             filiere !== "DEPOT DE DEVOIR(SFA" &&
@@ -198,48 +212,39 @@ export default {
               )
               .then((matr) => {
                 matr.data.forEach((mat) => {
-                  //    console.log(matr);
-                  this.professors.forEach((cours) => {
-                    //console.log(cours.name)
-                    if (cours.name === mat) {
+                
+                  this.professors.forEach((val) => {
+                    if (val.matiere === mat) {
                       this.matInfo.push({
-                        cours: cours.name,
+                        cours: val.matiere,
                         filiere: filiere,
-
+                        nbrCours: "21.0h",
                       });
                     }
-                   this.matN = this.removeDuplicate(this.matInfo);
-                    
                   });
-                  
+
+                  this.matN = this.removeDuplicate(this.matInfo);
+                  this.isLoading = false;
                 });
               });
-              
           }
         });
       });
   },
   methods: {
-    sortLastName() {
+    sortMatiere() {
       this.professors.sort((a, b) => {
-        if (a.lastName < b.lastName) return -1;
-        else if (a.lastName == b.lastName) return 0;
+        if (a.cours < b.cours) return -1;
+        else if (a.cours == b.cours) return 0;
         else return 1;
       });
     },
-    sortFirstName() {
+    sortFiliere() {
       this.professors.sort((a, b) => {
-        if (a.firstName < b.firstName) return -1;
-        else if (a.firstName == b.firstName) return 0;
+        if (a.filiere < b.filiere) return -1;
+        else if (a.filiere == b.filiere) return 0;
         else return 1;
       });
-    },
-    setCookie(prof) {
-      this.$cookies.set("prof", prof);
-      console.log(this.$cookies.get("prof"));
-      //  this.$cookies.set("lastName", lastName);
-      // this.$cookies.set("email", email);
-      this.$router.push("/professorService");
     },
     removeDuplicate(table) {
       let unique = [];

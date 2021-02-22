@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="this.$cookies.get('emailProfessor') !== null">
     <Navbar />
     <div class="title">
       <h2>Liste des Enseignements</h2>
@@ -12,9 +12,7 @@
         <table v-for="branch in M2N" :key="branch">
           <tr>
             <td @click="setCookie(branch)">
-             
-                {{ branch.branchName }}
-           
+              {{ branch.branchName }}
             </td>
           </tr>
         </table>
@@ -25,9 +23,7 @@
         <table v-for="branch in M1N" :key="branch">
           <tr>
             <td @click="setCookie(branch)">
-             
-                {{ branch.branchName }}
-              
+              {{ branch.branchName }}
             </td>
           </tr>
         </table>
@@ -38,9 +34,7 @@
         <table v-for="branch in L3N" :key="branch">
           <tr>
             <td @click="setCookie(branch)">
-             
-                {{ branch.branchName }}
-              
+              {{ branch.branchName }}
             </td>
           </tr>
         </table>
@@ -51,9 +45,7 @@
         <table v-for="branch in L2N" :key="branch">
           <tr>
             <td @click="setCookie(branch)">
-             
-                {{ branch.branchName }}
-            
+              {{ branch.branchName }}
             </td>
           </tr>
         </table>
@@ -64,13 +56,21 @@
         <table v-for="branch in L1N" :key="branch">
           <tr>
             <td @click="setCookie(branch)">
-               
-                {{ branch.branchName }}
-            
+              {{ branch.branchName }}
             </td>
           </tr>
         </table>
       </div>
+    </div>
+  </div>
+  <div
+    class="card alert alert-danger alert-dismissible"
+    style="height: 200px; width: 500px; margin-left: 30%; margin-top: 50px"
+    v-else
+  >
+    <div style="margin-top: 50px">
+      Veuillez vous connecter pour accéder aux données. <br />
+      <a href="/login"> Se connecter </a>
     </div>
   </div>
 </template>
@@ -109,7 +109,7 @@ hr {
   display: block;
   border: none;
   height: 3px;
-  background-color: #C9893C;
+  background-color: #c9893c;
   margin-top: 15px;
 
   -webkit-animation-name: line-show; /* Safari 4.0 - 8.0 */
@@ -153,17 +153,17 @@ export default {
       M2: [],
       M2N: [],
       info: [],
-      infoN:[],
+      infoN: [],
       firstSplit: String,
       branch_Name: String,
       originalName: String,
     };
   },
   mounted() {
+    //get all branchs
     axios
       .get("http://146.59.195.214:8006/api/v1/events/filieres")
       .then((response) => {
-        console.log(this.L1);
         response.data.forEach((branch) => {
           if (branch.startsWith("L1")) {
             this.firstSplit = branch.split("-")[0];
@@ -185,12 +185,12 @@ export default {
             });
 
             this.L1N = this.removeDuplicate(this.L1);
-            this.L1N.forEach((val)=>{
+            this.L1N.forEach((val) => {
               this.info.push({
                 branchName: val.branchName,
                 branchCookie: val.branchCookie,
               });
-            })
+            });
           }
           if (branch.startsWith("L2")) {
             this.firstSplit = branch.split("-")[0];
@@ -213,14 +213,14 @@ export default {
               branchCookie: "L2" + this.originalName,
             });
             this.L2N = this.removeDuplicate(this.L2);
-             this.L2N.forEach((val)=>{
+            this.L2N.forEach((val) => {
               this.info.push({
                 branchName: val.branchName,
                 branchCookie: val.branchCookie,
               });
-            })
+            });
           }
-        //  console.log(this.removeDuplicate(this.info))
+
           if (branch.startsWith("L3")) {
             if (branch.indexOf("-") > -1) {
               this.branch_Name = branch.split("-")[1];
@@ -230,8 +230,6 @@ export default {
                 this.branch_Name = this.branch_Name + "-Apprentissage";
               }
 
-              //this.branch_Name = this.firstSplit.split("L3")[1];
-              // console.log(this.firstSplit.split("L3"))
               if (this.branch_Name === "CIL") {
                 this.branch_Name = "CILS";
               }
@@ -249,12 +247,12 @@ export default {
               branchCookie: "L3" + this.originalName,
             });
             this.L3N = this.removeDuplicate(this.L3);
-             this.L3N.forEach((val)=>{
+            this.L3N.forEach((val) => {
               this.info.push({
                 branchName: val.branchName,
                 branchCookie: val.branchCookie,
               });
-            })
+            });
           }
           if (branch.startsWith("M1")) {
             this.firstSplit = branch.split("-")[0];
@@ -275,12 +273,12 @@ export default {
               branchCookie: "M1" + this.originalName,
             });
             this.M1N = this.removeDuplicate(this.M1);
-             this.M1N.forEach((val)=>{
+            this.M1N.forEach((val) => {
               this.info.push({
                 branchName: val.branchName,
                 branchCookie: val.branchCookie,
               });
-            })
+            });
           }
           if (branch.startsWith("M2")) {
             this.firstSplit = branch.split("-")[0];
@@ -303,14 +301,13 @@ export default {
             });
 
             this.M2N = this.removeDuplicate(this.M2);
-              this.M2N.forEach((val)=>{
+            this.M2N.forEach((val) => {
               this.info.push({
                 branchName: val.branchName,
                 branchCookie: val.branchCookie,
               });
-            })
-        this.infoN = this.removeDuplicate(this.info);
-        console.log(this.infoN)
+            });
+            this.infoN = this.removeDuplicate(this.info);
           }
         });
       });
@@ -322,14 +319,13 @@ export default {
       unique = table.filter(function (elem) {
         return cache[elem.branchCookie] ? 0 : (cache[elem.branchCookie] = 1);
       });
-      
-    //  console.log(unique);
+
       return unique;
     },
-    
+
     setCookie(item) {
       this.$cookies.set("filiere", item);
-      console.log(this.$cookies.get("filiere"))
+      console.log(this.$cookies.get("filiere"));
       this.$router.push("/detailsBranch");
     },
   },

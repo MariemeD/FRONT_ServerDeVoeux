@@ -16,7 +16,8 @@ import {
   faSortDown,
   faSortUp,
   faSort,
-  faEdit
+  faEdit,
+  faArrowAltCircleRight
 } from "@fortawesome/free-solid-svg-icons";
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -39,6 +40,7 @@ Vue.use(VueCookies)
 library.add(faServer)
 library.add(faUsers)
 library.add(faBook)
+library.add(faArrowAltCircleRight)
 
 library.add(faEye)
 library.add(faTrash)

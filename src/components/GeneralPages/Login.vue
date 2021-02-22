@@ -104,11 +104,13 @@
                     this.connexion.password
                 )
                 .then((user) => {
+                  console.log(user.data);
                   axios
                       .get("https://back-serverdevoeux.herokuapp.com/api/professors")
                       .then((response) => {
+                        console.log(response.data);
                         for (let prof of response.data) {
-                          console.log(prof);
+                       
                           if (prof.email === user.data.userLogin.email) {
                             console.log(user.data.userLogin);
                             this.$cookies.set("emailProfessor", prof.email);
@@ -118,10 +120,11 @@
                             this.$cookies.set("profile", user.data.userLogin.profile);
                             console.log(this.$cookies.get("emailProfessor"));
                             console.log(this.$cookies.get("profile"));
+                            this.$cookies.set("prof", prof)
                           }
                         }
                         if (user.data.userLogin.profile === "professeur") {
-                          this.$router.push("/professors");
+                          this.$router.push("/home");
                           $('#myModal').modal('hide')
                           this.$refs['myModal'].hide();
                         } else {

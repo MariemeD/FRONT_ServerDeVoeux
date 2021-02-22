@@ -1,14 +1,26 @@
 <template>
-  <div>
+  <div v-if="this.$cookies.get('emailProfessor') !== null">
     <Navbar />
+
     <div class="modules">
       <div class="card" id="infos">
         <div class="additional">
           <div class="info-card">
-            <h3>{{ branchName }}</h3>
-            <h3>Responsable : email</h3>
+            <h6>{{ branchName }}</h6>
+            <h6>Responsable : {{ responsableName }}</h6>
+            <h6>Email : {{ responsableEmail }}</h6>
           </div>
         </div>
+      </div>
+      <div class="progress mt-4" v-if="isLoading">
+        <div
+          class="progress-bar progress-bar-striped progress-bar-animated"
+          role="progressbar"
+          aria-valuenow="90"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          style="width: 90%; background-color: #536895"
+        ></div>
       </div>
       <div class="card" id="details">
         <div class="general">
@@ -21,6 +33,7 @@
                 <th>Cours</th>
                 <th>TD</th>
                 <th>TP</th>
+                <th>Enseignant</th>
               </tr>
             </thead>
             <tbody>
@@ -30,6 +43,7 @@
                 <td>{{ mat.nbCours }}</td>
                 <td>{{ mat.nbTD }}</td>
                 <td>{{ mat.nbTP }}</td>
+                <td>{{ mat.profName }}</td>
               </tr>
             </tbody>
           </table>
@@ -37,12 +51,22 @@
       </div>
     </div>
   </div>
+  <div
+    class="card alert alert-danger alert-dismissible"
+    style="height: 200px; width: 500px; margin-left: 30%; margin-top: 50px"
+    v-else
+  >
+    <div style="margin-top: 50px">
+      Veuillez vous connecter pour accéder aux données. <br />
+      <a href="/login"> Se connecter </a>
+    </div>
+  </div>
 </template>
 <style scoped>
 #infos {
   width: 200px;
   margin-left: 10px;
-  margin-top: 40px;
+  margin-top: 120px;
 
   height: 400px;
 }
@@ -69,7 +93,7 @@ td {
   margin-top: 5%;
   cursor: pointer;
 }
-h3 {
+h6 {
   color: #fff;
   margin-top: 40px;
 }
@@ -211,19 +235,36 @@ export default {
     return {
       matieres: [],
       branchName: String,
-      cmDone:Number,
-      tdDone:Number,
-      tpDone:Number,
-      matN:[],
+      cmDone: Number,
+      tdDone: Number,
+      tpDone: Number,
+      matN: [],
+      ProfN: String,
+      responsableName: String,
+      responsableEmail: String,
+      isLoading: true,
     };
   },
 
   mounted() {
-    
     this.branchName =
       this.$cookies.get("filiere").branchCookie.substring(0, 2) +
       " " +
       this.$cookies.get("filiere").branchName;
+    //get responsable information
+    axios
+      .get(
+        "https://back-serverdevoeux.herokuapp.com/api/responsible/" +
+          this.$cookies.get("filiere").branchCookie +
+          "/responsibles"
+      )
+      .then((response) => {
+        response.data.forEach((val) => {
+          this.responsableName = val.lastname + " " + val.firstname;
+          this.responsableEmail = val.email;
+        });
+      });
+    //get branch information
     axios
       .get(
         "http://146.59.195.214:8006/api/v1/events/" +
@@ -233,65 +274,65 @@ export default {
       .then((response) => {
         console.log(this.$cookies.get("filiere").branchCookie);
         response.data.forEach((matiere) => {
-          axios
-            .get("http://146.59.195.214:8006/api/v1/events/teacher/" + matiere)
-            .then((prof) => {
-              if (prof.data.length !== 0) {
-                prof.data.forEach((val) => {
-                //  console.log(val.split(" ")[0]);
-
-                  axios
-                    .get(
-                      "http://146.59.195.214:8006/api/v1/stats/teacher/matieres/" +
-                        val.split(" ")[0] +
-                        "/" +
-                        val.split(" ")[1]
-                    )
-                    .then((response) => {
-                      this.cmDone = 0;
-                      this.tdDone = 0;
-                      this.tpDone = 0;
-                   // console.log(response.data.get(key))
-                    for( var i in response.data){
-               //       console.log(response.data[i])
-                    this.cmDone = this.cmDone + response.data[i].cmDone;
-                    this.tdDone = this.tdDone + response.data[i].tdDone;
-                    this.tpDone=  this.tpDone + response.data[i].tpDone;
-                   
-                  //   console.log(this.professors);
-}
-//console.log(this.cmDone)
-                  this.matieres.push({
-                    brName: this.$cookies.get("filiere").branchName,
-                    brCookie: this.$cookies.get("filiere").branchCookie,
-                    matiereName: matiere,
-                    nbCours:this.cmDone,
-                    nbTD: this.tdDone,
-                    nbTP: this.tpDone
+          (this.ProfN = ""),
+            axios
+              .get(
+                "http://146.59.195.214:8006/api/v1/events/teacher/" + matiere
+              )
+              .then((prof) => {
+                if (prof.data.length !== 0) {
+                  console.log(prof.data);
+                  prof.data.forEach((val) => {
+                    axios
+                      .get(
+                        "http://146.59.195.214:8006/api/v1/stats/teacher/matieres/" +
+                          val.split(" ")[0] +
+                          "/" +
+                          val.split(" ")[1]
+                      )
+                      .then((response) => {
+                        for (var i in response.data) {
+                          if (i === matiere) {
+                            this.matieres.push({
+                              brName: this.$cookies.get("filiere").branchName,
+                              brCookie: this.$cookies.get("filiere")
+                                .branchCookie,
+                              matiereName: matiere,
+                              nbCours: response.data[i].cmDone,
+                              nbTD: response.data[i].tdDone,
+                              nbTP: response.data[i].tpDone,
+                              profName: val,
+                            });
+                          }
+                        }
+                        this.matN = this.removeDuplicate(this.matieres);
+                        console.log(this.matN);
+                      });
                   });
-                   
-                   this.matN = this.removeDuplicate(this.matieres)
-                   console.log(this.matN)
-                  });
-                });
-              }
-            });
+                }
+              });
         });
       });
+    this.isLoading = false;
     console.log(this.matieres);
   },
-   methods: {
+  methods: {
     removeDuplicate(table) {
       let unique = [];
       var cache = {};
       unique = table.filter(function (elem) {
         return cache[elem.matiereName] ? 0 : (cache[elem.matiereName] = 1);
       });
-      
-    //  console.log(unique);
+
+      //  console.log(unique);
       return unique;
     },
- 
+    setCookie(item) {
+      this.$cookies.set("hours", item.nbCours);
+      this.$cookies.set("cours", item.matiereName);
+
+      this.$router.push("/detailsMatiere");
+    },
   },
 };
 </script>
