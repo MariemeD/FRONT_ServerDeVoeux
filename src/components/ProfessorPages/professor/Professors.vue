@@ -1,12 +1,12 @@
 <template>
-  <div class="table-responsive">
+  <div class="table-responsive" v-if="this.$cookies.get('emailProfessor') !== null">
     <!-- navbar with links to others pages-->
     <Navbar />
     <h2>Liste des Enseignants</h2>
     <table class="table table-bordered table-striped">
       <thead>
-        <tr  >
-          <th  @click="sortLastName()">Nom</th>
+        <tr>
+          <th @click="sortLastName()">Nom</th>
           <th @click="sortFirstName()">Prenom</th>
           <th>Origine</th>
           <th>Statut</th>
@@ -14,7 +14,7 @@
           <th>Servcie Efféctué</th>
         </tr>
       </thead>
-      <tbody >
+      <tbody>
         <tr v-for="prof in professors" :key="prof">
           <td @click="setCookie(prof)">
             {{ prof.lastName }}
@@ -23,10 +23,14 @@
           <td>{{ prof.origin }}</td>
           <td>{{ prof.status }}</td>
           <td>{{ prof.serviceStatutaire }}</td>
-          <td>200</td>
+          <td>{{ prof.serviceEffectue }}</td>
         </tr>
       </tbody>
     </table>
+  </div>
+  <div class="card alert alert-danger alert-dismissible" style="height: 200px; width: 500px; margin-left:30%; margin-top:50px;" v-else>
+    <div style="margin-top:50px" > Veuillez vous connecter pour accéder aux données. <br> <a href="/login">
+        Se connecter </a></div>
   </div>
 </template>
 
@@ -37,31 +41,28 @@ h2 {
   font-family: Georgia, serif;
   font-size: 40px;
   font-weight: bold;
-  margin-top: 30px;
+  margin-top: 50px;
 }
 table {
   width: 90%;
   margin-left: 5%;
   border-collapse: collapse;
   overflow: hidden;
- 
+
   margin-top: 30px;
 }
 
 th,
 td {
   padding: 15px;
-  
-  
 }
 
 th {
   text-align: center;
   cursor: pointer;
-   background-color: #55608f;
+  background-color: #55608f;
   color: #eee;
 }
-
 
 tbody td {
   position: relative;
@@ -94,7 +95,7 @@ tbody tr:hover {
   }
 
   tr {
-    border: 2px solid #eee;
+    border: 1px solid #eee;
   }
 
   td {
@@ -157,36 +158,50 @@ export default {
   },
 
   mounted() {
+  
+    // get List od professors
     axios
-      .get("https://back-serverdevoeux.herokuapp.com/api/professors")
+      .get("http://146.59.195.214:8006/api/v1/teachers/all")
       .then((response) => {
         response.data.forEach((prof) => {
           if (prof.department === "Département d&#039;Informatique") {
             prof.department = "Département Informatique";
           }
-          this.professors.push({
-            firstName: prof.firstName,
-            lastName: prof.lastName,
-            origin: prof.department,
-            email: prof.email,
-            status: prof.status,
-            serviceStatutaire: prof.service,
-          });
+          // get Professor's details
+      axios
+            .get(
+              "http://146.59.195.214:8006/api/v1/stats/teacher/details/" +
+                prof.firstName +
+                "/" +
+                prof.lastName
+            )
+            .then((service) => {
+               
+          
+                this.professors.push({
+                  firstName: prof.firstName,
+                  lastName: prof.lastName,
+                  origin: prof.department,
+                  email: prof.email,
+                  status: prof.status,
+                  serviceStatutaire: prof.service,
+                  serviceEffectue: service.data.Done.cm +service.data.Done.td +service.data.Done.tp
+                });
+           
+            });
         });
       });
   },
   methods: {
     sortLastName() {
       this.professors.sort((a, b) => {
-        
         if (a.lastName < b.lastName) return -1;
         else if (a.lastName == b.lastName) return 0;
         else return 1;
       });
     },
-     sortFirstName() {
+    sortFirstName() {
       this.professors.sort((a, b) => {
-      
         if (a.firstName < b.firstName) return -1;
         else if (a.firstName == b.firstName) return 0;
         else return 1;
@@ -195,8 +210,6 @@ export default {
     setCookie(prof) {
       this.$cookies.set("prof", prof);
       console.log(this.$cookies.get("prof"));
-      //  this.$cookies.set("lastName", lastName);
-      // this.$cookies.set("email", email);
       this.$router.push("/professorService");
     },
   },

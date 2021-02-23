@@ -7,22 +7,27 @@
     <h3>2020 - 2021</h3>   
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"> Connexion </button> <!-- The Modal -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal2"> Inscription </button> <!-- The Modal -->
-    <!--<div class="visiteur"> <a href="/professors" class="linkVisiteur">Liste des professeurs</a> </div>
-    <div class="visiteur"> <a href="/branch" class="linkVisiteur">Liste des enseignements</a> </div>
-    <div class="visiteur"> <a href="#" class="linkVisiteur">Liste des enseignements non couverts</a> </div>-->
     <div class="modal fade" id="myModal">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <!-- Modal Header -->
           <div class="modal-header">
-            <div class="modal-title"><p>Serveur de voeux</p></div>
+            <div class="modal-title"><h4 style="color: white">Serveur de voeux</h4></div>
           </div> <!-- Modal body -->
           <div class="modal-body">
             <p class="title"> Connexion </p>
+            <!-- ALERTS -->
+            <transition name="slide-fade">
+            </transition>
+            <transition>
+              <div class="alert alert-danger alert-dismissible" v-if="connexion.error">
+                {{ errorMessage }}
+              </div>
+            </transition>
             <form>
               <div class="input-group"> <input class="input--style-3" type="text" placeholder="Login*" name="email" v-model.lazy="connexion.email"> </div>
               <div class="input-group"> <input class="input--style-3" type="password" placeholder="Password*" name="password" v-model.lazy="connexion.password"> </div>
-              <div class="extra"> <a href="#"><u>I forgot my password</u></a> </div>
+              <div class="extra"> <a data-toggle="modal" data-target="#myModal3" ><u>Mot de passe oublié</u></a> </div>
               <div class="p-t-10"><button class="btn btn--pill btn--signin" @click.stop.prevent="Login()">CONNEXION</button></div>
             </form>
           </div>
@@ -34,7 +39,7 @@
         <div class="modal-content">
           <!-- Modal Header -->
           <div class="modal-header">
-            <div class="modal-title"><p>Serveur de voeux</p></div>
+            <div class="modal-title"><h4 style="color: white">Serveur de voeux</h4></div>
           </div> <!-- Modal body -->
           <div class="modal-body">
             <p class="title"> Inscription </p>
@@ -54,6 +59,37 @@
               <div class="input-group"> <input class="input--style-3" type="password" placeholder="Mot de passe*" name="password" v-model.lazy="inscription.passwordInscription"> </div>
               <div class="input-group"> <input class="input--style-3" type="password" placeholder="Confirmer mot de passe*" name="passwordConfirmed" v-model.lazy="inscription.passwordConfirmed"> </div>
               <div class="p-t-10"><button class="btn btn--pill btn--signin" @click.stop.prevent="Register()">S'INSCRIRE</button></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="myModal3">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <div class="modal-title"><h4 style="color: white">Serveur de voeux</h4></div>
+          </div> <!-- Modal body -->
+          <div class="modal-body">
+            <p class="title"> Changement de mot de passe </p>
+            <!-- ALERTS -->
+            <transition name="slide-fade">
+              <div class="alert alert-success" v-if="changePassword.submitted && !changePassword.error">
+                Nouveau mot de passe envoyé
+                Veuillez le changer à votre prochaine connexion
+              </div>
+            </transition>
+            <transition>
+              <div class="alert alert-danger alert-dismissible" v-if="changePassword.error">
+                {{ errorMessage }}
+              </div>
+            </transition>
+            <form>
+              <div class="input-group"> <input class="input--style-3" type="text" placeholder="Email*" name="email" v-model.lazy="changePassword.emailChangement"> </div>
+              <!--<div class="input-group"> <input class="input--style-3" type="password" placeholder="Nouveau Mot de passe*" name="password" v-model.lazy="changePassword.newPassword"> </div>
+              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Confirmer nouveau mot de passe*" name="passwordConfirmed" v-model.lazy="changePassword.newPasswordConfirmed"> </div>-->
+              <div class="p-t-10"><button class="btn btn--pill btn--signin" @click.stop.prevent="passwordChange()" type="submit">CHANGER MOT DE PASSE</button></div>
             </form>
           </div>
         </div>
@@ -79,7 +115,8 @@
             email: "",
             password: "",
             wrong: "",
-            submitted: ""
+            submitted: "",
+            error: false
           },
           inscription:{
             emailInscription: "",
@@ -89,6 +126,14 @@
             error: false,
             submitted: false,
           },
+          changePassword:{
+            emailChangement: "",
+            newPassword: "",
+            newPasswordConfirmed: "",
+            error: false,
+            submitted: false
+          }
+          ,
           errorMessage: ""
         };
       },
@@ -104,11 +149,12 @@
                     this.connexion.password
                 )
                 .then((user) => {
+                  console.log(user.data);
                   axios
                       .get("https://back-serverdevoeux.herokuapp.com/api/professors")
                       .then((response) => {
+                        console.log(response.data);
                         for (let prof of response.data) {
-                          console.log(prof);
                           if (prof.email === user.data.userLogin.email) {
                             console.log(user.data.userLogin);
                             this.$cookies.set("emailProfessor", prof.email);
@@ -118,10 +164,11 @@
                             this.$cookies.set("profile", user.data.userLogin.profile);
                             console.log(this.$cookies.get("emailProfessor"));
                             console.log(this.$cookies.get("profile"));
+                            this.$cookies.set("prof", prof)
                           }
                         }
                         if (user.data.userLogin.profile === "professeur") {
-                          this.$router.push("/professors");
+                          this.$router.push("/home");
                           $('#myModal').modal('hide')
                           this.$refs['myModal'].hide();
                         } else {
@@ -133,26 +180,100 @@
                 })
                 .catch((error) => {
                   console.log(error.response);
-                  this.wrongPr= error.response.data.error
+                  this.connexion.error = true
+                  this.connexion.email = ""
+                  this.connexion.password =""
+                  this.connexion.submitted = false
+                  switch(error.response.status) {
+                    case 401:
+                      this.errorMessage = "Utilisateur ou mot de passe incorrect"
+                      break;
+                    default:
+                      this.errorMessage = "Une erreur est survenue lors de votre inscription.. Réessayez !"
+                      break;
+                  }
                 });
           }
         },
           Register(){
             this.inscription.submitted = true;
-            // eslint-disable-next-line no-unused-vars
-            let userRegistered = {
-              email: this.inscription.emailInscription,
-              password: this.inscription.passwordInscription,
-              profile: this.inscription.profile
-            }
-            if (this.inscription.passwordInscription !== this.inscription.passwordConfirmed) {
+            if(this.inscription.emailInscription && this.inscription.passwordInscription && this.inscription.passwordConfirmed !== "") {
+              let userRegistered = {
+                email: this.inscription.emailInscription,
+                password: this.inscription.passwordInscription,
+              }
+              if (this.inscription.passwordInscription !== this.inscription.passwordConfirmed) {
+                this.inscription.error = true
+                this.errorMessage = "Les mots de passe saisis sont différents, assurez vous de mettre le même mot de passe dans les deux champs."
+              } else {
+                axios.post("https://back-serverdevoeux.herokuapp.com/api/user", userRegistered).then(
+                    response => {
+                      this.inscription.error = false
+                      console.log(response)
+                      this.inscription.emailInscription = ""
+                      this.inscription.passwordConfirmed = ""
+                      this.inscription.passwordInscription = ""
+                    }
+                ).catch(error => {
+                  console.log(error)
+                  this.inscription.error = true
+                  this.inscription.submitted = false
+                  switch (error.response.status) {
+                    case 401:
+                      this.errorMessage = "Utilisateur déjà existant ! Connectez-vous !"
+                      break;
+                    case 403:
+                      this.errorMessage = "Votre email professeur n'existe pas dans notre base. Contactez l'administrateur !"
+                      break;
+                    default:
+                      this.errorMessage = "Une erreur est survenue lors de votre inscription.. Réessayez !"
+                      break;
+                  }
+                })
+              }
+            }else
+            {
+              this.inscription.submitted = false
               this.inscription.error = true
-              this.errorMessage = "Les mots de passe saisis sont différents, assurez vous de mettre le même mot de passe dans les deux champs."
+              this.errorMessage = "Remplissez tous les champs"
+            }
+          },
+          passwordChange(){
+            this.changePassword.submitted = true;
+            let userReset = {
+              email: this.changePassword.emailChangement,
+            }
+            if(this.changePassword.emailChangement === ""){
+              this.changePassword.error = true
+              this.errorMessage = "Remplissez le champ email"
+            }
+            else {
+              axios.post("https://back-serverdevoeux.herokuapp.com/api/reset", userReset)
+                  .then(
+                  response => {
+                    this.changePassword.submitted = true
+                    this.changePassword.error = false
+                    console.log(response)
+                    this.changePassword.emailChangement = ""
+                  }
+              ).catch(error => {
+                  console.log(error)
+                  this.changePassword.error = true
+                  this.changePassword.submitted = false
+                  console.log(error)
+                  switch(error.response.status) {
+                    case 404:
+                      this.errorMessage = "Utilisateur inexistant"
+                      break;
+                    default:
+                      this.errorMessage = "Une erreur est survenue... Réessayez !"
+                      break;
+                  }
+              })
             }
           }
-      }
+        }
     }
-
 </script>
 
 <style scoped>
@@ -244,7 +365,7 @@ input {
   border-bottom: 1px solid rgba(204, 204, 204, 0.459)
 }
 
-.input--style-3 {
+.input--style-3{
   font-size: 14px;
   color: rgb(143, 141, 141);
   background: transparent
@@ -367,7 +488,7 @@ h1,h2,h3{
 
 a:link, a:visited, a:hover, a:active{
   text-decoration: none;
-  color: white;
+  color: black;
 }
 
 .visiteur{
@@ -378,5 +499,6 @@ a:link, a:visited, a:hover, a:active{
 .logo{
   width: 40%;
 }
+
 
 </style>

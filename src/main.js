@@ -4,24 +4,30 @@ import VueRouter from "vue-router";
 import Routes from "@/Routes";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import FontAwesomeIcon from "@fortawesome/vue-fontawesome/src/components/FontAwesomeIcon";
-import {
-  faServer,
-  faUsers,
-  faBook,
-  faEdit,
-  faTrash,
-  faSortDown,
-  faSortUp,
-  faSort,
-  faPlusSquare,
-  faClipboardList,
-  faSpinner,
-  faUserTie,
-  faEye } from "@fortawesome/free-solid-svg-icons";
+import 'bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import VueCookies from 'vue-cookies';
 import VueDropdown from 'vue-dynamic-dropdown';
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
+
+import {
+    faServer,
+    faUsers,
+    faBook,
+    faSortDown,
+    faSortUp,
+    faSort,
+    faTrash,
+    faEdit,
+    faEye,
+    faCheckCircle,
+    faTimesCircle,
+    faExclamation,
+    faMailBulk,
+    faPlusSquare,
+    faClipboardList,
+    faSpinner,
+    faUserTie
+} from "@fortawesome/free-solid-svg-icons";
 
 Vue.config.productionTip = false
 
@@ -44,7 +50,10 @@ library.add(faEye)
 library.add(faSortUp)
 library.add(faSortDown)
 library.add(faSort)
-
+library.add(faCheckCircle)
+library.add(faTimesCircle)
+library.add(faExclamation)
+library.add(faMailBulk)
 
 const router = new VueRouter({
   routes: Routes,
