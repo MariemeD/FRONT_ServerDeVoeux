@@ -129,7 +129,7 @@ export default {
                 this.formData.isError = true
                 this.errorMessage = "Les mots de passe saisis sont différents, assurez vous de mettre le même mot de passe dans les deux champs."
             } else {
-                axios.put(`https://back-serverdevoeux.herokuapp.com/api/user/${this.$cookies.get('emailProfessor')}`,
+                axios.put(`https://back-serverdevoeux.herokuapp.com/api/user/${this.$cookies.get('emailProfessor')}/password`,
                     {
                         password: this.formData.newPassword
                     })
