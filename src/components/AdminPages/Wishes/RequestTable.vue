@@ -159,7 +159,7 @@
                     <th>Matière</th>
                     <th>Professeur</th>
                     <th>Statut</th>
-                    <th v-if="$cookies.get('profile') === 'responsable'">Actions</th>
+                    <th>Actions</th>
                 </thead>
                 <tbody>
                     <tr v-for="request in sortedRequests" :key="request._id">
@@ -167,7 +167,7 @@
                         <td>{{ request.courseRequested }}</td>
                         <td>{{ request.requestor }}</td>
                         <td>{{ request.status }}</td>
-                        <td v-if="$cookies.get('profile') === 'responsable'">
+                        <td>
                             <span class="btn btn-outline-success" @click.prevent="acceptRequest(request)">Accepter</span>
                             |
                             <span class="btn btn-outline-danger" @click.prevent="refuseRequest(request)">Refuser</span>
@@ -221,10 +221,10 @@ export default {
             acceptedRequest.status = 'Validé'
             axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${request._id}`, acceptedRequest).then(() => {
                 this.sendAlertMessage(`Le voeu de ${request.requestor} a bien été accepté`)
-                /*axios.post(`https://back-serverdevoeux.herokuapp.com/api/sendMail/`, {
+                axios.post(`https://back-serverdevoeux.herokuapp.com/api/sendEmail/`, {
                     to: request.emailRequestor,
                     subject: `[SERVEUR DE VOEUX - UNIV EVRY] Votre demande de voeu a été acceptée`,
-                    text: `Bonjour,\n\n
+                    text: `Bonjour,\n
                     Votre demande de voeu concernant la matière ${request.courseRequested} a bien été acceptée.`
                 }).then(response => {
                     console.log(response)
@@ -232,7 +232,7 @@ export default {
                 }).catch(error => {
                     console.error(error)
                     console.error("L'envoi du mail a échoué")
-                })*/
+                })
                 this.refreshPage(2000)
             }).catch(error => {
                 console.error(error)
@@ -245,10 +245,10 @@ export default {
             refusedRequest.status = 'Refusé'
             axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${request._id}`, refusedRequest).then(() => {
                 this.sendAlertMessage(`Le voeu de ${request.requestor} a bien été refusé`)
-                /*axios.post(`https://back-serverdevoeux.herokuapp.com/api/sendMail/`, {
+                axios.post(`https://back-serverdevoeux.herokuapp.com/api/sendEmail/`, {
                     to: request.emailRequestor,
                     subject: `[SERVEUR DE VOEUX - UNIV EVRY] Votre demande de voeu a été refusée`,
-                    text: `Bonjour,\n\n
+                    text: `Bonjour,\n
                     Votre demande de voeu concernant la matière ${request.courseRequested} a été refusée.`
                 }).then(response => {
                     console.log(response)
@@ -256,7 +256,7 @@ export default {
                 }).catch(error => {
                     console.error(error)
                     console.error("L'envoi du mail a échoué")
-                })*/
+                })
                 this.refreshPage(2000)
             }).catch(error => {
                 console.error(error)
@@ -270,10 +270,10 @@ export default {
                 for (let otherConflict of this.groupConflictByCursus()[request.courseRequested].filter(req => req !== request)) {
                     axios.put(`https://back-serverdevoeux.herokuapp.com/api/request/${otherConflict._id}`, {status: 'Refusé'}).then(() => {
                         console.log("Les voeux des autres professeurs ont été refusés")
-                        axios.post(`https://back-serverdevoeux.herokuapp.com/api/sendMail/`, {
+                        axios.post(`https://back-serverdevoeux.herokuapp.com/api/sendEmail/`, {
                             to: otherConflict.emailRequestor,
                             subject: `[SERVEUR DE VOEUX - UNIV EVRY] Votre demande de voeu a été refusée`,
-                            text: `Bonjour,\n\n
+                            text: `Bonjour,\n
                             Suite à un conflit entre plusieurs voeux de vos professeurs
                             et le votre concernant la matière ${otherConflict.courseRequested}, votre voeu ne vous a pas été accordé`
                         }).then(() => {

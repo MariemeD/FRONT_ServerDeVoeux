@@ -29,7 +29,7 @@
                             
                                 'text-warning': demande.status === 'En attente',
                                 'text-success': demande.status === 'Validé',
-                                
+                                'text-danger': demande.status === 'Refusé'
                             }">{{ demande.status }}</td>
               <td>
                 <font-awesome-icon
