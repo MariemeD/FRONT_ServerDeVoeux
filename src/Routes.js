@@ -7,9 +7,8 @@ import ProfessorService from "./components/ProfessorPages/professor/Prof_Service
 import Profil from "./components/ProfessorPages/Profile";
 //modules
 
-
-
 import Demandes from "./components/ProfessorPages/Modules/Demandes";
+
 //Filiere
 import Branch from "./components/ProfessorPages/Filieres/Branch";
 import DetailsBranch from "./components/ProfessorPages/Filieres/Details_Branch";
@@ -24,13 +23,16 @@ import Courses from "@/components/AdminPages/Studings/Courses/Courses";
 import AddCourse from "@/components/AdminPages/Studings/Courses/AddCourse";
 import ModifyCourse from "@/components/AdminPages/Studings/Courses/ModifyCourse";
 import Pathways from "@/components/AdminPages/Studings/Pathways/Pathways";
+import ListeRespoF from "@/components/AdminPages/Studings/Pathways/ListeRespo";
 import AddPathway from "@/components/AdminPages/Studings/Pathways/AddPathway";
-import ModifyPathway from "@/components/AdminPages/Studings/Pathways/ModifyPathway";
+import ProfPathway from "@/components/AdminPages/Studings/Pathways/ListeProf";
+import ListeMatiere from "@/components/AdminPages/Studings/Pathways/ListeMatiere";
 import Origins from "@/components/AdminPages/Studings/Origins/Origins";
 import AddOrigin from "@/components/AdminPages/Studings/Origins/AddOrigin";
 import ModifyOrigin from "@/components/AdminPages/Studings/Origins/ModifyOrigin";
 import Wishes from "@/components/AdminPages/Wishes/Wishes";
 import AddDisclaimer from "@/components/AdminPages/Professors/Disclaimers/AddDisclaimer";
+import ListOrigineProf from "@/components/AdminPages/Studings/Origins/ListeProf";
 //General
 import Login from "./components/GeneralPages/Login"
 import HoursMadeDetails from "@/components/AdminPages/Professors/Hours/HoursMadeDetails";
@@ -61,9 +63,12 @@ export default [
     {path: '/admin/cursus/modifier-un-cursus', component: ModifyCourse },
     {path: '/admin/filieres/', component: Pathways },
     {path: '/admin/filieres/ajouter-une-filiere', component: AddPathway },
-    {path: '/admin/filieres/modifier-une-filiere', component: ModifyPathway },
+    {path: '/admin/filieres/Professeur', component: ProfPathway },
+    {path: '/admin/filieres/RespoFil', component: ListeRespoF },
+    {path: '/admin/filieres/Matieres', component: ListeMatiere},
     {path: '/admin/origines/', component: Origins },
     {path: '/admin/origines/ajouter', component: AddOrigin },
+    {path: '/admin/origines/prof', component: ListOrigineProf },
     {path: '/admin/origines/modifier', component: ModifyOrigin },
 
     {path: '/home', component: HomeProf},
@@ -75,13 +80,12 @@ export default [
     {path: '/professorService/:emailProf', component: ProfessorService},
 
     //Modules
-
     {path: '/demandes', component: Demandes},
 
     //Branch
     {path: '/branch', component: Branch},
     {path: '/detailsBranch', component: DetailsBranch},
     {path: '/ncours', component: NCours}
-  
+
 
 ]
