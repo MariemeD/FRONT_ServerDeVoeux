@@ -87,8 +87,6 @@
             </transition>
             <form>
               <div class="input-group"> <input class="input--style-3" type="text" placeholder="Email*" name="email" v-model.lazy="changePassword.emailChangement"> </div>
-              <!--<div class="input-group"> <input class="input--style-3" type="password" placeholder="Nouveau Mot de passe*" name="password" v-model.lazy="changePassword.newPassword"> </div>
-              <div class="input-group"> <input class="input--style-3" type="password" placeholder="Confirmer nouveau mot de passe*" name="passwordConfirmed" v-model.lazy="changePassword.newPasswordConfirmed"> </div>-->
               <div class="p-t-10"><button class="btn btn--pill btn--signin" @click.stop.prevent="passwordChange()" type="submit">CHANGER MOT DE PASSE</button></div>
             </form>
           </div>
