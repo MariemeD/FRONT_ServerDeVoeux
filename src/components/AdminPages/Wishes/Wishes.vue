@@ -1,10 +1,10 @@
 <template>
     <div>
         <Header />
-        <h1 class="pt-5" v-if="this.$route.params.conflicts === 'conflits'">Gestion des conflits</h1>
-        <h1 class="pt-5" v-else>Gestion des voeux</h1>
+        <h1 :class="{'pt-5': $cookies.get('emailProfessor')}" v-if="this.$route.params.conflicts === 'conflits'">Gestion des conflits</h1>
+        <h1 :class="{'pt-5': $cookies.get('emailProfessor')}" v-else>Gestion des voeux</h1>
 
-        <div class="container">
+        <div class="container" v-if="$cookies.get('emailProfessor')">
             <div class="progress mt-4" v-if="isLoading">
                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%; background-color: #536895"></div>
             </div>

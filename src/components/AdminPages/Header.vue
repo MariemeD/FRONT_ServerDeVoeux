@@ -1,33 +1,44 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-        <router-link class="navbar-brand" to="/admin/">
-            <img alt="Vue logo" src="../../assets/Logo_Universite_Evry.png" width="175" class="img-fluid">
-        </router-link>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <router-link class="navbar-brand" to="/admin/">
+                <img alt="Vue logo" src="../../assets/Logo_Universite_Evry.png" width="175" class="img-fluid">
+            </router-link>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <router-link class="nav-link" :to="{ name: 'admin-profil'}">Profil</router-link>
-                </li>
-                <li class="nav-item">
-                    <router-link class="nav-link" :to="{ name: 'wishes' }">
-                        Gestion des voeux
-                        <span class="badge badge-request" v-if="getRequestsForFiliere().requests.length > 0">{{ getRequestsForFiliere().requests.length }}</span>
-                    </router-link>
-                </li>
-                <li class="nav-item">
-                    <router-link class="nav-link" :to="{ name: 'conflict-wishes', params: {conflicts: 'conflits'} }">
-                        Gestion des conflits
-                        <span class="badge badge-conflict" v-if="getRequestsForFiliere().conflicts.length > 0">{{ getRequestsForFiliere().conflicts.length }}</span>
-                    </router-link>
-                </li>
-            </ul>
-            <a class="nav-link my-2 my-lg-0" @click="logout">Déconnexion</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'admin-profil'}">Profil</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'wishes' }">
+                            Gestion des voeux
+                            <span class="badge badge-request" v-if="getRequestsForFiliere().requests.length > 0">{{ getRequestsForFiliere().requests.length }}</span>
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'conflict-wishes', params: {conflicts: 'conflits'} }">
+                            Gestion des conflits
+                            <span class="badge badge-conflict" v-if="getRequestsForFiliere().conflicts.length > 0">{{ getRequestsForFiliere().conflicts.length }}</span>
+                        </router-link>
+                    </li>
+                </ul>
+                <a class="nav-link my-2 my-lg-0" @click="logout">Déconnexion</a>
+            </div>
+        </nav>
+
+        <div v-if="!$cookies.get('emailProfessor')" class="container pt-5">
+            <div class="alert alert-danger">
+                Vous n'êtes actuellement pas connecté. Veuillez vous connecter pour accéder à toutes les données.
+                <router-link to="/login" class="text-danger">
+                    Retourner sur la page de connexion
+                </router-link>
+            </div>
         </div>
-    </nav>
+    </div>
 </template>
 
 <script>
@@ -47,10 +58,9 @@ export default {
                 request.requestor = request.requestor.toLowerCase().trim()
                 this.requests.push(request)
             }
-        })
-        axios.get(`https://back-serverdevoeux.herokuapp.com/api/responsibles`).then(response => {
-            const connectedAdmin = response.data.find(res =>
-                res.email === this.$cookies.get("emailProfessor"))
+        }).catch(error => console.error(error))
+        axios.get(`https://back-serverdevoeux.herokuapp.com/api/responsible/${this.$cookies.get("emailProfessor")}`).then(response => {
+            const connectedAdmin = response.data
             if (!this.$cookies.get("groupProfessor")) {
                 this.$cookies.set("groupProfessor", connectedAdmin.group)
             }
@@ -85,18 +95,22 @@ export default {
             this.$router.push("/login")
         }
     },
-    updated() {
+    /*updated() {
         // TODO Reflexion quand à faire des appels toutes les secondes en cas de nouvelles demandes ou non
-        /*axios.get("https://back-serverdevoeux.herokuapp.com/api/requests").then(response => {
-            for (let request of response.data.filter(request => request.status === "En attente")) {
-                request.requestor = request.requestor.toLowerCase().trim()
+        axios.get("https://back-serverdevoeux.herokuapp.com/api/requests").then(response => {
+            if (this.$cookies.get('profile') === 'responsable') {
+                this.requests = response.data.filter(request => {
+                    return request.groupRequested === this.$cookies.get("groupProfessor")
+                        && request.status === 'En attente'
+                })
+            } else {
+                this.requests = response.data.filter(request => request.status === "En attente")
             }
-            this.requests = response.data
         }).catch(error => {
             console.error("Error on updating Header component")
             console.error(error)
-        })*/
-    }
+        })
+    }*/
 }
 </script>
 
@@ -108,6 +122,7 @@ nav {
 
 .nav-link {
     color: #D5D5D5;
+    cursor: pointer;
 }
 
 .badge-request {
@@ -117,5 +132,10 @@ nav {
 .badge-conflict {
     background-color: #b54444;
     color: #2c3e50;
+}
+
+.text-danger {
+    text-decoration: underline;
+    cursor: pointer;
 }
 </style>

@@ -2,9 +2,9 @@
     <div>
         <Header />
 
-        <h1 class="pt-5">Liste de décharges</h1>
+        <h1 :class="{'pt-5': $cookies.get('emailProfessor')}">Liste de décharges</h1>
 
-        <div class="container">
+        <div class="container" v-if="$cookies.get('emailProfessor')">
 
             <div class="row justify-content-between ml-1">
                 <router-link :to="{name: 'disclaimers-add'}">

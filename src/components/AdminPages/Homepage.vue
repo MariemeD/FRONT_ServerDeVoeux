@@ -5,7 +5,14 @@
         <div class="jumbotron vertical-center">
             <div class="container">
             <div class="row pt-3">
-                <div class="col-lg-4 col-md-8 col-sm-6">
+                <div :class="{
+                    'col-lg-4': $cookies.get('profile') === 'admin',
+                    'col-md-8': $cookies.get('profile') === 'admin',
+                    'col-sm-6': $cookies.get('profile') === 'admin',
+                    'col-lg-6': $cookies.get('profile') === 'responsable' || !$cookies.get('profile'),
+                    'col-md-6': $cookies.get('profile') === 'responsable' || !$cookies.get('profile'),
+                    'col-sm-6': $cookies.get('profile') === 'responsable' || !$cookies.get('profile'),
+                }">
                     <div id="professor-card" class="card p-3">
                         <div id="div-professor-icon">
                             <font-awesome-icon id="professor-icon" icon="users" size="5x" style="color: #C9893C" />
@@ -27,40 +34,47 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-md-8 col-sm-6">
+                <div class="col-lg-4 col-md-8 col-sm-6" v-if="$cookies.get('profile') === 'admin'">
                     <div id="server-card" class="card p-3">
                         <div id="div-server-icon">
                             <font-awesome-icon id="server-icon" icon="server" size="5x" style="color: #C9893C" />
                         </div>
                         <h6 class="mt-3 mb-0 text-uppercase">Serveur</h6>
                         <hr>
-                        <small v-if="isServerOpen" class="text-success">Le serveur est <strong>ouvert</strong></small>
+                        <small v-if="server.status === true" class="text-success">Le serveur est <strong>ouvert</strong></small>
                         <small v-else class="text-danger">Le serveur est <strong>fermé</strong></small>
 
                         <ul id="server-actions" class="text-left mr-auto ml-auto">
                             <li>
                                 - <span
                                     @click.prevent="closeServer"
-                                    :class="{'unvailable-link': !isServerOpen}">
+                                    :class="{'unvailable-link': server.status === false}">
                                         Fermer le serveur
                                     </span>
                             </li>
                             <li>
                                 - <span
                                     @click.prevent="restartServer"
-                                    :class="{'unvailable-link': isServerOpen}">
+                                    :class="{'unvailable-link': server.status === true}">
                                     Redémarrer le serveur
                                 </span>
                             </li>
                             <li>
-                                - <a href="">Sauvegarder la base</a>
+                                - <span>Sauvegarder la base</span>
                             </li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-md-8 col-sm-6">
-                    <div id="studings-card" class="card p-3">
+                <div :class="{
+                    'col-lg-4': $cookies.get('profile') === 'admin',
+                    'col-md-8': $cookies.get('profile') === 'admin',
+                    'col-sm-6': $cookies.get('profile') === 'admin',
+                    'col-lg-6': $cookies.get('profile') === 'responsable' || !$cookies.get('profile'),
+                    'col-md-6': $cookies.get('profile') === 'responsable' || !$cookies.get('profile'),
+                    'col-sm-6': $cookies.get('profile') === 'responsable' || !$cookies.get('profile'),
+                }">
+                    <div id="studings-card" class="card p-3" :style="{'width: 50px': $cookies.get('profile') === 'responsable'}">
                         <div id="div-studings-icon">
                             <font-awesome-icon id="studings-icon" icon="book" size="5x" style="color: #C9893C" />
                         </div>
@@ -88,27 +102,45 @@
 
 <script>
 import Header from "@/components/AdminPages/Header";
+import axios from "axios";
+
 export default {
     name: "Homepage",
     components: { Header },
     data() {
         return {
-            isServerOpen: true,
+            server: {},
         }
+    },
+    created() {
+        axios.get('https://back-serverdevoeux.herokuapp.com/api/server/').then(response => {
+            this.server = response.data[0]
+        })
     },
     methods: {
         closeServer() {
-            if (this.isServerOpen) {
+            if (this.server.status === true) {
                 if (this.$cookies.get("profile") === "admin") {
-                    this.isServerOpen = !this.isServerOpen
+                    this.server.status = false
+                    axios.put(`https://back-serverdevoeux.herokuapp.com/api/server/${false}`).then(() => {
+                        console.log("Le serveur est fermé")
+                    }).catch(error => {
+                        console.error(error)
+                        console.error("Le serveur n'a pas pu être fermé")
+                    })
                 }
-
             }
         },
         restartServer() {
             if (this.$cookies.get("profile") === "admin") {
-                if (!this.isServerOpen) {
-                    this.isServerOpen = !this.isServerOpen
+                if (this.server.status === false) {
+                    this.server.status = true
+                    axios.put(`https://back-serverdevoeux.herokuapp.com/api/server/${true}`).then(() => {
+                        console.log("Le serveur est ouvert")
+                    }).catch(error => {
+                        console.error(error)
+                        console.error("Le serveur n'a pas pu être ouvert")
+                    })
                 }
             }
         }
