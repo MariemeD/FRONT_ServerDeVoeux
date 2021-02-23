@@ -109,13 +109,15 @@
                             <button
                                 type="button"
                                 class="btn btn-success"
-                                @click.prevent="acceptRequestConflict(currentRequest)"
-                                v-if="$cookies.get('profile') === 'responsable'">Accepter</button>
+                                @click.prevent="acceptRequestConflict(currentRequest)">
+                                    Accepter
+                            </button>
                             <button
                                 type="button"
                                 class="btn btn-danger"
-                                @click.prevent="refuseRequest(currentRequest)"
-                                v-if="$cookies.get('profile') === 'responsable'">Refuser</button>
+                                @click.prevent="refuseRequest(currentRequest)">
+                                    Refuser
+                            </button>
                         </div>
                     </div>
                 </div>

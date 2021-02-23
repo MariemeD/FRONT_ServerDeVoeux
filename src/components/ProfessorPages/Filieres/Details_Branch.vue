@@ -259,10 +259,26 @@ export default {
           "/responsibles"
       )
       .then((response) => {
-        response.data.forEach((val) => {
-          this.responsableName = val.lastname + " " + val.firstname;
-          this.responsableEmail = val.email;
-        });
+          console.log("cc")
+        console.log(response)
+          if (response.data.length === 0) {
+              this.responsableName ="-";
+              this.responsableEmail="-";
+          } else {
+              response.data.forEach((val) => {
+
+                  console.log(val)
+                  if(val.lastname !== null){
+                      this.responsableName = val.lastname + " " + val.firstname;
+                      this.responsableEmail = val.email;
+                  }else{
+                      this.responsableName ="";
+                      this.responsableEmail="";
+                  }
+
+              });
+          }
+
       });
     //get branch information
     axios

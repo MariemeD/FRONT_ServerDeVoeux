@@ -196,7 +196,7 @@
           }
         },
           Register(){
-            this.inscription.submitted = true;
+            //this.inscription.submitted = true;
             if(this.inscription.emailInscription && this.inscription.passwordInscription && this.inscription.passwordConfirmed !== "") {
               let userRegistered = {
                 email: this.inscription.emailInscription,
@@ -209,6 +209,7 @@
                 axios.post("https://back-serverdevoeux.herokuapp.com/api/user", userRegistered).then(
                     response => {
                       this.inscription.error = false
+                      this.inscription.submitted = true;
                       console.log(response)
                       this.inscription.emailInscription = ""
                       this.inscription.passwordConfirmed = ""
@@ -216,8 +217,8 @@
                     }
                 ).catch(error => {
                   console.log(error)
-                  this.inscription.error = true
                   this.inscription.submitted = false
+                  this.inscription.error = true
                   switch (error.response.status) {
                     case 401:
                       this.errorMessage = "Utilisateur déjà existant ! Connectez-vous !"

@@ -5,7 +5,7 @@
   >
     <!-- navbar with links to others pages-->
     <Navbar />
-    <h2>Liste des Enseignants</h2>
+    <h2>Liste des enseignements non couverts</h2>
     <div class="progress mt-4" v-if="isLoading">
       <div
         class="progress-bar progress-bar-striped progress-bar-animated"
@@ -212,7 +212,6 @@ export default {
               )
               .then((matr) => {
                 matr.data.forEach((mat) => {
-                
                   this.professors.forEach((val) => {
                     if (val.matiere === mat) {
                       this.matInfo.push({
@@ -222,10 +221,12 @@ export default {
                       });
                     }
                   });
+                  console.log(this.matN)
 
                   this.matN = this.removeDuplicate(this.matInfo);
-                  this.isLoading = false;
                 });
+
+                  this.isLoading = false;
               });
           }
         });
