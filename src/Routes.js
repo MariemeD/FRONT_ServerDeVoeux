@@ -1,18 +1,17 @@
 
-import HomeProf from "./components/ProfessorPages/HomePage";
+import HomeProf from "@/components/ProfessorPages/HomePage";
 
 //professor
-import Professor from "./components/ProfessorPages/professor/Professors";
-import ProfessorService from "./components/ProfessorPages/professor/Prof_Service";
-import Profil from "./components/ProfessorPages/Profile";
+import ProfessorService from "@/components/ProfessorPages/professor/Prof_Service";
+import Profil from "@/components/ProfessorPages/Profile";
 //modules
 
 import Demandes from "./components/ProfessorPages/Modules/Demandes";
 
 //Filiere
-import Branch from "./components/ProfessorPages/Filieres/Branch";
-import DetailsBranch from "./components/ProfessorPages/Filieres/Details_Branch";
-import NCours from "./components/ProfessorPages/Filieres/NC_Cours";
+import Branch from "@/components/ProfessorPages/Filieres/Branch";
+import DetailsBranch from "@/components/ProfessorPages/Filieres/Details_Branch";
+import NCours from "@/components/ProfessorPages/Filieres/NC_Cours";
 import Homepage from "@/components/AdminPages/Homepage";
 import Profile from "@/components/AdminPages/Profile";
 import Professors from "@/components/AdminPages/Professors/Professors/Professors";
@@ -34,14 +33,15 @@ import Wishes from "@/components/AdminPages/Wishes/Wishes";
 import AddDisclaimer from "@/components/AdminPages/Professors/Disclaimers/AddDisclaimer";
 import ListOrigineProf from "@/components/AdminPages/Studings/Origins/ListeProf";
 //General
-import Login from "./components/GeneralPages/Login"
+import Login from "@/components/GeneralPages/Login"
 import HoursMadeDetails from "@/components/AdminPages/Professors/Hours/HoursMadeDetails";
+import enseignant from "@/components/ProfessorPages/professor/enseignant";
 
 export default [
 
     // Login route
     {path: '/', component: Login },
-    {path: '/login/', component: Login },
+    {path: '/login/', name:"login", component: Login },
 
     // Register route
 
@@ -71,21 +71,21 @@ export default [
     {path: '/admin/origines/prof', component: ListOrigineProf },
     {path: '/admin/origines/modifier', component: ModifyOrigin },
 
-    {path: '/home', component: HomeProf},
-    {path: '/profil', component: Profil},
+    {path: '/home', name:"home",component: HomeProf},
+    {path: '/profil', name:"profil",component: Profil},
 
     // Professor routes
-    {path: '/professors', component: Professor},
-    {path: '/professorService', component: ProfessorService},
-    {path: '/professorService/:emailProf', component: ProfessorService},
+    {path: '/enseignant', name:"enseignant",component: enseignant },
+    {path: '/professorService', name:"professorService",component: ProfessorService},
+    {path: '/professorService/:emailProf', name:"professorService",component: ProfessorService},
 
     //Modules
-    {path: '/demandes', component: Demandes},
+    {path: '/demandes', name:"demandes",component: Demandes},
 
     //Branch
-    {path: '/branch', component: Branch},
-    {path: '/detailsBranch', component: DetailsBranch},
-    {path: '/ncours', component: NCours}
+    {path: '/branch', name:"branch",component: Branch},
+    {path: '/detailsBranch', name:"detailsBranch", component: DetailsBranch},
+    {path: '/ncours', name:"ncours",component: NCours}
 
 
 ]

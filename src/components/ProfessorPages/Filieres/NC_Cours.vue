@@ -40,7 +40,7 @@
   >
     <div style="margin-top: 50px">
       Veuillez vous connecter pour accéder aux données. <br />
-      <a href="/login"> Se connecter </a>
+      <router-link :to="{ name: 'login'}">Se connecter</router-link>
     </div>
   </div>
 </template>
@@ -157,7 +157,7 @@ import Navbar from "../Navbar_Prof";
 import axios from "axios";
 
 export default {
-  name: "Professors",
+  name: "ncours",
   components: {
     Navbar,
   },

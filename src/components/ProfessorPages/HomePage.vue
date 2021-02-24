@@ -14,12 +14,18 @@
                 style="color: #c9893c"
               />
             </div>
-            <a href="/professors">
+            <!--<a href="/enseignant">
               <h4 class="mt-3 mb-0 text-uppercase">- Enseignants</h4>
-            </a>
-            <a href="/branch">
+            </a>-->
+            <h4 class="mt-3 mb-0 text-uppercase">
+              <router-link class="nav-link" :to="{ name: 'enseignant'}">- Enseignant</router-link>
+            </h4>
+            <!--<a href="/branch">
               <h4 class="mt-3 mb-0 text-uppercase">- Enseignements</h4>
-            </a>
+            </a>-->
+            <h4 class="mt-3 mb-0 text-uppercase">
+              <router-link class="nav-link" :to="{ name: 'branch'}">- Enseignements</router-link>
+            </h4>
           </div>
         </div>
 
@@ -36,9 +42,12 @@
             <a href="#" @click="setCookie()">
               <h4 class="mt-3 mb-0 text-uppercase">- Mon Service</h4></a
             >
-            <a href="/demandes">
+            <!--<a href="/demandes">
               <h4 class="mt-3 mb-0 text-uppercase">- Mes Demandes</h4></a
-            >
+            >-->
+            <h4 class="mt-3 mb-0 text-uppercase">
+              <router-link class="nav-link" :to="{ name: 'demandes'}">- Mes Demandes</router-link>
+            </h4>
           </div>
         </div>
       </div>

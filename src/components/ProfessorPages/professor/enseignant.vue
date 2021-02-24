@@ -29,8 +29,11 @@
     </table>
   </div>
   <div class="card alert alert-danger alert-dismissible" style="height: 200px; width: 500px; margin-left:30%; margin-top:50px;" v-else>
-    <div style="margin-top:50px" > Veuillez vous connecter pour accéder aux données. <br> <a href="/login">
-        Se connecter </a></div>
+    <div style="margin-top:50px" > Veuillez vous connecter pour accéder aux données. <br>
+      <!--<a href="/login">
+        Se connecter </a>-->
+        <router-link :to="{ name: 'login'}">Se connecter</router-link>
+    </div>
   </div>
 </template>
 
@@ -146,7 +149,7 @@ import Navbar from "../Navbar_Prof";
 import axios from "axios";
 
 export default {
-  name: "Professors",
+  name: "enseignant",
   components: {
     Navbar,
   },

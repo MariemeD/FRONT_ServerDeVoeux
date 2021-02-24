@@ -1,6 +1,8 @@
 <template>
   <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-    <a href="/home">  <img alt="Vue logo" src="../../assets/Logo_Universite_Evry.png" width="160"  class="img-fluid"></a>
+    <router-link :to="{ name: 'home'}">
+      <img alt="Vue logo" src="../../assets/Logo_Universite_Evry.png" width="160"  class="img-fluid">
+    </router-link>
     <button
       class="navbar-toggler"
       type="button"
@@ -15,30 +17,30 @@
 
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-      
-        <a class="nav-item nav-link active" href="/professors"
-          >Enseignants<span class="sr-only">(current)</span></a
-        >
-
+        <router-link class="nav-item nav-link active" :to="{ name: 'enseignant'}">Enseignant</router-link>
         <div class="dropdown">
           <a class="nav-item nav-link active" href="#" data-toggle="dropdown">Enseignements</a>
           <ul class="dropdown-menu">
             <li>
-              <a class="nav-item nav-link active" href="/branch">Enseignements</a>
+              <!--<a class="nav-item nav-link active" href="/branch">Enseignements</a>-->
+              <router-link class="nav-item nav-link active" :to="{ name: 'branch'}">Enseignements</router-link>
             </li>
             <li>
-              <a class="nav-item nav-link active" href="/ncours">Enseignement non couvert</a>
+              <!--<a class="nav-item nav-link active" href="/ncours">Enseignement non couvert</a>-->
+              <router-link class="nav-item nav-link active" :to="{ name: 'ncours'}">Enseignement non couvert</router-link>
+
             </li>
             <li>
-              <a class="nav-item nav-link active" href="/demandes"
+              <!--<a class="nav-item nav-link active" href="/demandes"
                 >Demande d'enseignement</a
-              >
+              >-->
+              <router-link class="nav-item nav-link active" :to="{ name: 'demandes'}">Demande d'enseignement</router-link>
             </li>
           </ul>
         </div>
-
-        <a class="nav-item nav-link active" href="/profil">Profile</a>
-         <a class="nav-item nav-link active" @click="logout()">Deconnexion</a>
+        <!--<a class="nav-item nav-link active" href="/profil">Profile</a>-->
+        <router-link class="nav-item nav-link active" :to="{ name: 'profil'}">Profile</router-link>
+        <a class="nav-item nav-link active" @click="logout()">Deconnexion</a>
       </div>
     </div>
   </nav>
