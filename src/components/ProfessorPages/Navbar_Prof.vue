@@ -17,7 +17,7 @@
 
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <router-link class="nav-item nav-link active" :to="{ name: 'enseignant'}">Enseignant</router-link>
+        <router-link class="nav-item nav-link active" to="/enseignant">Enseignant</router-link>
         <div class="dropdown">
           <a class="nav-item nav-link active" href="#" data-toggle="dropdown">Enseignements</a>
           <ul class="dropdown-menu">

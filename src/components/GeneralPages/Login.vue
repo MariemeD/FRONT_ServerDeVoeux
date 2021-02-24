@@ -188,6 +188,9 @@
                     case 401:
                       this.errorMessage = "Utilisateur ou mot de passe incorrect"
                       break;
+                    case 403:
+                      this.errorMessage = "Le serveur de voeux est actuellement fermé !"
+                      break;
                     default:
                       this.errorMessage = "Une erreur est survenue lors de votre inscription.. Réessayez !"
                       break;

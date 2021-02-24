@@ -1,41 +1,41 @@
 
-import HomeProf from "@/components/ProfessorPages/HomePage";
+import HomeProf from "./components/ProfessorPages/HomePage";
 
 //professor
-import ProfessorService from "@/components/ProfessorPages/professor/Prof_Service";
-import Profil from "@/components/ProfessorPages/Profile";
+import ProfessorService from "./components/ProfessorPages/professor/Prof_Service";
+import Profil from "./components/ProfessorPages/Profile";
 //modules
 
 import Demandes from "./components/ProfessorPages/Modules/Demandes";
 
 //Filiere
-import Branch from "@/components/ProfessorPages/Filieres/Branch";
-import DetailsBranch from "@/components/ProfessorPages/Filieres/Details_Branch";
-import NCours from "@/components/ProfessorPages/Filieres/NC_Cours";
-import Homepage from "@/components/AdminPages/Homepage";
-import Profile from "@/components/AdminPages/Profile";
-import Professors from "@/components/AdminPages/Professors/Professors/Professors";
-import HoursMade from "@/components/AdminPages/Professors/Hours/HoursMade";
-import Disclaimers from "@/components/AdminPages/Professors/Disclaimers/Disclaimers";
-import ModifyDisclaimer from "@/components/AdminPages/Professors/Disclaimers/ModifyDisclaimer";
-import Courses from "@/components/AdminPages/Studings/Courses/Courses";
-import AddCourse from "@/components/AdminPages/Studings/Courses/AddCourse";
-import ModifyCourse from "@/components/AdminPages/Studings/Courses/ModifyCourse";
-import Pathways from "@/components/AdminPages/Studings/Pathways/Pathways";
-import ListeRespoF from "@/components/AdminPages/Studings/Pathways/ListeRespo";
-import AddPathway from "@/components/AdminPages/Studings/Pathways/AddPathway";
-import ProfPathway from "@/components/AdminPages/Studings/Pathways/ListeProf";
-import ListeMatiere from "@/components/AdminPages/Studings/Pathways/ListeMatiere";
-import Origins from "@/components/AdminPages/Studings/Origins/Origins";
-import AddOrigin from "@/components/AdminPages/Studings/Origins/AddOrigin";
-import ModifyOrigin from "@/components/AdminPages/Studings/Origins/ModifyOrigin";
-import Wishes from "@/components/AdminPages/Wishes/Wishes";
-import AddDisclaimer from "@/components/AdminPages/Professors/Disclaimers/AddDisclaimer";
-import ListOrigineProf from "@/components/AdminPages/Studings/Origins/ListeProf";
+import Branch from "./components/ProfessorPages/Filieres/Branch";
+import DetailsBranch from "./components/ProfessorPages/Filieres/Details_Branch";
+import NCours from "./components/ProfessorPages/Filieres/NC_Cours";
+import Homepage from "./components/AdminPages/Homepage";
+import Profile from "./components/AdminPages/Profile";
+import Professors from "./components/AdminPages/Professors/Professors/Professors";
+import HoursMade from "./components/AdminPages/Professors/Hours/HoursMade";
+import Disclaimers from "./components/AdminPages/Professors/Disclaimers/Disclaimers";
+import ModifyDisclaimer from "./components/AdminPages/Professors/Disclaimers/ModifyDisclaimer";
+import Courses from "./components/AdminPages/Studings/Courses/Courses";
+import AddCourse from "./components/AdminPages/Studings/Courses/AddCourse";
+import ModifyCourse from "./components/AdminPages/Studings/Courses/ModifyCourse";
+import Pathways from "./components/AdminPages/Studings/Pathways/Pathways";
+import ListeRespoF from "./components/AdminPages/Studings/Pathways/ListeRespo";
+import AddPathway from "./components/AdminPages/Studings/Pathways/AddPathway";
+import ProfPathway from "./components/AdminPages/Studings/Pathways/ListeProf";
+import ListeMatiere from "./components/AdminPages/Studings/Pathways/ListeMatiere";
+import Origins from "./components/AdminPages/Studings/Origins/Origins";
+import AddOrigin from "./components/AdminPages/Studings/Origins/AddOrigin";
+import ModifyOrigin from "./components/AdminPages/Studings/Origins/ModifyOrigin";
+import Wishes from "./components/AdminPages/Wishes/Wishes";
+import AddDisclaimer from "./components/AdminPages/Professors/Disclaimers/AddDisclaimer";
+import ListOrigineProf from "./components/AdminPages/Studings/Origins/ListeProf";
 //General
-import Login from "@/components/GeneralPages/Login"
-import HoursMadeDetails from "@/components/AdminPages/Professors/Hours/HoursMadeDetails";
-import enseignant from "@/components/ProfessorPages/professor/enseignant";
+import Login from "./components/GeneralPages/Login"
+import HoursMadeDetails from "./components/AdminPages/Professors/Hours/HoursMadeDetails";
+import enseignant from "./components/ProfessorPages/professor/enseignant";
 
 export default [
 
