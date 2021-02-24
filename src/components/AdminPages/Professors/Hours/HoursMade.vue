@@ -59,7 +59,7 @@
                             </td>
                         </tr>
                         <tr v-if="sortedProfessors.length === 0">
-                            <td colspan="4">Vous n'êtes responsable d'aucune filière, vous ne pouvez consulter les heures d'aucun professeur</td>
+                            <td colspan="4">Les professeurs liés à votre filière n'ont pas été récupérés.</td>
                         </tr>
                         </tbody>
                     </table>

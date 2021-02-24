@@ -158,7 +158,9 @@ export default {
             axios.delete(`https://back-serverdevoeux.herokuapp.com/api/discharge/${this.currentDischarge._id}`)
             .then(() => {
                 console.log("Suppression effective")
-                window.location.reload()
+                //window.location.reload()
+              this.$router.go(this.$router.currentRoute)
+
             }).catch(error => {
                 console.error(error)
                 console.error("La décharge n'a pas été supprimée")

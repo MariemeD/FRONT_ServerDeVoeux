@@ -351,7 +351,8 @@ export default {
         },
         refreshPage(timeout) {
             return setTimeout(function() {
-                window.location.reload()
+                //window.location.reload()
+              this.$router.go(this.$router.currentRoute)
             }, timeout)
         },
         sort(criteria) {

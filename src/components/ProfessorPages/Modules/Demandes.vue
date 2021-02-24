@@ -539,7 +539,8 @@ export default {
         })
         .then(function (response) {
           console.log(response);
-          window.location.reload();
+          //window.location.reload();
+          this.$router.go(this.$router.currentRoute)
         });
     },
     showRequest(id) {
@@ -576,7 +577,9 @@ export default {
         .delete("https://back-serverdevoeux.herokuapp.com/api/request/" + id)
         .then((response) => {
           console.log(response);
-          window.location.reload();
+          //window.location.reload();
+          this.$router.go(this.$router.currentRoute)
+
         });
     },
   },
